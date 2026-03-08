@@ -231,7 +231,7 @@ export const stations: Station[] = [
     theme: "lab",
     accentClass: "text-station-4",
     glowClass: "station-glow-4",
-    codeLetter: "ה",
+    codeLetter: "ד",
     briefing:
       "חוקרים, התחנה האחרונה! כאן נמצאת מעבדת הניווט והטכנולוגיה שלי. הציפורים משתמשות בשיטות ניווט שאנחנו עדיין לא מבינים עד הסוף, ואנחנו חוקרים אותן עם הטכנולוגיה הכי מתקדמת שיש. פצחו את שלוש החידות האחרונות — והקוד הסודי יושלם!",
     debriefing:
