@@ -35,6 +35,7 @@ const STATION_REWARDS: InventoryItem[] = [
   { id: "binoculars", name: "משקפת שדה", emoji: "🔭", description: "משקפת תצפית מתחנת אגמון החולה — חושפת את הנסתר", stationIndex: 1 },
   { id: "shield", name: "מגן שימור", emoji: "🛡️", description: "סמל פרויקט ׳פורשים כנף׳ — מגן על הנודדות", stationIndex: 2 },
   { id: "compass", name: "מצפן ניווט", emoji: "🧭", description: "מצפן מגנטי ביולוגי — הסוד של הציפורים", stationIndex: 3 },
+  { id: "ring-band", name: "טבעת טיבוע", emoji: "🏷️", description: "טבעת SA-1985 — עדות למסע של 7,150 ק״מ", stationIndex: 4 },
 ];
 
 export const getStationReward = (stationIndex: number) => STATION_REWARDS[stationIndex];
