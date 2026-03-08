@@ -11,7 +11,7 @@ import CorrectEffect from "./CorrectEffect";
  */
 
 interface Props {
-  onComplete: (letter: string) => void;
+  onComplete: (letter: string, mistakes: number, hints: number) => void;
   onOpenResearch: () => void;
   onGoHome: () => void;
   onGoMap: () => void;
