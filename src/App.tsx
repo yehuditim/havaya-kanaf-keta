@@ -1,27 +1,22 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import { useState } from "react";
+import HomeScreen from "./components/HomeScreen";
+import InstructionsScreen from "./components/InstructionsScreen";
+import ChallengeScreen from "./components/ChallengeScreen";
+import SuccessScreen from "./components/SuccessScreen";
 
-const queryClient = new QueryClient();
+type Screen = "home" | "instructions" | "challenge" | "success";
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [screen, setScreen] = useState<Screen>("home");
+
+  return (
+    <div className="min-h-screen">
+      {screen === "home" && <HomeScreen onStart={() => setScreen("instructions")} />}
+      {screen === "instructions" && <InstructionsScreen onContinue={() => setScreen("challenge")} />}
+      {screen === "challenge" && <ChallengeScreen onComplete={() => setScreen("success")} />}
+      {screen === "success" && <SuccessScreen onRestart={() => setScreen("home")} />}
+    </div>
+  );
+};
 
 export default App;
