@@ -37,8 +37,8 @@ const App = () => {
   const [showResearch, setShowResearch] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
-  const handleStationComplete = useCallback((stationIndex: number, letter: string) => {
-    game.completeStation(stationIndex, letter);
+  const handleStationComplete = useCallback((stationIndex: number, letter: string, mistakes: number, hints: number) => {
+    game.completeStation(stationIndex, letter, mistakes, hints);
     game.setScreen("hub");
   }, [game]);
 
