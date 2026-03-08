@@ -121,7 +121,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${eilatBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div className="absolute inset-0 z-0 bg-background/75 backdrop-blur-[2px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
-      <div className="max-w-lg w-full">
+      <div className="max-w-lg w-full relative z-10">
         {/* Navigation */}
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
 
