@@ -114,12 +114,17 @@ const ChallengeStation = ({ station, stationIndex, totalStations, collected, onC
               >
                 🔍 התחילו לחקור
               </button>
-              <button
+              <div
                 onClick={() => { playClick(); onOpenResearch(); }}
-                className="text-accent/60 hover:text-accent text-xs transition-colors"
+                className="glass-card rounded-xl px-5 py-3 cursor-pointer hover:scale-[1.03] transition-all border border-accent/15 hover:border-accent/30 group flex items-center gap-3"
               >
-                📚 פתחו את מרכז החקר
-              </button>
+                <span className="text-lg">📚</span>
+                <div className="text-right">
+                  <p className="text-[11px] font-bold text-accent">ארכיון המחקר</p>
+                  <p className="text-[10px] text-muted-foreground">רמזים שיעזרו לכם בחידות</p>
+                </div>
+                <span className="text-accent/30 group-hover:text-accent text-sm mr-auto transition-colors">←</span>
+              </div>
             </div>
           </div>
         </div>
