@@ -1,32 +1,22 @@
 import { useState } from "react";
 
-const questions = [
-  {
-    question: "באיזה עונה ציפורים רבות נודדות דרך ישראל מאפריקה לאירופה?",
-    options: ["קיץ", "אביב", "חורף", "סתיו"],
-    correct: 1,
-    hint: "🌸 נכון! באביב ציפורים רבות עוברות דרך ישראל בדרכן צפונה.",
-  },
-  {
-    question: "איזו ציפור נודדת ידועה בצבעה השחור-לבן ובמקורה האדום הארוך?",
-    options: ["עגור אפור", "חסידה לבנה", "דרור", "נשר"],
-    correct: 1,
-    hint: "🦩 מצוין! החסידה הלבנה היא מהציפורים הנודדות המפורסמות ביותר.",
-  },
-  {
-    question: "מדוע ישראל נחשבת למקום חשוב בנדידת ציפורים?",
-    options: [
-      "כי יש בה הרבה אוכל",
-      "כי היא נמצאת על צומת דרכים בין יבשות",
-      "כי בה חם תמיד",
-      "כי הציפורים אוהבות את הים",
-    ],
-    correct: 1,
-    hint: "🗺️ בדיוק! ישראל נמצאת על נתיב הנדידה בין אפריקה, אסיה ואירופה.",
-  },
-];
+export interface Question {
+  question: string;
+  options: string[];
+  correct: number;
+  hint: string;
+}
 
-const ChallengeScreen = ({ onComplete }: { onComplete: () => void }) => {
+export interface StationProps {
+  stationNumber: number;
+  totalStations: number;
+  title: string;
+  emoji: string;
+  questions: Question[];
+  onComplete: () => void;
+}
+
+const ChallengeStation = ({ stationNumber, totalStations, title, emoji, questions, onComplete }: StationProps) => {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showHint, setShowHint] = useState(false);
@@ -36,9 +26,7 @@ const ChallengeScreen = ({ onComplete }: { onComplete: () => void }) => {
   const handleSelect = (index: number) => {
     if (selected !== null) return;
     setSelected(index);
-    if (index === q.correct) {
-      setShowHint(true);
-    }
+    if (index === q.correct) setShowHint(true);
   };
 
   const handleNext = () => {
@@ -59,6 +47,13 @@ const ChallengeScreen = ({ onComplete }: { onComplete: () => void }) => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6">
       <div className="bg-card rounded-lg shadow-lg p-8 max-w-lg w-full">
+        <div className="text-center mb-4">
+          <span className="text-3xl">{emoji}</span>
+          <h3 className="text-lg font-bold text-muted-foreground">
+            תחנה {stationNumber} מתוך {totalStations}: {title}
+          </h3>
+        </div>
+
         <div className="flex justify-between items-center mb-6">
           <span className="text-sm text-muted-foreground">
             שאלה {current + 1} מתוך {questions.length}
@@ -97,9 +92,7 @@ const ChallengeScreen = ({ onComplete }: { onComplete: () => void }) => {
         </div>
 
         {showHint && (
-          <div className="bg-muted p-4 rounded-lg mb-4 text-right text-foreground">
-            {q.hint}
-          </div>
+          <div className="bg-muted p-4 rounded-lg mb-4 text-right text-foreground">{q.hint}</div>
         )}
 
         {selected !== null && selected !== q.correct && (
@@ -120,7 +113,7 @@ const ChallengeScreen = ({ onComplete }: { onComplete: () => void }) => {
               onClick={handleNext}
               className="bg-secondary text-secondary-foreground px-8 py-3 rounded-lg text-lg font-bold hover:opacity-90 transition-opacity"
             >
-              {current < questions.length - 1 ? "➡️ לשאלה הבאה" : "🏆 סיימנו!"}
+              {current < questions.length - 1 ? "➡️ לשאלה הבאה" : "🏆 לתחנה הבאה!"}
             </button>
           </div>
         )}
@@ -129,4 +122,4 @@ const ChallengeScreen = ({ onComplete }: { onComplete: () => void }) => {
   );
 };
 
-export default ChallengeScreen;
+export default ChallengeStation;
