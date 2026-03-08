@@ -59,11 +59,12 @@ const App = () => {
     onGoMap: goHub,
   };
 
+  type StationProps = { onComplete: (l: string, m: number, h: number) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void };
   const stationComponents = [
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station1Eilat {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station2Hula {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station3Dangers {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station4Lab {...props} />,
+    (props: StationProps) => <Station1Eilat {...props} />,
+    (props: StationProps) => <Station2Hula {...props} />,
+    (props: StationProps) => <Station3Dangers {...props} />,
+    (props: StationProps) => <Station4Lab {...props} />,
   ];
 
   return (
