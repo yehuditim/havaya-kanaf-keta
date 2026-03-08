@@ -64,6 +64,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch }: Props) => {
   const [selectedMatch, setSelectedMatch] = useState<string | null>(null);
   const [matchErrors, setMatchErrors] = useState(0);
   const [showSortResult, setShowSortResult] = useState(false);
+  const [showCorrectEffect, setShowCorrectEffect] = useState(false);
 
   const unsortedBirds = birds.filter(
     b => !sortedBirds.soaring.includes(b.id) && !sortedBirds.night.includes(b.id)
