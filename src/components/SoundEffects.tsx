@@ -1,8 +1,14 @@
 // Lightweight sound effects using Web Audio API - no external files needed
+// Checks global mute state before playing.
 
 let audioCtx: AudioContext | null = null;
+let globalMuted = false;
+
+/** Called by SFXProvider to sync mute state */
+export const setSFXMuted = (muted: boolean) => { globalMuted = muted; };
 
 const getCtx = () => {
+  if (globalMuted) return null;
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
   }
@@ -13,8 +19,8 @@ const getCtx = () => {
 export const playSuccess = () => {
   try {
     const ctx = getCtx();
+    if (!ctx) return;
     const now = ctx.currentTime;
-    // Rising arpeggio
     [523, 659, 784, 1047].forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -27,14 +33,14 @@ export const playSuccess = () => {
       osc.start(now + i * 0.12);
       osc.stop(now + i * 0.12 + 0.5);
     });
-  } catch (e) {}
+  } catch {}
 };
 
 export const playReveal = () => {
   try {
     const ctx = getCtx();
+    if (!ctx) return;
     const now = ctx.currentTime;
-    // Magical shimmer
     [880, 1100, 1320].forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -48,12 +54,13 @@ export const playReveal = () => {
       osc.start(now + i * 0.08);
       osc.stop(now + 1);
     });
-  } catch (e) {}
+  } catch {}
 };
 
 export const playError = () => {
   try {
     const ctx = getCtx();
+    if (!ctx) return;
     const now = ctx.currentTime;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -65,12 +72,13 @@ export const playError = () => {
     osc.connect(gain).connect(ctx.destination);
     osc.start(now);
     osc.stop(now + 0.35);
-  } catch (e) {}
+  } catch {}
 };
 
 export const playClick = () => {
   try {
     const ctx = getCtx();
+    if (!ctx) return;
     const now = ctx.currentTime;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -81,14 +89,14 @@ export const playClick = () => {
     osc.connect(gain).connect(ctx.destination);
     osc.start(now);
     osc.stop(now + 0.1);
-  } catch (e) {}
+  } catch {}
 };
 
 export const playComplete = () => {
   try {
     const ctx = getCtx();
+    if (!ctx) return;
     const now = ctx.currentTime;
-    // Fanfare
     [523, 659, 784, 1047, 784, 1047, 1318].forEach((freq, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -102,5 +110,5 @@ export const playComplete = () => {
       osc.start(now + i * 0.15);
       osc.stop(now + i * 0.15 + 1.6);
     });
-  } catch (e) {}
+  } catch {}
 };

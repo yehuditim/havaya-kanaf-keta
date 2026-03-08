@@ -3,10 +3,10 @@ import { motion } from "framer-motion";
 import { playClick, playSuccess, playError, playComplete } from "../SoundEffects";
 import type { InventoryItem } from "./useGameState";
 import { SECRET_WORD, CODE_LETTERS } from "../gameState";
+import BirdIcon from "../BirdIcon";
 
 /**
  * Final Puzzle: Combine all 4 collected items to crack the escape code.
- * Player must arrange the letters in correct order by clicking inventory items.
  */
 
 interface Props {
@@ -119,10 +119,6 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess }: Props) => {
               <div className="grid grid-cols-4 gap-3 mb-4">
                 {inventory.map(item => {
                   const letter = collectedLetters[item.stationIndex];
-                  const usedCount = enteredLetters.filter(l => l === letter).length;
-                  const availableCount = Object.values(collectedLetters).filter(l => l === letter).length;
-                  // Allow reuse for duplicate letters (like ד appears twice)
-                  const isUsedUp = false; // Allow clicking any time
                   return (
                     <motion.button
                       key={item.id}
@@ -166,18 +162,13 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess }: Props) => {
                 <p className="text-xs text-muted-foreground mb-1">המילה הסודית:</p>
                 <p className="text-4xl font-black text-primary text-glow tracking-[0.3em]">{SECRET_WORD}</p>
               </div>
-              <div className="flex justify-center gap-2 mt-4">
-                {["🎉", "⭐", "🦅", "✨"].map((e, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 + i * 0.2 }}
-                    className="text-2xl"
-                  >
-                    {e}
-                  </motion.span>
-                ))}
+              <div className="flex justify-center gap-3 mt-4">
+                <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="text-2xl">🎉</motion.span>
+                <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }} className="text-2xl">⭐</motion.span>
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }}>
+                  <BirdIcon type="eagle" size={28} className="text-primary" />
+                </motion.div>
+                <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }} className="text-2xl">✨</motion.span>
               </div>
             </motion.div>
           )}

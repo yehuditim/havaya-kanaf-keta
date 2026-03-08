@@ -1,22 +1,27 @@
 import { playClick } from "./SoundEffects";
+import BirdIcon from "./BirdIcon";
 
 const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenResearch: () => void }) => (
   <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
     {/* Animated floating elements */}
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      <div className="absolute top-[8%] right-[8%] text-5xl opacity-[0.12] animate-float">🦅</div>
+      <div className="absolute top-[8%] right-[8%] opacity-[0.12] animate-float">
+        <BirdIcon type="eagle" size={56} className="text-primary" />
+      </div>
       <div className="absolute top-[18%] left-[12%] text-3xl opacity-[0.1] animate-float" style={{ animationDelay: '1.2s' }}>🌍</div>
       <div className="absolute bottom-[22%] right-[18%] text-4xl opacity-[0.1] animate-float" style={{ animationDelay: '2.4s' }}>🧭</div>
       <div className="absolute bottom-[12%] left-[8%] text-5xl opacity-[0.12] animate-float" style={{ animationDelay: '0.6s' }}>🌙</div>
       <div className="absolute top-[45%] right-[5%] text-2xl opacity-[0.08] animate-float" style={{ animationDelay: '1.8s' }}>✨</div>
-      <div className="absolute top-[55%] left-[5%] text-3xl opacity-[0.08] animate-float" style={{ animationDelay: '3s' }}>🪶</div>
+      <div className="absolute top-[55%] left-[5%] opacity-[0.1] animate-float" style={{ animationDelay: '3s' }}>
+        <BirdIcon type="stork" size={40} className="text-muted-foreground" />
+      </div>
     </div>
 
     <div className="max-w-lg relative z-10">
       {/* Animated hero icon */}
       <div className="relative mb-8 inline-block">
         <div className="w-24 h-24 rounded-3xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto shadow-lg shadow-primary/10">
-          <span className="text-6xl animate-float filter drop-shadow-lg">🦅</span>
+          <BirdIcon type="eagle" size={64} className="text-primary animate-float filter drop-shadow-lg" />
         </div>
         <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center text-sm animate-pulse-glow">✨</div>
         <div className="absolute -bottom-2 -left-2 w-7 h-7 rounded-full bg-secondary/20 border border-secondary/30 flex items-center justify-center text-xs animate-pulse-glow" style={{ animationDelay: '1s' }}>⭐</div>

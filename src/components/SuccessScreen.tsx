@@ -2,6 +2,7 @@ import CodeTracker from "./CodeTracker";
 import { SECRET_WORD } from "./gameState";
 import { useEffect } from "react";
 import { playComplete, playClick } from "./SoundEffects";
+import BirdIcon from "./BirdIcon";
 
 interface Props {
   collected: { [key: number]: string };
@@ -18,7 +19,13 @@ const SuccessScreen = ({ collected, onRestart }: Props) => {
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
       {/* Celebration particles */}
       <div className="absolute inset-0 pointer-events-none">
-        {["🎉", "⭐", "🦅", "✨", "🌟", "🎊", "🪶", "🏆"].map((emoji, i) => (
+        {[
+          { el: "🎉" }, { el: "⭐" },
+          { el: <BirdIcon type="eagle" size={28} className="text-primary/60" /> },
+          { el: "✨" }, { el: "🌟" }, { el: "🎊" },
+          { el: <BirdIcon type="crane" size={24} className="text-accent/50" /> },
+          { el: "🏆" },
+        ].map((item, i) => (
           <div
             key={i}
             className="absolute text-2xl animate-float"
@@ -29,7 +36,7 @@ const SuccessScreen = ({ collected, onRestart }: Props) => {
               opacity: 0.15 + (i % 3) * 0.05,
             }}
           >
-            {emoji}
+            {typeof item.el === "string" ? item.el : item.el}
           </div>
         ))}
       </div>

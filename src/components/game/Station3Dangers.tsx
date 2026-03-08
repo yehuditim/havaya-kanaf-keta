@@ -25,7 +25,7 @@ interface ThreatPair {
 
 const threatPairs: ThreatPair[] = [
   { id: "electric", threat: "עמודי חשמל", threatEmoji: "⚡", solution: "מיגון עמודים", solutionEmoji: "🔧", explanation: "נשרים ודורסים גדולים מתחשמלים — מיגון עמודים מציל חיים!" },
-  { id: "invasive", threat: "מינים פולשים", threatEmoji: "🦜", solution: "בקרת אוכלוסין", solutionEmoji: "🛡️", explanation: "המיינה גונבת קינים מציפורים מקומיות — חייבים לשלוט באוכלוסייה" },
+  { id: "invasive", threat: "מינים פולשים", threatEmoji: "⚠️", solution: "בקרת אוכלוסין", solutionEmoji: "🛡️", explanation: "המיינה גונבת קינים מציפורים מקומיות — חייבים לשלוט באוכלוסייה" },
   { id: "turbines", threat: "טורבינות רוח", threatEmoji: "💨", solution: "מיקום חכם", solutionEmoji: "📍", explanation: "הצבת טורבינות רחוק מנתיבי נדידה מונעת התנגשויות" },
   { id: "poison", threat: "הרעלת חומרי הדברה", threatEmoji: "☠️", solution: "חקלאות ירוקה", solutionEmoji: "🌱", explanation: "חומרי הדברה מרעילים את שרשרת המזון — חקלאות אורגנית מצילה" },
   { id: "light", threat: "זיהום אור", threatEmoji: "💡", solution: "תאורה חכמה", solutionEmoji: "🌙", explanation: "אור מלאכותי מבלבל נודדי לילה שמנווטים לפי כוכבים" },
