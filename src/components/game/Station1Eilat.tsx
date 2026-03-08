@@ -55,7 +55,7 @@ const matchTargets = [
   { id: "rest", label: "🏕️ מנוחה", emoji: "🏕️" },
 ];
 
-const Station1Eilat = ({ onComplete, onOpenResearch }: Props) => {
+const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
   const [sortedBirds, setSortedBirds] = useState<{ soaring: string[]; night: string[] }>({ soaring: [], night: [] });
   const [selectedBird, setSelectedBird] = useState<string | null>(null);
