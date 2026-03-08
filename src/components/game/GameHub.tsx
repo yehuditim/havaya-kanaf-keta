@@ -25,7 +25,7 @@ const stationNodes = [
 ];
 
 const pathSegments = [
-  { from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 },
+  { from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }, { from: 3, to: 4 }, { from: 4, to: 0 },
 ];
 
 const GameHub = ({
