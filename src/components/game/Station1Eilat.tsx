@@ -1,4 +1,5 @@
 import { useState } from "react";
+import eilatBg from "../../assets/backgrounds/eilat-desert.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
