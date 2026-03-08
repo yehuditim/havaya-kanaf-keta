@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dangersBg from "../../assets/backgrounds/dangers-path.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
