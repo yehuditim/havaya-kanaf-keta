@@ -35,7 +35,7 @@ export const stations: Station[] = [
   {
     title: "שער אילת",
     emoji: "🏜️",
-    bgEmoji: "🦅",
+    bgEmoji: "🗺️",
     theme: "desert",
     accentClass: "text-station-3",
     glowClass: "station-glow-3",
