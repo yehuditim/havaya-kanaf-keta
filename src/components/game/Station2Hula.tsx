@@ -6,7 +6,6 @@ import { getStationReward } from "./useGameState";
 import GameNav from "./GameNav";
 import CorrectEffect from "./CorrectEffect";
 import NarrationPlayer from "./NarrationPlayer";
-import YouTubeEmbed from "./YouTubeEmbed";
 import AtbashDecoder from "./AtbashDecoder";
 import { encodeAtbash } from "./AtbashDecoder";
 import ResearchMission from "./ResearchMission";
@@ -18,7 +17,7 @@ interface Props {
   onGoMap: () => void;
 }
 
-type Phase = "briefing" | "investigate" | "video" | "research" | "decode" | "reward";
+type Phase = "briefing" | "investigate" | "research" | "decode" | "reward";
 
 interface Hotspot {
   id: string; x: string; y: string; emoji: string; label: string;
@@ -39,9 +38,15 @@ const researchCards = [
   { id: "stopover", title: "תחנות תדלוק", emoji: "⛽", content: "תחנות תדלוק (Stopover sites) הן מקומות בהם ציפורים נחות, אוכלות ושותות. בלי תחנות כאלה הנדידה בלתי אפשרית. החולה היא תחנת תדלוק מרכזית." },
 ];
 
-// Atbash target: "עגור" (the crane)
 const ATBASH_ANSWER = "עגור";
 const ATBASH_ENCODED = encodeAtbash(ATBASH_ANSWER);
+
+const phaseVariants = {
+  initial: { opacity: 0, y: 30, scale: 0.97 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, y: -20, scale: 0.97 },
+};
+const phaseTransition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
 
 const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
@@ -72,7 +77,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
         <AnimatePresence mode="wait">
           {/* BRIEFING */}
           {phase === "briefing" && (
-            <motion.div key="briefing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-4">
+            <motion.div key="briefing" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-4">
               <div className="glass-card rounded-2xl p-6 station-glow-1">
                 <div className="text-center mb-4">
                   <div className="w-20 h-20 rounded-2xl bg-station-1/10 border border-station-1/25 flex items-center justify-center text-5xl mx-auto mb-3">🌿</div>
@@ -80,9 +85,12 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
                   <p className="text-sm text-muted-foreground mt-1">תחנת התצפית • חקירת שטח</p>
                 </div>
                 <NarrationPlayer
-                  text="הגעתם לצפון — לאגמון החולה! זה אחד ממרכזי הצפרות המדהימים בעולם. הפורץ סגר את כל המסכים בתחנת התצפית. תצטרכו לחפש 5 רמזים חבויים, לצפות בסרטון, לחקור בכרטיסי מידע, ולפענח צופן אתב״ש מסתורי שמסתתר באחד הרמזים. רק כך תגלו את האות השנייה!"
+                  text="הגעתם לצפון — לאגמון החולה! זה אחד ממרכזי הצפרות המדהימים בעולם. הפורץ סגר את כל המסכים בתחנת התצפית. תצטרכו לחפש 5 רמזים חבויים, לחקור בכרטיסי מידע, ולפענח צופן אתב״ש מסתורי שמסתתר באחד הרמזים. רק כך תגלו את האות השנייה!"
                   className="mb-4"
                 />
+                <div className="bg-accent/5 rounded-lg p-3 border border-accent/15 text-right mb-4">
+                  <p className="text-[11px] text-accent/80">📖 <strong>טיפ:</strong> קראו על <a href="https://www.agamon-hula.co.il/" target="_blank" rel="noopener noreferrer" className="text-accent underline hover:text-accent/70">אגמון החולה</a> או פתחו את ארכיון המחקר</p>
+                </div>
                 <div className="flex flex-col items-center gap-3">
                   <button onClick={() => { playClick(); setPhase("investigate"); }} className="bg-gradient-to-l from-station-1 to-station-1/80 text-background px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-station-1/20">
                     🔍 היכנסו לתחנה
@@ -94,7 +102,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
 
           {/* INVESTIGATE */}
           {phase === "investigate" && (
-            <motion.div key="investigate" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+            <motion.div key="investigate" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <div className="glass-card rounded-2xl p-5 station-glow-1 mb-3">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-black text-station-1 bg-station-1/10 px-3 py-1 rounded-lg border border-station-1/20">🌿 שלב 1: חקירת שטח</span>
@@ -140,38 +148,20 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
               {allDiscovered && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card rounded-xl p-4 text-center">
                   <p className="text-sm font-bold text-station-1 mb-2">🔓 כל הרמזים נחשפו!</p>
-                  <p className="text-xs text-muted-foreground mb-3">שמתם לב לצופן ברמז של הנוצה? עכשיו צפו בסרטון וחקרו!</p>
-                  <button onClick={() => { playClick(); setPhase("video"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
-                    🎬 לסרטון
+                  <p className="text-xs text-muted-foreground mb-3">שמתם לב לצופן ברמז של הנוצה? עכשיו חקרו בכרטיסים!</p>
+                  <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
+                    🔬 למשימת החקר
                   </button>
                 </motion.div>
               )}
             </motion.div>
           )}
 
-          {/* VIDEO */}
-          {phase === "video" && (
-            <motion.div key="video" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
-              <div className="glass-card rounded-2xl p-5 station-glow-1">
-                <p className="text-xs font-black text-station-1 mb-3">🎬 שלב 2: צפו וחקרו</p>
-                <p className="text-[11px] text-muted-foreground text-right mb-3">
-                  צפו בסרטון על עגורים באגמון החולה. <strong className="text-foreground">כמה עגורים חונים בחולה בחורף?</strong> תזדקקו למספר הזה!
-                </p>
-                <YouTubeEmbed videoId="kYsG5ml1ARY" title="עגורים באגמון החולה" className="mb-3" />
-              </div>
-              <div className="text-center">
-                <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
-                  ➡️ למשימת החקר
-                </button>
-              </div>
-            </motion.div>
-          )}
-
           {/* RESEARCH */}
           {phase === "research" && (
-            <motion.div key="research" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
+            <motion.div key="research" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <div className="glass-card rounded-2xl p-5 station-glow-1">
-                <p className="text-xs font-black text-station-1 mb-3">🔬 שלב 3: משימת חקר</p>
+                <p className="text-xs font-black text-station-1 mb-3">🔬 שלב 2: משימת חקר</p>
                 <ResearchMission
                   prompt="פרופסור דרור שואל: ׳כמה עגורים אפורים חונים באגמון החולה כל חורף? חפשו את המספר המדויק!׳"
                   cards={researchCards}
@@ -195,9 +185,9 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
 
           {/* DECODE - Atbash */}
           {phase === "decode" && (
-            <motion.div key="decode" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
+            <motion.div key="decode" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <div className="glass-card rounded-2xl p-5 station-glow-1">
-                <p className="text-xs font-black text-station-1 mb-3">🔐 שלב 4: פענוח צופן אתב״ש</p>
+                <p className="text-xs font-black text-station-1 mb-3">🔐 שלב 3: פענוח צופן אתב״ש</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
                   ברמז של הנוצה מצאתם ש״שם העגור באתב״ש הוא: ״{ATBASH_ENCODED}״. <strong className="text-foreground">פענחו — מה המילה האמיתית?</strong>
                 </p>
@@ -213,7 +203,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
 
           {/* REWARD */}
           {phase === "reward" && (
-            <motion.div key="reward" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card rounded-2xl p-6 station-glow-1 text-center">
+            <motion.div key="reward" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="glass-card rounded-2xl p-6 station-glow-1 text-center">
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring" }} className="mb-4">
                 <div className="w-20 h-20 rounded-2xl bg-primary/15 border-2 border-primary flex items-center justify-center text-5xl mx-auto shadow-xl shadow-primary/20">{reward?.emoji}</div>
               </motion.div>

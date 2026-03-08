@@ -3,11 +3,10 @@ import eilatBg from "../../assets/backgrounds/eilat-desert.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
-import BirdIcon, { birdIdToIcon } from "../BirdIcon";
+import BirdIcon from "../BirdIcon";
 import GameNav from "./GameNav";
 import CorrectEffect from "./CorrectEffect";
 import NarrationPlayer from "./NarrationPlayer";
-import YouTubeEmbed from "./YouTubeEmbed";
 import CodeLock from "./CodeLock";
 import ResearchMission from "./ResearchMission";
 
@@ -18,7 +17,7 @@ interface Props {
   onGoMap: () => void;
 }
 
-type Phase = "briefing" | "video" | "research" | "sort" | "lock" | "reward";
+type Phase = "briefing" | "research" | "sort" | "lock" | "reward";
 
 interface BirdCard {
   id: string;
@@ -43,6 +42,13 @@ const researchCards = [
   { id: "hyperphagia", title: "היפרפגיה — תדלוק לפני הטיסה", emoji: "⚖️", content: "לפני נדידה ציפורים עוברות היפרפגיה — אכילה מוגברת שמעלה את משקלן עד 50% בשומן. תהליך זה נמשך כשבועיים. אחוז השומן המדויק: עד 50 אחוז ממשקל הגוף.", hiddenClue: "הקוד הוא אחוז השומן שציפורים צוברות: 50" },
   { id: "eilat", title: "אילת — שער הכניסה", emoji: "🏜️", content: "אילת היא תחנת הדלק הראשונה אחרי 2,000 ק״מ של מדבר סהרה. פסטיבל הצפרות באילת (מרץ) הוא אירוע בינלאומי." },
 ];
+
+const phaseVariants = {
+  initial: { opacity: 0, y: 30, scale: 0.97 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, y: -20, scale: 0.97 },
+};
+const phaseTransition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
 
 const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
@@ -78,9 +84,9 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
 
         <AnimatePresence mode="wait">
-          {/* BRIEFING with Narration */}
+          {/* BRIEFING */}
           {phase === "briefing" && (
-            <motion.div key="briefing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-4">
+            <motion.div key="briefing" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-4">
               <div className="glass-card rounded-2xl p-6 station-glow-3">
                 <div className="text-center mb-4">
                   <div className="w-20 h-20 rounded-2xl bg-station-3/10 border border-station-3/25 flex items-center justify-center text-5xl mx-auto mb-3">🏜️</div>
@@ -89,52 +95,31 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
                 </div>
 
                 <NarrationPlayer
-                  text="הגעתם לאילת — השער הדרומי של ישראל. כאן, אחרי טיסה של אלפיים קילומטר מעל מדבר סהרה, נוחתות ציפורים על סף התמוטטות. מישהו פרץ למחשב שלי ונעל את כל הנתונים. כדי לשחזר אותם, תצטרכו קודם ללמוד על הנדידה — לצפות בסרטון, לחפש מידע בכרטיסי המחקר, למיין את הציפורים, ולפענח את קוד המנעול. בהצלחה, חוקרים!"
+                  text="הגעתם לאילת — השער הדרומי של ישראל. כאן, אחרי טיסה של אלפיים קילומטר מעל מדבר סהרה, נוחתות ציפורים על סף התמוטטות. מישהו פרץ למחשב שלי ונעל את כל הנתונים. כדי לשחזר אותם, תצטרכו לחפש מידע בכרטיסי המחקר, למיין את הציפורים, ולפענח את קוד המנעול. בהצלחה, חוקרים!"
                   className="mb-4"
                 />
 
+                <div className="bg-accent/5 rounded-lg p-3 border border-accent/15 text-right mb-4">
+                  <p className="text-[11px] text-accent/80">📖 <strong>טיפ:</strong> קראו על נדידת ציפורים בארכיון המחקר או ב<a href="https://he.wikipedia.org/wiki/%D7%A0%D7%93%D7%99%D7%93%D7%AA_%D7%A6%D7%99%D7%A4%D7%95%D7%A8%D7%99%D7%9D" target="_blank" rel="noopener noreferrer" className="text-accent underline hover:text-accent/70">ויקיפדיה</a> — תצטרכו את המידע!</p>
+                </div>
+
                 <div className="flex flex-col items-center gap-3">
-                  <button onClick={() => { playClick(); setPhase("video"); }} className="bg-gradient-to-l from-station-3 to-station-3/80 text-background px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-station-3/20">
-                    🎬 צפו בסרטון קודם
+                  <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-station-3 to-station-3/80 text-background px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-station-3/20">
+                    🔬 למשימת החקר
                   </button>
                   <button onClick={() => { playClick(); onOpenResearch(); }} className="text-accent/60 text-xs hover:text-accent transition-colors">
-                    📚 או קפצו ישר לארכיון המחקר
+                    📚 פתחו את ארכיון המחקר
                   </button>
                 </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* VIDEO PHASE */}
-          {phase === "video" && (
-            <motion.div key="video" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
-              <div className="glass-card rounded-2xl p-5 station-glow-3">
-                <p className="text-xs font-black text-station-3 mb-3">🎬 שלב 1: צפו וחקרו</p>
-                <p className="text-[11px] text-muted-foreground text-right mb-3">
-                  צפו בסרטון ושימו לב: <strong className="text-foreground">אילו ציפורים טסות ביום ואילו בלילה?</strong> מה ההבדל בין דואים לנודדי לילה?
-                </p>
-                <YouTubeEmbed
-                  videoId="bRz9TdDxM_0"
-                  title="נדידת ציפורים בישראל"
-                  className="mb-3"
-                />
-                <div className="bg-accent/5 rounded-lg p-2.5 border border-accent/15 text-right">
-                  <p className="text-[10px] text-accent/80">💡 <strong>טיפ מפרופסור דרור:</strong> שימו לב למילה ״תרמיקות״ בסרטון — היא המפתח למשימת המיון!</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-3">
-                <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
-                  ➡️ למשימת החקר
-                </button>
               </div>
             </motion.div>
           )}
 
           {/* RESEARCH MISSION */}
           {phase === "research" && (
-            <motion.div key="research" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
+            <motion.div key="research" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <div className="glass-card rounded-2xl p-5 station-glow-3">
-                <p className="text-xs font-black text-station-3 mb-3">🔬 שלב 2: משימת חקר</p>
+                <p className="text-xs font-black text-station-3 mb-3">🔬 שלב 1: משימת חקר</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
                   חפשו בכרטיסי המחקר: <strong className="text-foreground">כמה אחוזי שומן ציפורים צוברות לפני הנדידה?</strong> המספר הזה הוא הקוד למנעול בשלב הבא!
                 </p>
@@ -161,14 +146,14 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
 
           {/* SORT PHASE */}
           {phase === "sort" && (
-            <motion.div key="sort" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+            <motion.div key="sort" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <div className="glass-card rounded-2xl p-5 station-glow-3 mb-3">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-black text-station-3 bg-station-3/10 px-3 py-1 rounded-lg border border-station-3/20">🏜️ שלב 3: מיון ציפורים</span>
+                  <span className="text-xs font-black text-station-3 bg-station-3/10 px-3 py-1 rounded-lg border border-station-3/20">🏜️ שלב 2: מיון ציפורים</span>
                   <span className="text-[10px] text-muted-foreground">{6 - unsortedBirds.length}/6</span>
                 </div>
                 <p className="text-xs text-muted-foreground text-right mb-3">
-                  השתמשו במה שלמדתם מהסרטון והכרטיסים — מיינו כל ציפור לקטגוריה הנכונה
+                  השתמשו במה שלמדתם מהכרטיסים — מיינו כל ציפור לקטגוריה הנכונה
                 </p>
                 <div className="grid grid-cols-3 gap-2 mb-3">
                   {birds.map(bird => {
@@ -212,9 +197,9 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
 
           {/* LOCK PHASE */}
           {phase === "lock" && (
-            <motion.div key="lock" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
+            <motion.div key="lock" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <div className="glass-card rounded-2xl p-5 station-glow-3">
-                <p className="text-xs font-black text-station-3 mb-3">🔒 שלב 4: מנעול קוד</p>
+                <p className="text-xs font-black text-station-3 mb-3">🔒 שלב 3: מנעול קוד</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
                   זוכרים את המספר שמצאתם במשימת החקר? <strong className="text-foreground">אחוז השומן שציפורים צוברות לפני נדידה?</strong> הכניסו אותו כדי לפתוח!
                 </p>
@@ -230,7 +215,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
 
           {/* REWARD */}
           {phase === "reward" && (
-            <motion.div key="reward" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card rounded-2xl p-6 station-glow-3 text-center">
+            <motion.div key="reward" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="glass-card rounded-2xl p-6 station-glow-3 text-center">
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring" }} className="mb-4">
                 <div className="w-20 h-20 rounded-2xl bg-primary/15 border-2 border-primary flex items-center justify-center text-5xl mx-auto shadow-xl shadow-primary/20">{reward?.emoji}</div>
               </motion.div>
@@ -243,10 +228,9 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
               </motion.div>
               <div className="bg-muted/25 rounded-xl p-4 mb-5 text-right border border-border/20">
                 <p className="text-xs leading-[1.8] text-foreground/80 italic">
-                  ״מעולה! שחזרתם את נתוני תחנת אילת. כמיליארד ציפורים עוברות מעל ישראל — וכל אחת עוברת את הנדידה הקשה הזו רק בזכות התדלוק והכנה מדהימים. עכשיו אתם מבינים!״
+                  ״מצוין! שחזרתם את הנתונים של תחנת אילת. ציפורים מגיעות לכאן רזות ועייפות — אילת מצילה את חייהן!״
                 </p>
               </div>
-              <p className="text-xs text-muted-foreground mb-4">💡 עגורים תועדו טסים בגובה 8,000 מטר — מעל הרי ההימלאיה!</p>
               <button onClick={() => onComplete("נ", sortErrors, hintsUsed)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
