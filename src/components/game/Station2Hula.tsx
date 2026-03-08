@@ -2,15 +2,18 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
+import GameNav from "./GameNav";
+import CorrectEffect from "./CorrectEffect";
 
 /**
  * Station 2: Hula Valley — "Field Station Investigation"
- * Puzzle: Click hotspots in a scene to discover clues, then solve a riddle.
  */
 
 interface Props {
   onComplete: (letter: string) => void;
   onOpenResearch: () => void;
+  onGoHome: () => void;
+  onGoMap: () => void;
 }
 
 interface Hotspot {
@@ -65,11 +68,12 @@ const riddles: Riddle[] = [
   },
 ];
 
-const Station2Hula = ({ onComplete, onOpenResearch }: Props) => {
+const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
   const [discoveredHotspots, setDiscoveredHotspots] = useState<Set<string>>(new Set());
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
   const [riddleIndex, setRiddleIndex] = useState(0);
+  const [showCorrectEffect, setShowCorrectEffect] = useState(false);
   const [riddleAnswer, setRiddleAnswer] = useState<number | null>(null);
   const [riddleErrors, setRiddleErrors] = useState(0);
 
@@ -114,15 +118,19 @@ const Station2Hula = ({ onComplete, onOpenResearch }: Props) => {
 
   return (
     <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col items-center justify-center">
+      <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
       <div className="max-w-lg w-full">
+        {/* Navigation */}
+        <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
+
         <AnimatePresence mode="wait">
           {/* BRIEFING */}
           {phase === "briefing" && (
             <motion.div key="briefing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="glass-card rounded-2xl p-6 station-glow-1">
               <div className="text-center mb-5">
-                <div className="w-16 h-16 rounded-2xl bg-station-1/10 border border-station-1/25 flex items-center justify-center text-4xl mx-auto mb-3">🌿</div>
-                <h2 className="text-xl font-black text-station-1">תחנה 2: אגמון החולה</h2>
-                <p className="text-xs text-muted-foreground mt-1">תחנת התצפית • חקירת שטח</p>
+                <div className="w-20 h-20 rounded-2xl bg-station-1/10 border border-station-1/25 flex items-center justify-center text-5xl mx-auto mb-3">🌿</div>
+                <h2 className="text-2xl font-black text-station-1">תחנה 2: אגמון החולה</h2>
+                <p className="text-sm text-muted-foreground mt-1">תחנת התצפית • חקירת שטח</p>
               </div>
               <div className="bg-muted/25 rounded-xl p-4 mb-5 border border-border/20">
                 <div className="flex items-center gap-2 mb-2">

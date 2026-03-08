@@ -2,16 +2,18 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
+import GameNav from "./GameNav";
+import CorrectEffect from "./CorrectEffect";
 
 /**
  * Station 4: Navigation Lab — "Build the Compass"
- * Phase 1: Place navigation methods on a compass diagram (click-to-select & place)
- * Phase 2: Sequence tracking technologies in chronological order
  */
 
 interface Props {
   onComplete: (letter: string) => void;
   onOpenResearch: () => void;
+  onGoHome: () => void;
+  onGoMap: () => void;
 }
 
 interface NavMethod {
@@ -54,13 +56,14 @@ const techItems: TechItem[] = [
 
 type Phase = "briefing" | "compass" | "sequence" | "reward";
 
-const Station4Lab = ({ onComplete, onOpenResearch }: Props) => {
+const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
   const [selectedNav, setSelectedNav] = useState<string | null>(null);
   const [placedNavs, setPlacedNavs] = useState<{ [slot: string]: string }>({});
   const [compassErrors, setCompassErrors] = useState(0);
   const [techOrder, setTechOrder] = useState<string[]>([]);
   const [seqErrors, setSeqErrors] = useState(0);
+  const [showCorrectEffect, setShowCorrectEffect] = useState(false);
 
   const reward = getStationReward(3);
   const allNavPlaced = Object.keys(placedNavs).length === 4;
@@ -111,20 +114,24 @@ const Station4Lab = ({ onComplete, onOpenResearch }: Props) => {
 
   return (
     <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col items-center justify-center">
+      <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
       <div className="max-w-lg w-full">
+        {/* Navigation */}
+        <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
+
         <AnimatePresence mode="wait">
           {/* BRIEFING */}
           {phase === "briefing" && (
             <motion.div key="briefing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="glass-card rounded-2xl p-6 station-glow-4">
               <div className="text-center mb-5">
-                <div className="w-16 h-16 rounded-2xl bg-station-4/10 border border-station-4/25 flex items-center justify-center text-4xl mx-auto mb-3">🧭</div>
-                <h2 className="text-xl font-black text-station-4">תחנה 4: מעבדת הניווט</h2>
-                <p className="text-xs text-muted-foreground mt-1">טכנולוגיה ומדע • הרכבת מצפן</p>
+                <div className="w-20 h-20 rounded-2xl bg-station-4/10 border border-station-4/25 flex items-center justify-center text-5xl mx-auto mb-3">🧭</div>
+                <h2 className="text-2xl font-black text-station-4">תחנה 4: מעבדת הניווט</h2>
+                <p className="text-sm text-muted-foreground mt-1">טכנולוגיה ומדע • הרכבת מצפן</p>
               </div>
               <div className="bg-muted/25 rounded-xl p-4 mb-5 border border-border/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-lg">👨‍🔬</span>
-                  <span className="text-xs font-bold text-muted-foreground">פרופסור דרור</span>
+                  <span className="text-xl">👨‍🔬</span>
+                  <span className="text-sm font-bold text-muted-foreground">פרופסור דרור</span>
                 </div>
                 <p className="text-[13px] leading-[2] text-foreground/85 italic text-right">
                   ״התחנה האחרונה! כאן נמצאת מעבדת הניווט שלי.

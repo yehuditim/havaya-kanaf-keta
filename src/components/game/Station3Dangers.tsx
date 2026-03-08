@@ -2,16 +2,18 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
+import GameNav from "./GameNav";
+import CorrectEffect from "./CorrectEffect";
 
 /**
  * Station 3: Danger Path — "Match Threats & Decode"
- * Phase 1: Match threats to their descriptions
- * Phase 2: Decode a cipher message about conservation
  */
 
 interface Props {
   onComplete: (letter: string) => void;
   onOpenResearch: () => void;
+  onGoHome: () => void;
+  onGoMap: () => void;
 }
 
 interface ThreatPair {
@@ -45,7 +47,7 @@ const cipherHint = "כל אות הוחלפה באות שלפניה באל״ף ב
 
 type Phase = "briefing" | "match" | "decode" | "reward";
 
-const Station3Dangers = ({ onComplete, onOpenResearch }: Props) => {
+const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
   const [selectedThreat, setSelectedThreat] = useState<string | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<Set<string>>(new Set());
@@ -54,6 +56,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch }: Props) => {
   const [decodeAttempts, setDecodeAttempts] = useState(0);
   const [showCipherHint, setShowCipherHint] = useState(false);
   const [decoded, setDecoded] = useState(false);
+  const [showCorrectEffect, setShowCorrectEffect] = useState(false);
 
   const reward = getStationReward(2);
   const allMatched = matchedPairs.size === threatPairs.length;
@@ -93,19 +96,23 @@ const Station3Dangers = ({ onComplete, onOpenResearch }: Props) => {
 
   return (
     <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col items-center justify-center">
+      <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
       <div className="max-w-lg w-full">
+        {/* Navigation */}
+        <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
+
         <AnimatePresence mode="wait">
           {/* BRIEFING */}
           {phase === "briefing" && (
             <motion.div key="briefing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="glass-card rounded-2xl p-6 station-glow-2">
               <div className="text-center mb-5">
-                <div className="w-16 h-16 rounded-2xl bg-station-2/10 border border-station-2/25 flex items-center justify-center text-4xl mx-auto mb-3">⚡</div>
-                <h2 className="text-xl font-black text-station-2">תחנה 3: שביל הסכנות</h2>
-                <p className="text-xs text-muted-foreground mt-1">חקירת איומים • פענוח צופן</p>
+                <div className="w-20 h-20 rounded-2xl bg-station-2/10 border border-station-2/25 flex items-center justify-center text-5xl mx-auto mb-3">⚡</div>
+                <h2 className="text-2xl font-black text-station-2">תחנה 3: שביל הסכנות</h2>
+                <p className="text-sm text-muted-foreground mt-1">חקירת איומים • פענוח צופן</p>
               </div>
               <div className="bg-muted/25 rounded-xl p-4 mb-5 border border-border/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-lg">👨‍🔬</span>
+                  <span className="text-xl">👨‍🔬</span>
                   <span className="text-xs font-bold text-muted-foreground">פרופסור דרור</span>
                 </div>
                 <p className="text-[13px] leading-[2] text-foreground/85 italic text-right">
