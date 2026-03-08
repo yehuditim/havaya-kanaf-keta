@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
 import BirdIcon, { birdIdToIcon } from "../BirdIcon";
+import GameNav from "./GameNav";
+import CorrectEffect from "./CorrectEffect";
 
 /**
  * Station 1: Eilat Gateway — "Sort the Migrants"
@@ -11,6 +13,8 @@ import BirdIcon, { birdIdToIcon } from "../BirdIcon";
 interface Props {
   onComplete: (letter: string) => void;
   onOpenResearch: () => void;
+  onGoHome: () => void;
+  onGoMap: () => void;
 }
 
 interface BirdCard {
