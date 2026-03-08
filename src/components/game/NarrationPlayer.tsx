@@ -1,24 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { playClick } from "../SoundEffects";
 
 interface NarrationPlayerProps {
-  /** Display text to show (the narration script) */
   text: string;
-  /** Speaker name */
   speaker?: string;
-  /** Speaker emoji */
   speakerEmoji?: string;
-  /** Auto-expand on mount */
   autoExpand?: boolean;
   className?: string;
 }
 
-/**
- * Narration component that shows story text with a typewriter-like reveal effect.
- * Designed for pre-recorded audio (placeholder URLs) — currently shows text with
- * animated reveal to create an immersive narration feel.
- */
 const NarrationPlayer = ({
   text,
   speaker = "פרופסור דרור",
@@ -28,7 +19,10 @@ const NarrationPlayer = ({
 }: NarrationPlayerProps) => {
   const [revealed, setRevealed] = useState(autoExpand);
   const [displayedChars, setDisplayedChars] = useState(autoExpand ? text.length : 0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [ttsSupported] = useState(() => typeof window !== "undefined" && "speechSynthesis" in window);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   useEffect(() => {
     if (revealed && displayedChars < text.length) {
@@ -38,21 +32,66 @@ const NarrationPlayer = ({
             if (intervalRef.current) clearInterval(intervalRef.current);
             return text.length;
           }
-          return prev + 2; // reveal 2 chars at a time for speed
+          return prev + 2;
         });
       }, 15);
     }
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [revealed, text]);
 
+  // Cleanup speech on unmount
+  useEffect(() => {
+    return () => {
+      if (utteranceRef.current) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  const speak = useCallback(() => {
+    if (!ttsSupported) return;
+    window.speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "he-IL";
+    utter.rate = 0.9;
+    utter.pitch = 1;
+
+    // Try to find a Hebrew voice
+    const voices = window.speechSynthesis.getVoices();
+    const heVoice = voices.find(v => v.lang.startsWith("he")) || voices.find(v => v.lang.startsWith("ar")) || null;
+    if (heVoice) utter.voice = heVoice;
+
+    utter.onstart = () => setIsSpeaking(true);
+    utter.onend = () => setIsSpeaking(false);
+    utter.onerror = () => setIsSpeaking(false);
+
+    utteranceRef.current = utter;
+    window.speechSynthesis.speak(utter);
+  }, [text, ttsSupported]);
+
+  const stopSpeaking = useCallback(() => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  }, []);
+
   const handlePlay = () => {
     playClick();
     setRevealed(true);
+    speak();
   };
 
   const handleSkip = () => {
     setDisplayedChars(text.length);
     if (intervalRef.current) clearInterval(intervalRef.current);
+  };
+
+  const handleTTSToggle = () => {
+    if (isSpeaking) {
+      stopSpeaking();
+    } else {
+      speak();
+    }
   };
 
   return (
@@ -65,16 +104,31 @@ const NarrationPlayer = ({
           <p className="text-xs font-bold text-primary">{speaker}</p>
           <p className="text-[10px] text-muted-foreground">קריינות סיפור</p>
         </div>
-        {!revealed && (
-          <button onClick={handlePlay} className="bg-primary/15 text-primary px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-primary/25 transition-colors border border-primary/20">
-            ▶ השמע
-          </button>
-        )}
-        {revealed && displayedChars < text.length && (
-          <button onClick={handleSkip} className="text-muted-foreground/60 text-[10px] hover:text-muted-foreground transition-colors">
-            דלג ⏭
-          </button>
-        )}
+        <div className="flex items-center gap-1.5">
+          {!revealed && (
+            <button onClick={handlePlay} className="bg-primary/15 text-primary px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-primary/25 transition-colors border border-primary/20">
+              ▶ השמע
+            </button>
+          )}
+          {revealed && ttsSupported && (
+            <button
+              onClick={handleTTSToggle}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                isSpeaking
+                  ? "bg-primary/20 text-primary border-primary/30 animate-pulse"
+                  : "bg-muted/40 text-muted-foreground border-border/25 hover:bg-primary/10 hover:text-primary"
+              }`}
+              title={isSpeaking ? "עצור הקראה" : "הקרא בקול"}
+            >
+              {isSpeaking ? "⏸ עצור" : "🔊 הקרא"}
+            </button>
+          )}
+          {revealed && displayedChars < text.length && (
+            <button onClick={handleSkip} className="text-muted-foreground/60 text-[10px] hover:text-muted-foreground transition-colors">
+              דלג ⏭
+            </button>
+          )}
+        </div>
       </div>
       {revealed && (
         <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} className="p-4">
