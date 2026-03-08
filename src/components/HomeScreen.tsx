@@ -67,6 +67,25 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         🔓 קבלו את המשימה
       </button>
 
+      {/* Research center - prominent card */}
+      <div
+        onClick={() => { playClick(); onOpenResearch(); }}
+        className="glass-card rounded-2xl p-4 mt-8 mb-6 cursor-pointer hover:scale-[1.02] transition-all duration-300 border border-accent/20 hover:border-accent/35 hover:shadow-lg hover:shadow-accent/10 group"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-accent/15 border border-accent/20 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
+            📚
+          </div>
+          <div className="flex-1 text-right">
+            <p className="text-sm font-black text-accent mb-0.5">ארכיון המחקר של פרופסור דרור</p>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              13 כרטיסי מחקר סודיים • מכילים רמזים לחידות • <span className="text-accent/80">כדאי לקרוא לפני שמתחילים!</span>
+            </p>
+          </div>
+          <span className="text-accent/40 group-hover:text-accent text-lg transition-colors shrink-0">←</span>
+        </div>
+      </div>
+
       {/* Info footer */}
       <div className="flex items-center justify-center gap-5 text-muted-foreground/40 text-xs">
         <span className="flex items-center gap-1.5">🗺️ 4 תחנות</span>
@@ -75,14 +94,6 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         <span className="w-1 h-1 rounded-full bg-muted-foreground/20" />
         <span className="flex items-center gap-1.5">🔑 קוד סודי</span>
       </div>
-
-      {/* Research center link */}
-      <button
-        onClick={() => { playClick(); onOpenResearch(); }}
-        className="mt-6 inline-flex items-center gap-2 text-accent/70 hover:text-accent text-xs transition-colors"
-      >
-        📚 מרכז החקר — כרטיסי מידע ומקורות
-      </button>
     </div>
   </div>
 );

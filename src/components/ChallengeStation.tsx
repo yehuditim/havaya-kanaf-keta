@@ -305,15 +305,14 @@ const ChallengeStation = ({ station, stationIndex, totalStations, collected, onC
             </div>
           )}
 
-          {/* Research center link */}
+          {/* Research center - visible help prompt */}
           {selected === null && (
-            <div className="text-center mt-4">
-              <button
-                onClick={() => { playClick(); onOpenResearch(); }}
-                className="text-accent/40 hover:text-accent/70 text-[11px] transition-colors"
-              >
-                📚 מרכז החקר
-              </button>
+            <div
+              onClick={() => { playClick(); onOpenResearch(); }}
+              className="mt-4 flex items-center justify-center gap-2 py-2.5 px-4 mx-auto rounded-xl bg-accent/6 border border-accent/12 cursor-pointer hover:bg-accent/12 hover:border-accent/25 transition-all group"
+            >
+              <span className="text-sm">📚</span>
+              <span className="text-[11px] text-accent/60 group-hover:text-accent font-medium transition-colors">צריכים עזרה? בדקו בארכיון המחקר</span>
             </div>
           )}
         </div>
