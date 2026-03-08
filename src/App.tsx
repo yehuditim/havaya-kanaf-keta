@@ -9,6 +9,22 @@ type Screen = "home" | "instructions" | "success" | number;
 
 const App = () => {
   const [screen, setScreen] = useState<Screen>("home");
+  const [collected, setCollected] = useState<{ [key: number]: string }>({});
+
+  const handleStationComplete = (stationIndex: number, codeLetter: string) => {
+    const next = { ...collected, [stationIndex]: codeLetter };
+    setCollected(next);
+    if (stationIndex < stations.length - 1) {
+      setScreen(stationIndex + 1);
+    } else {
+      setScreen("success");
+    }
+  };
+
+  const handleRestart = () => {
+    setCollected({});
+    setScreen("home");
+  };
 
   return (
     <div className="min-h-screen">
@@ -17,17 +33,14 @@ const App = () => {
       {typeof screen === "number" && (
         <ChallengeStation
           key={screen}
-          stationNumber={screen + 1}
+          station={stations[screen]}
+          stationIndex={screen}
           totalStations={stations.length}
-          title={stations[screen].title}
-          emoji={stations[screen].emoji}
-          questions={stations[screen].questions}
-          onComplete={() =>
-            screen < stations.length - 1 ? setScreen(screen + 1) : setScreen("success")
-          }
+          collected={collected}
+          onComplete={(letter) => handleStationComplete(screen, letter)}
         />
       )}
-      {screen === "success" && <SuccessScreen onRestart={() => setScreen("home")} />}
+      {screen === "success" && <SuccessScreen collected={collected} onRestart={handleRestart} />}
     </div>
   );
 };
