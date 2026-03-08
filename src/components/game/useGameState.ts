@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 
 export interface InventoryItem {
   id: string;
@@ -9,6 +9,18 @@ export interface InventoryItem {
 }
 
 export type Screen = "home" | "instructions" | "hub" | "final" | "success" | number;
+
+export interface StationStats {
+  mistakes: number;
+  hintsUsed: number;
+}
+
+export interface GameStats {
+  totalMistakes: number;
+  totalHintsUsed: number;
+  elapsedSeconds: number;
+  stationStats: { [key: number]: StationStats };
+}
 
 export interface GameState {
   screen: Screen;
@@ -33,15 +45,29 @@ export const useGameState = () => {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [collectedLetters, setCollectedLetters] = useState<{ [key: number]: string }>({});
   const [hintsUsed, setHintsUsed] = useState(0);
+  const [stationStats, setStationStats] = useState<{ [key: number]: StationStats }>({});
+  const startTimeRef = useRef<number | null>(null);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+
+  const startGame = useCallback(() => {
+    startTimeRef.current = Date.now();
+  }, []);
+
+  const stopTimer = useCallback(() => {
+    if (startTimeRef.current) {
+      setElapsedSeconds(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }
+  }, []);
 
   const isStationUnlocked = useCallback((index: number) => {
     if (index === 0) return true;
     return completedStations.has(index - 1);
   }, [completedStations]);
 
-  const completeStation = useCallback((stationIndex: number, letter: string) => {
+  const completeStation = useCallback((stationIndex: number, letter: string, mistakes = 0, hints = 0) => {
     setCompletedStations(prev => new Set([...prev, stationIndex]));
     setCollectedLetters(prev => ({ ...prev, [stationIndex]: letter }));
+    setStationStats(prev => ({ ...prev, [stationIndex]: { mistakes, hintsUsed: hints } }));
     const reward = STATION_REWARDS[stationIndex];
     if (reward) {
       setInventory(prev => [...prev, reward]);
@@ -54,12 +80,22 @@ export const useGameState = () => {
 
   const canAccessFinal = completedStations.size === 4;
 
+  const getGameStats = useCallback((): GameStats => {
+    const totalMistakes = Object.values(stationStats).reduce((sum, s) => sum + s.mistakes, 0);
+    const totalHintsUsed = Object.values(stationStats).reduce((sum, s) => sum + s.hintsUsed, 0) + hintsUsed;
+    const elapsed = startTimeRef.current ? Math.floor((Date.now() - startTimeRef.current) / 1000) : elapsedSeconds;
+    return { totalMistakes, totalHintsUsed, elapsedSeconds: elapsed, stationStats };
+  }, [stationStats, hintsUsed, elapsedSeconds]);
+
   const restart = useCallback(() => {
     setScreen("home");
     setCompletedStations(new Set());
     setInventory([]);
     setCollectedLetters({});
     setHintsUsed(0);
+    setStationStats({});
+    startTimeRef.current = null;
+    setElapsedSeconds(0);
   }, []);
 
   return {
@@ -68,5 +104,6 @@ export const useGameState = () => {
     hintsUsed, useHint,
     isStationUnlocked, completeStation,
     canAccessFinal, restart,
+    startGame, stopTimer, getGameStats, stationStats,
   };
 };
