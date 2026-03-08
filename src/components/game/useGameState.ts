@@ -59,10 +59,10 @@ export const useGameState = () => {
     }
   }, []);
 
-  const isStationUnlocked = useCallback((index: number) => {
-    if (index === 0) return true;
-    return completedStations.has(index - 1);
-  }, [completedStations]);
+  // All stations unlocked from start — free order!
+  const isStationUnlocked = useCallback((_index: number) => {
+    return true;
+  }, []);
 
   const completeStation = useCallback((stationIndex: number, letter: string, mistakes = 0, hints = 0) => {
     setCompletedStations(prev => new Set([...prev, stationIndex]));

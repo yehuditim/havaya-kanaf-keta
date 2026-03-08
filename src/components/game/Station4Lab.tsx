@@ -6,7 +6,6 @@ import { getStationReward } from "./useGameState";
 import GameNav from "./GameNav";
 import CorrectEffect from "./CorrectEffect";
 import NarrationPlayer from "./NarrationPlayer";
-import YouTubeEmbed from "./YouTubeEmbed";
 import CodeLock from "./CodeLock";
 import AtbashDecoder from "./AtbashDecoder";
 import { encodeAtbash } from "./AtbashDecoder";
@@ -39,11 +38,17 @@ const researchCards = [
   { id: "citizen", title: "eBird — מדע אזרחי", emoji: "📱", content: "eBird הוא פרויקט מדע אזרחי — צפרים מדווחים תצפיות באפליקציה. מאז שנות ה-2010 חולל מהפכה במחקר הנדידה." },
 ];
 
-// Atbash for final clue: "נדיד" (the secret word!)
 const ATBASH_ANSWER = "נדיד";
 const ATBASH_ENCODED = encodeAtbash(ATBASH_ANSWER);
 
-type Phase = "briefing" | "video" | "compass" | "research" | "lock" | "atbash" | "reward";
+const phaseVariants = {
+  initial: { opacity: 0, y: 30, scale: 0.97 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, y: -20, scale: 0.97 },
+};
+const phaseTransition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
+
+type Phase = "briefing" | "compass" | "research" | "lock" | "atbash" | "reward";
 
 const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
@@ -78,7 +83,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
         <AnimatePresence mode="wait">
           {/* BRIEFING */}
           {phase === "briefing" && (
-            <motion.div key="briefing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-4">
+            <motion.div key="briefing" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-4">
               <div className="glass-card rounded-2xl p-6 station-glow-4">
                 <div className="text-center mb-4">
                   <div className="w-20 h-20 rounded-2xl bg-station-4/10 border border-station-4/25 flex items-center justify-center text-5xl mx-auto mb-3">🧭</div>
@@ -86,45 +91,30 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
                   <p className="text-sm text-muted-foreground mt-1">טכנולוגיה ומדע • המשימה האחרונה</p>
                 </div>
                 <NarrationPlayer
-                  text="התחנה האחרונה! כאן נמצאת מעבדת הניווט והטכנולוגיה שלי. קודם תצפו בסרטון על שיטות ניווט. אחר כך תבנו מצפן ביולוגי, תחקרו בכרטיסי מידע כדי למצוא קוד למנעול, ולבסוף — תפענחו צופן אתב״ש שיחשוף את האות האחרונה. כשתשלימו — הקוד הסודי יתגלה!"
+                  text="התחנה האחרונה! כאן נמצאת מעבדת הניווט והטכנולוגיה שלי. תבנו מצפן ביולוגי, תחקרו בכרטיסי מידע כדי למצוא קוד למנעול, ולבסוף — תפענחו צופן אתב״ש שיחשוף את האות האחרונה. כשתשלימו — הקוד הסודי יתגלה!"
                   className="mb-4"
                 />
+                <div className="bg-accent/5 rounded-lg p-3 border border-accent/15 text-right mb-4">
+                  <p className="text-[11px] text-accent/80">📖 <strong>טיפ:</strong> קראו על <a href="https://he.wikipedia.org/wiki/%D7%98%D7%99%D7%91%D7%95%D7%A2_(%D7%A6%D7%99%D7%A4%D7%95%D7%A8%D7%99%D7%9D)" target="_blank" rel="noopener noreferrer" className="text-accent underline hover:text-accent/70">טיבוע ציפורים בוויקיפדיה</a> — תצטרכו מידע על הטכנולוגיה!</p>
+                </div>
                 <div className="flex flex-col items-center gap-3">
-                  <button onClick={() => { playClick(); setPhase("video"); }} className="bg-gradient-to-l from-station-4 to-station-4/80 text-background px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-station-4/20">
-                    🎬 צפו בסרטון
+                  <button onClick={() => { playClick(); setPhase("compass"); }} className="bg-gradient-to-l from-station-4 to-station-4/80 text-background px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-station-4/20">
+                    🧭 בנו את המצפן
                   </button>
                   <button onClick={() => { playClick(); onOpenResearch(); }} className="text-accent/60 text-xs hover:text-accent transition-colors">
-                    📚 או קפצו לארכיון המחקר
+                    📚 פתחו את ארכיון המחקר
                   </button>
                 </div>
               </div>
             </motion.div>
           )}
 
-          {/* VIDEO */}
-          {phase === "video" && (
-            <motion.div key="video" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
-              <div className="glass-card rounded-2xl p-5 station-glow-4">
-                <p className="text-xs font-black text-station-4 mb-3">🎬 שלב 1: צפו וחקרו</p>
-                <p className="text-[11px] text-muted-foreground text-right mb-3">
-                  איך ציפורים מנווטות? <strong className="text-foreground">שימו לב לארבע שיטות הניווט!</strong>
-                </p>
-                <YouTubeEmbed videoId="mGLYvhMjHaA" title="איך ציפורים מנווטות?" className="mb-3" />
-              </div>
-              <div className="text-center">
-                <button onClick={() => { playClick(); setPhase("compass"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
-                  ➡️ לבניית המצפן
-                </button>
-              </div>
-            </motion.div>
-          )}
-
           {/* COMPASS */}
           {phase === "compass" && (
-            <motion.div key="compass" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+            <motion.div key="compass" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <div className="glass-card rounded-2xl p-5 station-glow-4">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-black text-station-4 bg-station-4/10 px-3 py-1 rounded-lg border border-station-4/20">🧭 שלב 2: בנו את המצפן</span>
+                  <span className="text-xs font-black text-station-4 bg-station-4/10 px-3 py-1 rounded-lg border border-station-4/20">🧭 שלב 1: בנו את המצפן</span>
                   <span className="text-[10px] text-muted-foreground">{Object.keys(placedNavs).length}/4</span>
                 </div>
                 <p className="text-xs text-muted-foreground text-right mb-3">בחרו שיטת ניווט ➜ שבצו אותה במקום הנכון</p>
@@ -172,9 +162,9 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
 
           {/* RESEARCH + LOCK */}
           {phase === "research" && (
-            <motion.div key="research" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
+            <motion.div key="research" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <div className="glass-card rounded-2xl p-5 station-glow-4">
-                <p className="text-xs font-black text-station-4 mb-3">🔬 שלב 3: חקר + מנעול</p>
+                <p className="text-xs font-black text-station-4 mb-3">🔬 שלב 2: חקר + מנעול</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
                   חפשו: <strong className="text-foreground">באיזו שנה הומצא הטיבוע?</strong> המספר הזה הוא הקוד!
                 </p>
@@ -205,9 +195,9 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
 
           {/* ATBASH FINAL */}
           {phase === "atbash" && (
-            <motion.div key="atbash" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-3">
+            <motion.div key="atbash" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <div className="glass-card rounded-2xl p-5 station-glow-4">
-                <p className="text-xs font-black text-station-4 mb-3">🔐 שלב 4: הצופן האחרון</p>
+                <p className="text-xs font-black text-station-4 mb-3">🔐 שלב 3: הצופן האחרון</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
                   בתוך המנעול מצאתם פתק: <strong className="text-foreground">״המילה שמתארת את כל המסע — מוצפנת באתב״ש.״</strong> פענחו אותה לגלות את האות האחרונה!
                 </p>
@@ -223,7 +213,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
 
           {/* REWARD */}
           {phase === "reward" && (
-            <motion.div key="reward" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card rounded-2xl p-6 station-glow-4 text-center">
+            <motion.div key="reward" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="glass-card rounded-2xl p-6 station-glow-4 text-center">
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring" }} className="mb-4">
                 <div className="w-20 h-20 rounded-2xl bg-primary/15 border-2 border-primary flex items-center justify-center text-5xl mx-auto shadow-xl shadow-primary/20">{reward?.emoji}</div>
               </motion.div>
@@ -236,7 +226,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
               </motion.div>
               <div className="bg-muted/25 rounded-xl p-4 mb-5 text-right border border-border/20">
                 <p className="text-xs leading-[1.8] text-foreground/80 italic">
-                  ״פנטסטי! פיצחתם את כל החידות! המילה הסודית — ״{ATBASH_ANSWER}״ — מסכמת את כל מה שלמדתם. עגורים טסים בגובה 8,000 מטר מעל ההימלאיה. עכשיו — לפאזל הסופי!״
+                  ״פנטסטי! פיצחתם את כל החידות! המילה הסודית — ״{ATBASH_ANSWER}״ — מסכמת את כל מה שלמדתם. עכשיו — לפאזל הסופי!״
                 </p>
               </div>
               <button onClick={() => onComplete("ד", compassErrors, 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">

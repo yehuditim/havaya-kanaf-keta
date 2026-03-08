@@ -17,11 +17,11 @@ import { useGameState } from "./components/game/useGameState";
 import { useState } from "react";
 
 const pageVariants = {
-  initial: { opacity: 0, scale: 0.97, y: 12 },
-  animate: { opacity: 1, scale: 1, y: 0 },
-  exit: { opacity: 0, scale: 0.97, y: -12 },
+  initial: { opacity: 0, scale: 0.95, y: 24, filter: "blur(4px)" },
+  animate: { opacity: 1, scale: 1, y: 0, filter: "blur(0px)" },
+  exit: { opacity: 0, scale: 0.97, y: -16, filter: "blur(2px)" },
 };
-const pageTransition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const };
+const pageTransition = { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const };
 
 const overlayVariants = { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } };
 const drawerVariants = { initial: { x: "100%" }, animate: { x: 0 }, exit: { x: "100%" } };
