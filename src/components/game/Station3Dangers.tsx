@@ -318,7 +318,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
 
               <p className="text-xs text-station-2/60 mb-4">💡 פרויקט ״פורשים כנף״ הציל מאות נשרים ודורסים בישראל!</p>
 
-              <button onClick={() => onComplete("י")} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
+              <button onClick={() => onComplete("י", matchErrors + decodeAttempts, showCipherHint ? 1 : 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
             </motion.div>

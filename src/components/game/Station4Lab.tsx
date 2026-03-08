@@ -356,7 +356,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
 
               <p className="text-xs text-station-4/60 mb-4">💡 עגורים תועדו טסים בגובה 8,000 מטר — מעל הרי ההימלאיה!</p>
 
-              <button onClick={() => onComplete("ד")} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
+              <button onClick={() => onComplete("ד", compassErrors + seqErrors, 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
             </motion.div>

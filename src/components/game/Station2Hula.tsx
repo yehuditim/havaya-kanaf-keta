@@ -329,7 +329,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
                 </p>
               </div>
 
-              <button onClick={() => onComplete("ד")} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
+              <button onClick={() => onComplete("ד", riddleErrors, 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
             </motion.div>
