@@ -47,7 +47,7 @@ const cipherHint = "כל אות הוחלפה באות שלפניה באל״ף ב
 
 type Phase = "briefing" | "match" | "decode" | "reward";
 
-const Station3Dangers = ({ onComplete, onOpenResearch }: Props) => {
+const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
   const [selectedThreat, setSelectedThreat] = useState<string | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<Set<string>>(new Set());
@@ -56,6 +56,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch }: Props) => {
   const [decodeAttempts, setDecodeAttempts] = useState(0);
   const [showCipherHint, setShowCipherHint] = useState(false);
   const [decoded, setDecoded] = useState(false);
+  const [showCorrectEffect, setShowCorrectEffect] = useState(false);
 
   const reward = getStationReward(2);
   const allMatched = matchedPairs.size === threatPairs.length;
