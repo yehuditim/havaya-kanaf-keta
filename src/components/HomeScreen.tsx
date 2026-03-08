@@ -38,9 +38,6 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
       <h1 className="text-5xl md:text-7xl font-black mb-2 text-glow text-primary leading-[1.1]">
         תעלומת הנדידה
       </h1>
-      <p className="text-muted-foreground mb-10 tracking-wider text-sm">
-        הרפתקת חקר • כיתה ד׳ מחוננים
-      </p>
 
       {/* Professor message */}
       <div className="glass-card rounded-2xl p-6 card-glow mb-8 text-right animate-slide-up">
