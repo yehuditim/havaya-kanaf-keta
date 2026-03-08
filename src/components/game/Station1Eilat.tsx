@@ -2,13 +2,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
+import BirdIcon, { birdIdToIcon } from "../BirdIcon";
 
 /**
  * Station 1: Eilat Gateway — "Sort the Migrants"
- * Puzzle: Tap-to-select bird cards and place them in correct category buckets.
- * Phase 1: Sort birds into Soaring/Day vs Night migrants
- * Phase 2: Match preparation behaviors  
- * Reward: Map fragment + letter נ
  */
 
 interface Props {
@@ -19,18 +16,18 @@ interface Props {
 interface BirdCard {
   id: string;
   name: string;
-  emoji: string;
+  iconType: "stork" | "crane" | "pelican" | "warbler" | "robin" | "flycatcher";
   type: "soaring" | "night";
   fact: string;
 }
 
 const birds: BirdCard[] = [
-  { id: "stork", name: "חסידה לבנה", emoji: "🦢", type: "soaring", fact: "רוכבת על תרמיקות ביום, נמנעת מחציית ימים" },
-  { id: "crane", name: "עגור אפור", emoji: "🦅", type: "soaring", fact: "טס בתצורת V בגובה אלפי מטרים, חוסך 70% אנרגיה" },
-  { id: "pelican", name: "שקנאי לבן", emoji: "🦆", type: "soaring", fact: "דואה ענק — מוטת כנפיים של 3 מטר!" },
-  { id: "warbler", name: "סבכי", emoji: "🐦", type: "night", fact: "טס לבד בחשיכה, מנווט לפי כוכבים" },
-  { id: "robin", name: "אדום-חזה", emoji: "🐤", type: "night", fact: "נודד לילה — נמנע מטורפים ומחום" },
-  { id: "flycatcher", name: "זמיר", emoji: "🕊️", type: "night", fact: "ציפור שיר קטנה שטסה אלפי ק״מ בלילות" },
+  { id: "stork", name: "חסידה לבנה", iconType: "stork", type: "soaring", fact: "רוכבת על תרמיקות ביום, נמנעת מחציית ימים" },
+  { id: "crane", name: "עגור אפור", iconType: "crane", type: "soaring", fact: "טס בתצורת V בגובה אלפי מטרים, חוסך 70% אנרגיה" },
+  { id: "pelican", name: "שקנאי לבן", iconType: "pelican", type: "soaring", fact: "דואה ענק — מוטת כנפיים של 3 מטר!" },
+  { id: "warbler", name: "סבכי", iconType: "warbler", type: "night", fact: "טס לבד בחשיכה, מנווט לפי כוכבים" },
+  { id: "robin", name: "אדום-חזה", iconType: "robin", type: "night", fact: "נודד לילה — נמנע מטורפים ומחום" },
+  { id: "flycatcher", name: "זמיר", iconType: "flycatcher", type: "night", fact: "ציפור שיר קטנה שטסה אלפי ק״מ בלילות" },
 ];
 
 type Phase = "briefing" | "sort" | "match" | "reward";
@@ -180,7 +177,9 @@ const Station1Eilat = ({ onComplete, onOpenResearch }: Props) => {
                               : "bg-muted/30 border-border/25 hover:border-station-3/40"
                         }`}
                       >
-                        <span className="text-2xl block mb-1">{bird.emoji}</span>
+                        <div className="flex justify-center mb-1">
+                          <BirdIcon type={bird.iconType} size={36} className={isSorted ? "text-primary/50" : isSelected ? "text-station-3" : "text-foreground/70"} />
+                        </div>
                         <span className="text-[11px] font-bold block">{bird.name}</span>
                         {isSorted && <span className="text-[9px] text-primary">✓</span>}
                       </motion.button>
@@ -200,9 +199,10 @@ const Station1Eilat = ({ onComplete, onOpenResearch }: Props) => {
                     <span className="text-xs font-black text-primary">דואים (יום)</span>
                     <p className="text-[9px] text-muted-foreground mt-1">תרמיקות • להקות • גדולים</p>
                     <div className="flex justify-center gap-1 mt-2">
-                      {sortedBirds.soaring.map(id => (
-                        <span key={id} className="text-sm">{birds.find(b => b.id === id)?.emoji}</span>
-                      ))}
+                      {sortedBirds.soaring.map(id => {
+                        const b = birds.find(x => x.id === id);
+                        return b ? <BirdIcon key={id} type={b.iconType} size={18} className="text-primary/60" /> : null;
+                      })}
                     </div>
                   </button>
                   <button
@@ -215,9 +215,10 @@ const Station1Eilat = ({ onComplete, onOpenResearch }: Props) => {
                     <span className="text-xs font-black text-accent">נודדי לילה</span>
                     <p className="text-[9px] text-muted-foreground mt-1">כוכבים • לבד • קטנים</p>
                     <div className="flex justify-center gap-1 mt-2">
-                      {sortedBirds.night.map(id => (
-                        <span key={id} className="text-sm">{birds.find(b => b.id === id)?.emoji}</span>
-                      ))}
+                      {sortedBirds.night.map(id => {
+                        const b = birds.find(x => x.id === id);
+                        return b ? <BirdIcon key={id} type={b.iconType} size={18} className="text-accent/60" /> : null;
+                      })}
                     </div>
                   </button>
                 </div>
@@ -233,7 +234,10 @@ const Station1Eilat = ({ onComplete, onOpenResearch }: Props) => {
                   <p className="text-sm font-bold text-primary mb-2">🎉 כל הציפורים מוינו נכון!</p>
                   <div className="space-y-1 mb-4">
                     {birds.map(b => (
-                      <p key={b.id} className="text-[11px] text-foreground/70">{b.emoji} {b.name}: {b.fact}</p>
+                      <div key={b.id} className="flex items-center gap-2 justify-center text-[11px] text-foreground/70">
+                        <BirdIcon type={b.iconType} size={16} className="text-foreground/50" />
+                        <span>{b.name}: {b.fact}</span>
+                      </div>
                     ))}
                   </div>
                   <button onClick={() => { playClick(); setShowSortResult(true); setPhase("match"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
@@ -340,12 +344,9 @@ const Station1Eilat = ({ onComplete, onOpenResearch }: Props) => {
 
               <div className="bg-muted/25 rounded-xl p-4 mb-5 text-right border border-border/20">
                 <p className="text-xs leading-[1.8] text-foreground/80 italic">
-                  ״מצוין! שחזרתם את נתוני תחנת אילת. כמיליארד ציפורים חולפות מעל ישראל פעמיים בשנה.
-                  הנתיב האפרו-פליארקטי הוא אחד ממסלולי הנדידה הגדולים בעולם!״
+                  ״מעולה! שחזרתם את נתוני תחנת אילת. עכשיו אתם מבינים למה הנגב הוא שער חיים — ציפורים שחצו 2,000 ק״מ של מדבר מגיעות לכאן על סף התמוטטות.״
                 </p>
               </div>
-
-              <p className="text-xs text-station-3/60 mb-4">💡 ציפורים צוברות עד 50% שומן לפני נדידה — כמו תדלוק לפני טיסה!</p>
 
               <button onClick={() => onComplete("נ")} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
