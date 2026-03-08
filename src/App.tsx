@@ -47,6 +47,7 @@ const App = () => {
 
   const handleStart = useCallback(() => {
     setGameStarted(true);
+    game.startGame();
     game.setScreen("instructions");
   }, [game]);
 
