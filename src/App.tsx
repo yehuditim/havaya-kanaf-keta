@@ -114,7 +114,7 @@ const App = () => {
             )}
             {typeof game.screen === "number" && stationComponents[game.screen] && (
               stationComponents[game.screen]({
-                onComplete: (letter) => handleStationComplete(game.screen as number, letter),
+                onComplete: (letter, mistakes, hints) => handleStationComplete(game.screen as number, letter, mistakes, hints),
                 ...stationProps,
               })
             )}
