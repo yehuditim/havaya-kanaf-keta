@@ -1,4 +1,5 @@
 import { useState } from "react";
+import labBg from "../../assets/backgrounds/research-lab.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
