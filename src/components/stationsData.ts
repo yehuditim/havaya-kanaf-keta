@@ -99,7 +99,7 @@ export const stations: Station[] = [
   {
     title: "אגמון החולה",
     emoji: "🌿",
-    bgEmoji: "🦩",
+    bgEmoji: "🌿",
     theme: "spring",
     accentClass: "text-station-1",
     glowClass: "station-glow-1",
