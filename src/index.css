@@ -79,6 +79,9 @@
   .station-glow-4 {
     box-shadow: 0 0 40px hsl(155 55% 42% / 0.12), 0 8px 32px hsl(0 0% 0% / 0.5), inset 0 1px 0 hsl(155 55% 42% / 0.1);
   }
+  .station-glow-5 {
+    box-shadow: 0 0 40px hsl(35 85% 50% / 0.12), 0 8px 32px hsl(0 0% 0% / 0.5), inset 0 1px 0 hsl(35 85% 50% / 0.1);
+  }
 
   .bg-adventure {
     background: 
