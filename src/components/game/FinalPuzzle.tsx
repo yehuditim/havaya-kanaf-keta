@@ -4,6 +4,7 @@ import { playClick, playSuccess, playError, playComplete } from "../SoundEffects
 import type { InventoryItem } from "./useGameState";
 import { SECRET_WORD, CODE_LETTERS } from "../gameState";
 import BirdIcon from "../BirdIcon";
+import GameNav from "./GameNav";
 
 /**
  * Final Puzzle: Combine all 4 collected items to crack the escape code.
@@ -13,9 +14,11 @@ interface Props {
   inventory: InventoryItem[];
   collectedLetters: { [key: number]: string };
   onSuccess: () => void;
+  onGoMap: () => void;
+  onGoHome: () => void;
 }
 
-const FinalPuzzle = ({ inventory, collectedLetters, onSuccess }: Props) => {
+const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome }: Props) => {
   const [enteredLetters, setEnteredLetters] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState(false);
   const [attempts, setAttempts] = useState(0);
