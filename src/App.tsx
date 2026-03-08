@@ -12,6 +12,7 @@ import Station1Eilat from "./components/game/Station1Eilat";
 import Station2Hula from "./components/game/Station2Hula";
 import Station3Dangers from "./components/game/Station3Dangers";
 import Station4Lab from "./components/game/Station4Lab";
+import Station5Ringing from "./components/game/Station5Ringing";
 import FinalPuzzle from "./components/game/FinalPuzzle";
 import { useGameState } from "./components/game/useGameState";
 import { useState } from "react";
