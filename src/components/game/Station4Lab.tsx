@@ -56,13 +56,14 @@ const techItems: TechItem[] = [
 
 type Phase = "briefing" | "compass" | "sequence" | "reward";
 
-const Station4Lab = ({ onComplete, onOpenResearch }: Props) => {
+const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
   const [selectedNav, setSelectedNav] = useState<string | null>(null);
   const [placedNavs, setPlacedNavs] = useState<{ [slot: string]: string }>({});
   const [compassErrors, setCompassErrors] = useState(0);
   const [techOrder, setTechOrder] = useState<string[]>([]);
   const [seqErrors, setSeqErrors] = useState(0);
+  const [showCorrectEffect, setShowCorrectEffect] = useState(false);
 
   const reward = getStationReward(3);
   const allNavPlaced = Object.keys(placedNavs).length === 4;
