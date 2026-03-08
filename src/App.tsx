@@ -128,7 +128,7 @@ const App = () => {
               />
             )}
             {game.screen === "success" && (
-              <SuccessScreen collected={game.collectedLetters} onRestart={() => { setGameStarted(false); game.restart(); }} />
+              <SuccessScreen collected={game.collectedLetters} gameStats={game.getGameStats()} onRestart={() => { setGameStarted(false); game.restart(); }} />
             )}
           </motion.div>
         </AnimatePresence>
