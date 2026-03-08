@@ -26,6 +26,7 @@ export default {
         "station-2": "hsl(var(--station-2))",
         "station-3": "hsl(var(--station-3))",
         "station-4": "hsl(var(--station-4))",
+        "station-5": "hsl(var(--station-5))",
       },
       borderRadius: { lg: "var(--radius)", md: "calc(var(--radius) - 2px)", sm: "calc(var(--radius) - 4px)" },
       keyframes: {
