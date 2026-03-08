@@ -68,11 +68,12 @@ const riddles: Riddle[] = [
   },
 ];
 
-const Station2Hula = ({ onComplete, onOpenResearch }: Props) => {
+const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) => {
   const [phase, setPhase] = useState<Phase>("briefing");
   const [discoveredHotspots, setDiscoveredHotspots] = useState<Set<string>>(new Set());
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
   const [riddleIndex, setRiddleIndex] = useState(0);
+  const [showCorrectEffect, setShowCorrectEffect] = useState(false);
   const [riddleAnswer, setRiddleAnswer] = useState<number | null>(null);
   const [riddleErrors, setRiddleErrors] = useState(0);
 
