@@ -1,4 +1,5 @@
 import { useState } from "react";
+import dangersBg from "../../assets/backgrounds/dangers-path.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
@@ -95,9 +96,11 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
   };
 
   return (
-    <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col items-center justify-center">
+    <div className="min-h-screen p-4 flex flex-col items-center justify-center relative overflow-hidden">
+      <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${dangersBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <div className="absolute inset-0 z-0 bg-background/75 backdrop-blur-[2px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
-      <div className="max-w-lg w-full">
+      <div className="max-w-lg w-full relative z-10">
         {/* Navigation */}
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
 
