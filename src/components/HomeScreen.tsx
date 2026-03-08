@@ -1,66 +1,88 @@
-const HomeScreen = ({ onStart }: { onStart: () => void }) => (
+import { playClick } from "./SoundEffects";
+
+const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenResearch: () => void }) => (
   <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
-    {/* Decorative floating elements */}
+    {/* Animated floating elements */}
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      <div className="absolute top-[10%] right-[10%] text-4xl opacity-20 animate-float" style={{ animationDelay: '0s' }}>🦅</div>
-      <div className="absolute top-[20%] left-[15%] text-3xl opacity-15 animate-float" style={{ animationDelay: '1s' }}>🌍</div>
-      <div className="absolute bottom-[25%] right-[20%] text-3xl opacity-15 animate-float" style={{ animationDelay: '2s' }}>🧭</div>
-      <div className="absolute bottom-[15%] left-[10%] text-4xl opacity-20 animate-float" style={{ animationDelay: '0.5s' }}>🌙</div>
+      <div className="absolute top-[8%] right-[8%] text-5xl opacity-[0.12] animate-float">🦅</div>
+      <div className="absolute top-[18%] left-[12%] text-3xl opacity-[0.1] animate-float" style={{ animationDelay: '1.2s' }}>🌍</div>
+      <div className="absolute bottom-[22%] right-[18%] text-4xl opacity-[0.1] animate-float" style={{ animationDelay: '2.4s' }}>🧭</div>
+      <div className="absolute bottom-[12%] left-[8%] text-5xl opacity-[0.12] animate-float" style={{ animationDelay: '0.6s' }}>🌙</div>
+      <div className="absolute top-[45%] right-[5%] text-2xl opacity-[0.08] animate-float" style={{ animationDelay: '1.8s' }}>✨</div>
+      <div className="absolute top-[55%] left-[5%] text-3xl opacity-[0.08] animate-float" style={{ animationDelay: '3s' }}>🪶</div>
     </div>
 
     <div className="max-w-lg relative z-10">
-      {/* Icon cluster */}
-      <div className="relative mb-6">
-        <div className="text-7xl animate-float filter drop-shadow-lg">🦅</div>
-        <div className="absolute -top-2 -right-4 text-2xl animate-pulse-glow">✨</div>
-        <div className="absolute -bottom-1 -left-3 text-xl animate-pulse-glow" style={{ animationDelay: '1s' }}>⭐</div>
+      {/* Animated hero icon */}
+      <div className="relative mb-8 inline-block">
+        <div className="w-24 h-24 rounded-3xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto shadow-lg shadow-primary/10">
+          <span className="text-6xl animate-float filter drop-shadow-lg">🦅</span>
+        </div>
+        <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center text-sm animate-pulse-glow">✨</div>
+        <div className="absolute -bottom-2 -left-2 w-7 h-7 rounded-full bg-secondary/20 border border-secondary/30 flex items-center justify-center text-xs animate-pulse-glow" style={{ animationDelay: '1s' }}>⭐</div>
       </div>
 
-      <div className="mb-2">
-        <span className="inline-block bg-primary/15 text-primary text-xs font-bold px-4 py-1.5 rounded-full border border-primary/20 tracking-widest">
+      {/* Badge */}
+      <div className="mb-3">
+        <span className="inline-block bg-primary/10 text-primary text-[11px] font-bold px-5 py-2 rounded-full border border-primary/15 tracking-[0.2em] uppercase">
           חדר בריחה דיגיטלי
         </span>
       </div>
 
-      <h1 className="text-5xl md:text-6xl font-black mb-2 text-glow text-primary leading-tight">
+      {/* Title */}
+      <h1 className="text-5xl md:text-7xl font-black mb-2 text-glow text-primary leading-[1.1]">
         תעלומת הנדידה
       </h1>
-      <p className="text-sm text-muted-foreground mb-8 tracking-wider">הרפתקה חינוכית • כיתה ד׳</p>
+      <p className="text-muted-foreground mb-10 tracking-wider text-sm">
+        הרפתקת חקר • כיתה ד׳ מחוננים
+      </p>
 
-      <div className="glass-card rounded-2xl p-7 card-glow mb-8 text-right animate-slide-up">
+      {/* Professor message */}
+      <div className="glass-card rounded-2xl p-6 card-glow mb-8 text-right animate-slide-up">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-lg border border-primary/30">
+          <div className="w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center text-2xl border border-primary/20 shadow-sm">
             👨‍🔬
           </div>
           <div>
-            <p className="text-primary font-bold text-sm">הודעה דחופה</p>
-            <p className="text-muted-foreground text-xs">מפרופסור דרור — חוקר ציפורים</p>
+            <p className="text-primary font-black text-sm">הודעה דחופה!</p>
+            <p className="text-muted-foreground text-xs">פרופסור דרור — חוקר ציפורים נודדות</p>
           </div>
         </div>
-        <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-          <p className="text-sm leading-[1.8] text-foreground/90">
-            ״ילדים יקרים, המחשב שלי נפרץ ומישהו
-            ערבב את כל מחקר הנדידה שלי! אני צריך את עזרתכם לפענח את החידות ולשחזר
-            את <span className="text-primary font-bold">קוד הבריחה הסודי</span> שיחזיר הכל לסדר.
-            בכל תחנה תגלו רמז חדש. מוכנים למשימה?״
+        <div className="bg-muted/30 rounded-xl p-5 border border-border/40">
+          <p className="text-[13px] leading-[2] text-foreground/90">
+            ״ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! 
+            אני צריך <strong className="text-primary">חוקרים צעירים ומוכשרים</strong> שיעזרו לי לפענח 
+            את החידות ולשחזר את <span className="text-primary font-black">קוד הבריחה הסודי</span>. 
+            בכל תחנה תגלו רמז חדש. ארבע אותיות — מילה אחת — וכל המחקר יחזור לסדר. 
+            מוכנים לצאת למשימה?״
           </p>
         </div>
       </div>
 
+      {/* CTA button */}
       <button
-        onClick={onStart}
-        className="group relative bg-gradient-to-l from-primary to-primary/80 text-primary-foreground px-10 py-4 rounded-xl text-xl font-black hover:scale-105 transition-all duration-300 shadow-lg shadow-primary/25"
+        onClick={() => { playClick(); onStart(); }}
+        className="group relative bg-gradient-to-l from-primary via-primary to-primary/85 text-primary-foreground px-12 py-5 rounded-2xl text-xl font-black hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/25 mb-6"
       >
-        <span className="relative z-10 flex items-center gap-2 justify-center">
-          🔓 קבלו את המשימה
-        </span>
+        🔓 קבלו את המשימה
       </button>
 
-      <div className="flex items-center justify-center gap-6 mt-8 text-muted-foreground/50 text-xs">
+      {/* Info footer */}
+      <div className="flex items-center justify-center gap-5 text-muted-foreground/40 text-xs">
         <span className="flex items-center gap-1.5">🗺️ 4 תחנות</span>
+        <span className="w-1 h-1 rounded-full bg-muted-foreground/20" />
         <span className="flex items-center gap-1.5">🧩 12 חידות</span>
+        <span className="w-1 h-1 rounded-full bg-muted-foreground/20" />
         <span className="flex items-center gap-1.5">🔑 קוד סודי</span>
       </div>
+
+      {/* Research center link */}
+      <button
+        onClick={() => { playClick(); onOpenResearch(); }}
+        className="mt-6 inline-flex items-center gap-2 text-accent/70 hover:text-accent text-xs transition-colors"
+      >
+        📚 מרכז החקר — כרטיסי מידע ומקורות
+      </button>
     </div>
   </div>
 );

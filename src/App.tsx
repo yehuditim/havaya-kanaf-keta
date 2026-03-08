@@ -4,6 +4,7 @@ import InstructionsScreen from "./components/InstructionsScreen";
 import ChallengeStation from "./components/ChallengeStation";
 import SuccessScreen from "./components/SuccessScreen";
 import MusicPlayer from "./components/MusicPlayer";
+import ResearchCenter from "./components/ResearchCenter";
 import { stations } from "./components/stationsData";
 
 type Screen = "home" | "instructions" | "success" | number;
@@ -11,6 +12,7 @@ type Screen = "home" | "instructions" | "success" | number;
 const App = () => {
   const [screen, setScreen] = useState<Screen>("home");
   const [collected, setCollected] = useState<{ [key: number]: string }>({});
+  const [showResearch, setShowResearch] = useState(false);
 
   const handleStationComplete = (stationIndex: number, codeLetter: string) => {
     const next = { ...collected, [stationIndex]: codeLetter };
@@ -30,7 +32,13 @@ const App = () => {
   return (
     <div className="min-h-screen">
       <MusicPlayer />
-      {screen === "home" && <HomeScreen onStart={() => setScreen("instructions")} />}
+      {showResearch && <ResearchCenter onClose={() => setShowResearch(false)} />}
+      {screen === "home" && (
+        <HomeScreen
+          onStart={() => setScreen("instructions")}
+          onOpenResearch={() => setShowResearch(true)}
+        />
+      )}
       {screen === "instructions" && <InstructionsScreen onContinue={() => setScreen(0)} />}
       {typeof screen === "number" && (
         <ChallengeStation
@@ -40,6 +48,7 @@ const App = () => {
           totalStations={stations.length}
           collected={collected}
           onComplete={(letter) => handleStationComplete(screen, letter)}
+          onOpenResearch={() => setShowResearch(true)}
         />
       )}
       {screen === "success" && <SuccessScreen collected={collected} onRestart={handleRestart} />}
