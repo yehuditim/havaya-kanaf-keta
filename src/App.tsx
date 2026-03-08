@@ -122,7 +122,7 @@ const App = () => {
               <FinalPuzzle
                 inventory={game.inventory}
                 collectedLetters={game.collectedLetters}
-                onSuccess={() => game.setScreen("success")}
+                onSuccess={() => { game.stopTimer(); game.setScreen("success"); }}
                 onGoMap={goHub}
                 onGoHome={goHome}
               />
