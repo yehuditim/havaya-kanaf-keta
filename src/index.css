@@ -4,28 +4,36 @@
 
 @layer base {
   :root {
-    --background: 200 40% 96%;
-    --foreground: 220 30% 15%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 30% 15%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 30% 15%;
-    --primary: 160 50% 40%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 35 90% 55%;
+    --background: 220 25% 10%;
+    --foreground: 45 30% 90%;
+    --card: 220 20% 16%;
+    --card-foreground: 45 30% 90%;
+    --popover: 220 20% 16%;
+    --popover-foreground: 45 30% 90%;
+    --primary: 45 80% 55%;
+    --primary-foreground: 220 25% 10%;
+    --secondary: 160 45% 45%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 200 20% 90%;
-    --muted-foreground: 220 15% 45%;
-    --accent: 200 70% 50%;
+    --muted: 220 15% 22%;
+    --muted-foreground: 220 15% 60%;
+    --accent: 280 50% 55%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 200 20% 82%;
-    --input: 200 20% 82%;
-    --ring: 160 50% 40%;
-    --radius: 1rem;
-    --sky: 200 80% 60%;
-    --earth: 35 60% 45%;
+    --border: 220 15% 25%;
+    --input: 220 15% 25%;
+    --ring: 45 80% 55%;
+    --radius: 0.75rem;
+
+    /* Station accent colors */
+    --station-1: 200 70% 50%;
+    --station-2: 280 55% 55%;
+    --station-3: 15 75% 55%;
+    --station-4: 160 55% 45%;
+
+    /* Escape room specific */
+    --glow: 45 90% 60%;
+    --mystery: 260 40% 20%;
   }
 }
 
@@ -38,4 +46,17 @@
     direction: rtl;
     font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
   }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 20px hsl(45 90% 60% / 0.4), 0 0 40px hsl(45 90% 60% / 0.2);
+  }
+  .card-glow {
+    box-shadow: 0 0 30px hsl(45 90% 60% / 0.08), 0 4px 20px hsl(0 0% 0% / 0.4);
+  }
+  .station-glow-1 { box-shadow: 0 0 30px hsl(200 70% 50% / 0.15), 0 4px 20px hsl(0 0% 0% / 0.4); }
+  .station-glow-2 { box-shadow: 0 0 30px hsl(280 55% 55% / 0.15), 0 4px 20px hsl(0 0% 0% / 0.4); }
+  .station-glow-3 { box-shadow: 0 0 30px hsl(15 75% 55% / 0.15), 0 4px 20px hsl(0 0% 0% / 0.4); }
+  .station-glow-4 { box-shadow: 0 0 30px hsl(160 55% 45% / 0.15), 0 4px 20px hsl(0 0% 0% / 0.4); }
 }
