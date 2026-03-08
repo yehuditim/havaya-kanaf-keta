@@ -1,0 +1,178 @@
+import { motion } from "framer-motion";
+import Inventory from "./Inventory";
+import type { InventoryItem } from "./useGameState";
+import { playClick, playError } from "../SoundEffects";
+
+interface Props {
+  completedStations: Set<number>;
+  inventory: InventoryItem[];
+  collectedLetters: { [key: number]: string };
+  isStationUnlocked: (i: number) => boolean;
+  canAccessFinal: boolean;
+  onEnterStation: (i: number) => void;
+  onEnterFinal: () => void;
+  onOpenResearch: () => void;
+}
+
+const stationNodes = [
+  { emoji: "🏜️", title: "שער אילת", subtitle: "הכניסה הדרומית", x: "22%", y: "68%", color: "station-3" },
+  { emoji: "🌿", title: "אגמון החולה", subtitle: "תחנת התצפית", x: "70%", y: "28%", color: "station-1" },
+  { emoji: "⚡", title: "שביל הסכנות", subtitle: "חקירת איומים", x: "25%", y: "32%", color: "station-2" },
+  { emoji: "🧭", title: "מעבדת הניווט", subtitle: "טכנולוגיה ומדע", x: "68%", y: "65%", color: "station-4" },
+];
+
+const pathSegments = [
+  { from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 },
+];
+
+const GameHub = ({
+  completedStations, inventory, collectedLetters,
+  isStationUnlocked, canAccessFinal,
+  onEnterStation, onEnterFinal, onOpenResearch,
+}: Props) => {
+
+  const handleStationClick = (i: number) => {
+    if (isStationUnlocked(i)) {
+      playClick();
+      onEnterStation(i);
+    } else {
+      playError();
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col">
+      {/* Top bar */}
+      <div className="flex items-center justify-between mb-3 max-w-2xl mx-auto w-full">
+        <div className="flex items-center gap-2">
+          <span className="text-xl">🗺️</span>
+          <div>
+            <h1 className="text-lg font-black text-primary">מפת המשימה</h1>
+            <p className="text-[10px] text-muted-foreground">בחרו תחנה כדי להתחיל חקירה</p>
+          </div>
+        </div>
+        <button
+          onClick={() => { playClick(); onOpenResearch(); }}
+          className="glass-card rounded-xl px-3 py-2 flex items-center gap-2 border border-accent/20 hover:border-accent/40 transition-all hover:scale-105"
+        >
+          <span className="text-sm">📚</span>
+          <span className="text-[10px] font-bold text-accent">ארכיון</span>
+        </button>
+      </div>
+
+      <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full gap-3">
+        {/* Map area */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex-1 glass-card rounded-2xl relative overflow-hidden min-h-[340px] border border-border/30"
+        >
+          {/* Map background decoration */}
+          <div className="absolute inset-0 opacity-[0.03]">
+            <div className="absolute top-[15%] left-[40%] text-8xl">🌍</div>
+            <div className="absolute bottom-[10%] right-[10%] text-6xl">🗺️</div>
+          </div>
+
+          {/* Dotted path connections */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1 }}>
+            {pathSegments.map(({ from, to }, idx) => {
+              const f = stationNodes[from];
+              const t = stationNodes[to];
+              const completed = completedStations.has(from);
+              return (
+                <line
+                  key={idx}
+                  x1={f.x} y1={f.y} x2={t.x} y2={t.y}
+                  stroke={completed ? "hsl(var(--primary))" : "hsl(var(--muted))"}
+                  strokeWidth="2"
+                  strokeDasharray={completed ? "none" : "6 4"}
+                  opacity={completed ? 0.5 : 0.2}
+                  className="transition-all duration-700"
+                />
+              );
+            })}
+          </svg>
+
+          {/* Station nodes */}
+          {stationNodes.map((node, i) => {
+            const unlocked = isStationUnlocked(i);
+            const completed = completedStations.has(i);
+            return (
+              <motion.button
+                key={i}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.1 + i * 0.12, type: "spring", stiffness: 200 }}
+                onClick={() => handleStationClick(i)}
+                className="absolute z-10 flex flex-col items-center gap-1 group"
+                style={{ left: node.x, top: node.y, transform: "translate(-50%, -50%)" }}
+              >
+                {/* Node circle */}
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border-2 transition-all duration-300 shadow-lg ${
+                  completed
+                    ? `bg-${node.color}/20 border-${node.color} shadow-${node.color}/20`
+                    : unlocked
+                      ? `bg-muted/60 border-${node.color}/50 hover:border-${node.color} hover:scale-110 cursor-pointer animate-pulse-glow shadow-${node.color}/10`
+                      : "bg-muted/30 border-border/30 opacity-40 cursor-not-allowed"
+                }`}>
+                  {completed ? "✅" : unlocked ? node.emoji : "🔒"}
+                </div>
+                {/* Label */}
+                <div className={`text-center transition-opacity ${unlocked ? "opacity-100" : "opacity-40"}`}>
+                  <p className={`text-[10px] font-black ${completed ? `text-${node.color}` : "text-foreground/80"}`}>
+                    {node.title}
+                  </p>
+                  <p className="text-[8px] text-muted-foreground">{node.subtitle}</p>
+                </div>
+                {/* Completed badge */}
+                {completed && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className={`absolute -top-1 -right-1 w-5 h-5 rounded-full bg-${node.color} flex items-center justify-center text-[10px] text-background font-black shadow-md`}
+                  >
+                    {collectedLetters[i]}
+                  </motion.div>
+                )}
+              </motion.button>
+            );
+          })}
+
+          {/* Final puzzle node - center */}
+          <motion.button
+            initial={{ scale: 0 }}
+            animate={{ scale: canAccessFinal ? 1 : 0.6 }}
+            transition={{ delay: 0.6, type: "spring" }}
+            onClick={() => {
+              if (canAccessFinal) { playClick(); onEnterFinal(); } else { playError(); }
+            }}
+            className="absolute z-10 flex flex-col items-center gap-1"
+            style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
+          >
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl border-2 transition-all duration-500 ${
+              canAccessFinal
+                ? "bg-primary/20 border-primary shadow-xl shadow-primary/30 animate-pulse-glow cursor-pointer hover:scale-110"
+                : "bg-muted/20 border-border/30 opacity-30 cursor-not-allowed"
+            }`}>
+              {canAccessFinal ? "🔐" : "🔒"}
+            </div>
+            <p className={`text-[10px] font-black ${canAccessFinal ? "text-primary" : "text-muted-foreground/40"}`}>
+              {canAccessFinal ? "פצחו את הקוד!" : "השלימו הכל"}
+            </p>
+          </motion.button>
+        </motion.div>
+
+        {/* Bottom: Inventory */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Inventory items={inventory} collectedLetters={collectedLetters} />
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default GameHub;
