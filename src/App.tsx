@@ -7,6 +7,7 @@ import SFXToggle, { SFXProvider, useSFX } from "./components/MusicPlayer";
 import { setSFXMuted } from "./components/SoundEffects";
 import ResearchCenter from "./components/ResearchCenter";
 import GameHub from "./components/game/GameHub";
+import GameTimer from "./components/game/GameTimer";
 import Station1Eilat from "./components/game/Station1Eilat";
 import Station2Hula from "./components/game/Station2Hula";
 import Station3Dangers from "./components/game/Station3Dangers";
@@ -25,7 +26,6 @@ const pageTransition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] as const };
 const overlayVariants = { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } };
 const drawerVariants = { initial: { x: "100%" }, animate: { x: 0 }, exit: { x: "100%" } };
 
-/** Syncs SFX context mute state to the SoundEffects module */
 const SFXSync = () => {
   const { muted } = useSFX();
   useEffect(() => { setSFXMuted(muted); }, [muted]);
@@ -35,19 +35,34 @@ const SFXSync = () => {
 const App = () => {
   const game = useGameState();
   const [showResearch, setShowResearch] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   const handleStationComplete = useCallback((stationIndex: number, letter: string) => {
     game.completeStation(stationIndex, letter);
     game.setScreen("hub");
   }, [game]);
 
+  const goHome = useCallback(() => game.setScreen("home"), [game]);
+  const goHub = useCallback(() => game.setScreen("hub"), [game]);
+
+  const handleStart = useCallback(() => {
+    setGameStarted(true);
+    game.setScreen("instructions");
+  }, [game]);
+
   const screenKey = typeof game.screen === "number" ? `station-${game.screen}` : game.screen;
 
+  const stationProps = {
+    onOpenResearch: () => setShowResearch(true),
+    onGoHome: goHome,
+    onGoMap: goHub,
+  };
+
   const stationComponents = [
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void }) => <Station1Eilat {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void }) => <Station2Hula {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void }) => <Station3Dangers {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void }) => <Station4Lab {...props} />,
+    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station1Eilat {...props} />,
+    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station2Hula {...props} />,
+    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station3Dangers {...props} />,
+    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station4Lab {...props} />,
   ];
 
   return (
@@ -55,6 +70,11 @@ const App = () => {
       <SFXSync />
       <div className="min-h-screen relative overflow-hidden">
         <SFXToggle />
+
+        {/* Game Timer — appears once game starts */}
+        {gameStarted && game.screen !== "home" && game.screen !== "success" && (
+          <GameTimer totalSeconds={30 * 60} />
+        )}
 
         {/* Research Center overlay */}
         <AnimatePresence>
@@ -72,7 +92,7 @@ const App = () => {
         <AnimatePresence mode="wait">
           <motion.div key={screenKey} variants={pageVariants} initial="initial" animate="animate" exit="exit" transition={pageTransition} className="min-h-screen">
             {game.screen === "home" && (
-              <HomeScreen onStart={() => game.setScreen("instructions")} onOpenResearch={() => setShowResearch(true)} />
+              <HomeScreen onStart={handleStart} onOpenResearch={() => setShowResearch(true)} />
             )}
             {game.screen === "instructions" && (
               <InstructionsScreen onContinue={() => game.setScreen("hub")} />
@@ -87,12 +107,13 @@ const App = () => {
                 onEnterStation={(i) => game.setScreen(i)}
                 onEnterFinal={() => game.setScreen("final")}
                 onOpenResearch={() => setShowResearch(true)}
+                onGoHome={goHome}
               />
             )}
             {typeof game.screen === "number" && stationComponents[game.screen] && (
               stationComponents[game.screen]({
                 onComplete: (letter) => handleStationComplete(game.screen as number, letter),
-                onOpenResearch: () => setShowResearch(true),
+                ...stationProps,
               })
             )}
             {game.screen === "final" && (
@@ -100,10 +121,12 @@ const App = () => {
                 inventory={game.inventory}
                 collectedLetters={game.collectedLetters}
                 onSuccess={() => game.setScreen("success")}
+                onGoMap={goHub}
+                onGoHome={goHome}
               />
             )}
             {game.screen === "success" && (
-              <SuccessScreen collected={game.collectedLetters} onRestart={game.restart} />
+              <SuccessScreen collected={game.collectedLetters} onRestart={() => { setGameStarted(false); game.restart(); }} />
             )}
           </motion.div>
         </AnimatePresence>

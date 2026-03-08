@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Inventory from "./Inventory";
 import type { InventoryItem } from "./useGameState";
 import { playClick, playError } from "../SoundEffects";
+import GameNav from "./GameNav";
 
 interface Props {
   completedStations: Set<number>;
@@ -12,6 +13,7 @@ interface Props {
   onEnterStation: (i: number) => void;
   onEnterFinal: () => void;
   onOpenResearch: () => void;
+  onGoHome: () => void;
 }
 
 const stationNodes = [
@@ -28,7 +30,7 @@ const pathSegments = [
 const GameHub = ({
   completedStations, inventory, collectedLetters,
   isStationUnlocked, canAccessFinal,
-  onEnterStation, onEnterFinal, onOpenResearch,
+  onEnterStation, onEnterFinal, onOpenResearch, onGoHome,
 }: Props) => {
 
   const handleStationClick = (i: number) => {
@@ -43,21 +45,25 @@ const GameHub = ({
   return (
     <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col">
       {/* Top bar */}
-      <div className="flex items-center justify-between mb-3 max-w-2xl mx-auto w-full">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🗺️</span>
-          <div>
-            <h1 className="text-lg font-black text-primary">מפת המשימה</h1>
-            <p className="text-[10px] text-muted-foreground">בחרו תחנה כדי להתחיל חקירה</p>
+      <div className="max-w-2xl mx-auto w-full">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <GameNav onHome={onGoHome} backLabel="בית" />
+          </div>
+          <div className="flex items-center gap-3">
+            <div>
+              <h1 className="text-xl font-black text-primary">🗺️ מפת המשימה</h1>
+              <p className="text-sm text-muted-foreground">בחרו תחנה כדי להתחיל חקירה</p>
+            </div>
+            <button
+              onClick={() => { playClick(); onOpenResearch(); }}
+              className="glass-card rounded-xl px-4 py-2.5 flex items-center gap-2 border border-accent/20 hover:border-accent/40 transition-all hover:scale-105"
+            >
+              <span className="text-base">📚</span>
+              <span className="text-sm font-bold text-accent">ארכיון</span>
+            </button>
           </div>
         </div>
-        <button
-          onClick={() => { playClick(); onOpenResearch(); }}
-          className="glass-card rounded-xl px-3 py-2 flex items-center gap-2 border border-accent/20 hover:border-accent/40 transition-all hover:scale-105"
-        >
-          <span className="text-sm">📚</span>
-          <span className="text-[10px] font-bold text-accent">ארכיון</span>
-        </button>
       </div>
 
       <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full gap-3">
@@ -107,8 +113,7 @@ const GameHub = ({
                 className="absolute z-10 flex flex-col items-center gap-1 group"
                 style={{ left: node.x, top: node.y, transform: "translate(-50%, -50%)" }}
               >
-                {/* Node circle */}
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl border-2 transition-all duration-300 shadow-lg ${
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl border-2 transition-all duration-300 shadow-lg ${
                   completed
                     ? `bg-${node.color}/20 border-${node.color} shadow-${node.color}/20`
                     : unlocked
@@ -117,19 +122,17 @@ const GameHub = ({
                 }`}>
                   {completed ? "✅" : unlocked ? node.emoji : "🔒"}
                 </div>
-                {/* Label */}
                 <div className={`text-center transition-opacity ${unlocked ? "opacity-100" : "opacity-40"}`}>
-                  <p className={`text-[10px] font-black ${completed ? `text-${node.color}` : "text-foreground/80"}`}>
+                  <p className={`text-sm font-black ${completed ? `text-${node.color}` : "text-foreground/80"}`}>
                     {node.title}
                   </p>
-                  <p className="text-[8px] text-muted-foreground">{node.subtitle}</p>
+                  <p className="text-xs text-muted-foreground">{node.subtitle}</p>
                 </div>
-                {/* Completed badge */}
                 {completed && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className={`absolute -top-1 -right-1 w-5 h-5 rounded-full bg-${node.color} flex items-center justify-center text-[10px] text-background font-black shadow-md`}
+                    className={`absolute -top-1 -right-1 w-6 h-6 rounded-full bg-${node.color} flex items-center justify-center text-xs text-background font-black shadow-md`}
                   >
                     {collectedLetters[i]}
                   </motion.div>
@@ -138,7 +141,7 @@ const GameHub = ({
             );
           })}
 
-          {/* Final puzzle node - center */}
+          {/* Final puzzle node */}
           <motion.button
             initial={{ scale: 0 }}
             animate={{ scale: canAccessFinal ? 1 : 0.6 }}
@@ -149,14 +152,14 @@ const GameHub = ({
             className="absolute z-10 flex flex-col items-center gap-1"
             style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
           >
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl border-2 transition-all duration-500 ${
+            <div className={`w-18 h-18 rounded-full flex items-center justify-center text-3xl border-2 transition-all duration-500 ${
               canAccessFinal
                 ? "bg-primary/20 border-primary shadow-xl shadow-primary/30 animate-pulse-glow cursor-pointer hover:scale-110"
                 : "bg-muted/20 border-border/30 opacity-30 cursor-not-allowed"
             }`}>
               {canAccessFinal ? "🔐" : "🔒"}
             </div>
-            <p className={`text-[10px] font-black ${canAccessFinal ? "text-primary" : "text-muted-foreground/40"}`}>
+            <p className={`text-sm font-black ${canAccessFinal ? "text-primary" : "text-muted-foreground/40"}`}>
               {canAccessFinal ? "פצחו את הקוד!" : "השלימו הכל"}
             </p>
           </motion.button>
