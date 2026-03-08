@@ -60,10 +60,13 @@ const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
           ))}
         </div>
 
-        {/* Professor encouragement */}
-        <div className="bg-muted/20 rounded-xl p-4 mb-6 border border-border/20 text-center">
-          <p className="text-xs text-muted-foreground italic leading-relaxed">
-            👨‍🔬 ״אין מגבלת זמן. קחו את הזמן שלכם, קראו בעיון, וזכרו — לפעמים התשובה מסתתרת בין השורות.״
+        {/* Professor warning */}
+        <div className="bg-destructive/8 rounded-xl p-4 mb-6 border border-destructive/20 text-center">
+          <p className="text-xs text-foreground/80 leading-relaxed">
+            ⏰ <strong className="text-destructive">שימו לב:</strong> יש לכם <strong>30 דקות</strong> לפצח את הקוד. אם הזמן ייגמר — החדר יינעל והמחקר יימחק לנצח!
+          </p>
+          <p className="text-[10px] text-muted-foreground mt-1 italic">
+            👨‍🔬 ״אפשר לבחור בכל סדר — העיקר לאסוף את כל 4 האותיות בזמן!״
           </p>
         </div>
 
