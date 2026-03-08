@@ -37,8 +37,8 @@ const App = () => {
   const [showResearch, setShowResearch] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
 
-  const handleStationComplete = useCallback((stationIndex: number, letter: string) => {
-    game.completeStation(stationIndex, letter);
+  const handleStationComplete = useCallback((stationIndex: number, letter: string, mistakes: number, hints: number) => {
+    game.completeStation(stationIndex, letter, mistakes, hints);
     game.setScreen("hub");
   }, [game]);
 
@@ -47,6 +47,7 @@ const App = () => {
 
   const handleStart = useCallback(() => {
     setGameStarted(true);
+    game.startGame();
     game.setScreen("instructions");
   }, [game]);
 
@@ -58,11 +59,12 @@ const App = () => {
     onGoMap: goHub,
   };
 
+  type StationProps = { onComplete: (l: string, m: number, h: number) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void };
   const stationComponents = [
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station1Eilat {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station2Hula {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station3Dangers {...props} />,
-    (props: { onComplete: (l: string) => void; onOpenResearch: () => void; onGoHome: () => void; onGoMap: () => void }) => <Station4Lab {...props} />,
+    (props: StationProps) => <Station1Eilat {...props} />,
+    (props: StationProps) => <Station2Hula {...props} />,
+    (props: StationProps) => <Station3Dangers {...props} />,
+    (props: StationProps) => <Station4Lab {...props} />,
   ];
 
   return (
@@ -112,7 +114,7 @@ const App = () => {
             )}
             {typeof game.screen === "number" && stationComponents[game.screen] && (
               stationComponents[game.screen]({
-                onComplete: (letter) => handleStationComplete(game.screen as number, letter),
+                onComplete: (letter, mistakes, hints) => handleStationComplete(game.screen as number, letter, mistakes, hints),
                 ...stationProps,
               })
             )}
@@ -120,13 +122,13 @@ const App = () => {
               <FinalPuzzle
                 inventory={game.inventory}
                 collectedLetters={game.collectedLetters}
-                onSuccess={() => game.setScreen("success")}
+                onSuccess={() => { game.stopTimer(); game.setScreen("success"); }}
                 onGoMap={goHub}
                 onGoHome={goHome}
               />
             )}
             {game.screen === "success" && (
-              <SuccessScreen collected={game.collectedLetters} onRestart={() => { setGameStarted(false); game.restart(); }} />
+              <SuccessScreen collected={game.collectedLetters} gameStats={game.getGameStats()} onRestart={() => { setGameStarted(false); game.restart(); }} />
             )}
           </motion.div>
         </AnimatePresence>

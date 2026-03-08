@@ -12,7 +12,7 @@ import CorrectEffect from "./CorrectEffect";
  */
 
 interface Props {
-  onComplete: (letter: string) => void;
+  onComplete: (letter: string, mistakes: number, hints: number) => void;
   onOpenResearch: () => void;
   onGoHome: () => void;
   onGoMap: () => void;
@@ -360,7 +360,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
                 </p>
               </div>
 
-              <button onClick={() => onComplete("נ")} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
+              <button onClick={() => onComplete("נ", sortErrors + matchErrors, 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
             </motion.div>

@@ -3,17 +3,55 @@ import { SECRET_WORD } from "./gameState";
 import { useEffect } from "react";
 import { playComplete, playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
+import type { GameStats } from "./game/useGameState";
 
 interface Props {
   collected: { [key: number]: string };
   onRestart: () => void;
+  gameStats: GameStats;
 }
 
-const SuccessScreen = ({ collected, onRestart }: Props) => {
+const STATION_NAMES = ["אילת — שער הנדידה", "עמק החולה", "שביל הסכנות", "מעבדת הניווט"];
+
+const getStarRating = (stats: GameStats): number => {
+  let stars = 5;
+  // Deduct for mistakes
+  if (stats.totalMistakes > 10) stars -= 2;
+  else if (stats.totalMistakes > 5) stars -= 1;
+  // Deduct for hints
+  if (stats.totalHintsUsed > 4) stars -= 1;
+  else if (stats.totalHintsUsed > 2) stars -= 0.5;
+  // Deduct for time (over 20 min)
+  if (stats.elapsedSeconds > 25 * 60) stars -= 1;
+  else if (stats.elapsedSeconds > 20 * 60) stars -= 0.5;
+  return Math.max(1, Math.min(5, Math.round(stars)));
+};
+
+const getBadges = (stats: GameStats): { emoji: string; label: string }[] => {
+  const badges: { emoji: string; label: string }[] = [];
+  if (stats.totalMistakes === 0) badges.push({ emoji: "🎯", label: "אפס טעויות!" });
+  if (stats.totalHintsUsed === 0) badges.push({ emoji: "🧠", label: "בלי רמזים!" });
+  if (stats.elapsedSeconds < 10 * 60) badges.push({ emoji: "⚡", label: "ברק!" });
+  if (stats.elapsedSeconds < 15 * 60) badges.push({ emoji: "🚀", label: "מהיר במיוחד" });
+  if (stats.totalMistakes <= 3 && stats.totalHintsUsed <= 1) badges.push({ emoji: "🏆", label: "חוקר מומחה" });
+  if (badges.length === 0) badges.push({ emoji: "🎓", label: "חוקר צעיר מצטיין" });
+  return badges;
+};
+
+const formatTime = (seconds: number) => {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+};
+
+const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
   useEffect(() => {
     const timer = setTimeout(playComplete, 400);
     return () => clearTimeout(timer);
   }, []);
+
+  const stars = getStarRating(gameStats);
+  const badges = getBadges(gameStats);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
@@ -36,7 +74,7 @@ const SuccessScreen = ({ collected, onRestart }: Props) => {
               opacity: 0.15 + (i % 3) * 0.05,
             }}
           >
-            {typeof item.el === "string" ? item.el : item.el}
+            {item.el}
           </div>
         ))}
       </div>
@@ -49,6 +87,16 @@ const SuccessScreen = ({ collected, onRestart }: Props) => {
           </div>
           <div className="absolute -top-3 -right-3 text-2xl animate-pulse-glow">🎉</div>
           <div className="absolute -bottom-2 -left-2 text-xl animate-pulse-glow" style={{ animationDelay: '0.5s' }}>✨</div>
+        </div>
+
+        {/* Star Rating */}
+        <div className="flex items-center justify-center gap-1 mb-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <span key={i} className={`text-3xl transition-all duration-500 ${i < stars ? "scale-110" : "opacity-20 grayscale"}`}
+              style={{ animationDelay: `${i * 0.15}s` }}>
+              ⭐
+            </span>
+          ))}
         </div>
 
         <h1 className="text-5xl md:text-6xl font-black mb-1 text-glow text-primary">
@@ -67,8 +115,61 @@ const SuccessScreen = ({ collected, onRestart }: Props) => {
           <p className="text-4xl font-black text-primary text-glow tracking-widest">{SECRET_WORD}</p>
         </div>
 
+        {/* Badges */}
+        {badges.length > 0 && (
+          <div className="flex items-center justify-center gap-2 flex-wrap mb-6 animate-slide-up">
+            {badges.map((b, i) => (
+              <span key={i} className="inline-flex items-center gap-1.5 bg-accent/15 text-accent border border-accent/25 rounded-full px-4 py-1.5 text-xs font-bold">
+                {b.emoji} {b.label}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Detailed Results Board */}
+        <div className="glass-card rounded-2xl p-5 mb-6 animate-slide-up text-right" style={{ animationDelay: '0.2s' }}>
+          <h3 className="text-sm font-black text-primary mb-4 text-center">📊 לוח תוצאות</h3>
+          
+          {/* Summary stats */}
+          <div className="grid grid-cols-3 gap-3 mb-5">
+            <div className="bg-muted/30 rounded-xl p-3 text-center border border-border/30">
+              <p className="text-2xl font-black text-foreground">{formatTime(gameStats.elapsedSeconds)}</p>
+              <p className="text-[10px] text-muted-foreground mt-1">⏱️ זמן כולל</p>
+            </div>
+            <div className="bg-muted/30 rounded-xl p-3 text-center border border-border/30">
+              <p className="text-2xl font-black text-foreground">{gameStats.totalMistakes}</p>
+              <p className="text-[10px] text-muted-foreground mt-1">❌ טעויות</p>
+            </div>
+            <div className="bg-muted/30 rounded-xl p-3 text-center border border-border/30">
+              <p className="text-2xl font-black text-foreground">{gameStats.totalHintsUsed}</p>
+              <p className="text-[10px] text-muted-foreground mt-1">💡 רמזים</p>
+            </div>
+          </div>
+
+          {/* Per-station breakdown */}
+          <div className="space-y-2">
+            {STATION_NAMES.map((name, i) => {
+              const stat = gameStats.stationStats[i];
+              const mistakes = stat?.mistakes ?? 0;
+              const hints = stat?.hintsUsed ?? 0;
+              const perfect = mistakes === 0 && hints === 0;
+              return (
+                <div key={i} className={`flex items-center gap-3 rounded-lg px-3 py-2 text-xs border ${perfect ? "bg-primary/5 border-primary/20" : "bg-muted/20 border-border/20"}`}>
+                  <span className="text-base">{perfect ? "⭐" : "✅"}</span>
+                  <span className="flex-1 font-bold text-foreground/80">{name}</span>
+                  <span className="text-muted-foreground">
+                    {mistakes > 0 && <span className="text-destructive/70">❌{mistakes}</span>}
+                    {hints > 0 && <span className="mr-2 text-accent/70">💡{hints}</span>}
+                    {perfect && <span className="text-primary">מושלם!</span>}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Professor final message */}
-        <div className="glass-card rounded-2xl p-6 card-glow mb-8 animate-slide-up text-right">
+        <div className="glass-card rounded-2xl p-6 card-glow mb-8 animate-slide-up text-right" style={{ animationDelay: '0.4s' }}>
           <div className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center text-2xl border border-primary/20">
               👨‍🔬
@@ -85,15 +186,6 @@ const SuccessScreen = ({ collected, onRestart }: Props) => {
               עכשיו אתם יודעים למה ישראל היא מקום כל כך מיוחד לציפורים נודדות, 
               ולמה חשוב לכולנו לשמור עליהן. תודה רבה, שותפים למדע!״
             </p>
-          </div>
-        </div>
-
-        {/* Achievements summary */}
-        <div className="glass-card rounded-xl p-4 mb-8 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-          <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">🗺️ 4 תחנות הושלמו</span>
-            <span className="flex items-center gap-1.5">🧩 12 חידות נפתרו</span>
-            <span className="flex items-center gap-1.5">🔓 הקוד נפתח</span>
           </div>
         </div>
 
