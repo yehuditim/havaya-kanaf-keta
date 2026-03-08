@@ -2,16 +2,18 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
+import GameNav from "./GameNav";
+import CorrectEffect from "./CorrectEffect";
 
 /**
  * Station 4: Navigation Lab — "Build the Compass"
- * Phase 1: Place navigation methods on a compass diagram (click-to-select & place)
- * Phase 2: Sequence tracking technologies in chronological order
  */
 
 interface Props {
   onComplete: (letter: string) => void;
   onOpenResearch: () => void;
+  onGoHome: () => void;
+  onGoMap: () => void;
 }
 
 interface NavMethod {

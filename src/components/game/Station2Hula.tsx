@@ -2,15 +2,18 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
+import GameNav from "./GameNav";
+import CorrectEffect from "./CorrectEffect";
 
 /**
  * Station 2: Hula Valley — "Field Station Investigation"
- * Puzzle: Click hotspots in a scene to discover clues, then solve a riddle.
  */
 
 interface Props {
   onComplete: (letter: string) => void;
   onOpenResearch: () => void;
+  onGoHome: () => void;
+  onGoMap: () => void;
 }
 
 interface Hotspot {
