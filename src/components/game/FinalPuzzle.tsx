@@ -61,8 +61,8 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
   }, [unlocking, onSuccess]);
 
   return (
-    <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col items-center justify-center">
-      <div className="max-w-lg w-full">
+    <div className="min-h-screen bg-adventure stars-bg p-3 sm:p-4 flex flex-col items-center justify-center">
+      <div className="max-w-lg w-full mt-12 sm:mt-0">
         {/* Navigation */}
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
 

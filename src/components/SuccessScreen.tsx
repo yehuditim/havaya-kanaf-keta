@@ -132,7 +132,7 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
           ))}
         </div>
 
-        <h1 className="text-5xl md:text-6xl font-black mb-1 text-glow text-primary">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black mb-1 text-glow text-primary">
           הקוד נפתח!
         </h1>
         <p className="text-muted-foreground text-sm mb-6">פיצחתם את התעלומה של פרופסור דרור!</p>

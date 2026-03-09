@@ -107,7 +107,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         {/* CTA button */}
         <button
           onClick={() => { playClick(); onStart(); }}
-          className="group relative bg-gradient-to-l from-primary via-primary to-primary/85 text-primary-foreground px-12 py-5 rounded-2xl text-xl font-black hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/25 mb-6"
+          className="group relative bg-gradient-to-l from-primary via-primary to-primary/85 text-primary-foreground px-8 sm:px-12 py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-black hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/25 mb-4 sm:mb-6"
         >
           🔓 קבלו את המשימה
         </button>
