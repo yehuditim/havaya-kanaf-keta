@@ -87,7 +87,7 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-center bg-adventure stars-bg relative overflow-hidden">
       {/* Celebration particles */}
       <div className="absolute inset-0 pointer-events-none">
         {[
