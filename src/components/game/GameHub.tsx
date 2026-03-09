@@ -45,24 +45,24 @@ const GameHub = ({
   };
 
   return (
-    <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col">
+    <div className="min-h-screen bg-adventure stars-bg p-2 sm:p-4 flex flex-col">
       {/* Top bar */}
-      <div className="max-w-2xl mx-auto w-full">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+      <div className="max-w-2xl mx-auto w-full mt-12 sm:mt-0">
+        <div className="flex items-center justify-between mb-2 sm:mb-3">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <GameNav onHome={onGoHome} backLabel="בית" />
           </div>
-          <div className="flex items-center gap-3">
-            <div>
-              <h1 className="text-xl font-black text-primary">🗺️ מפת המשימה</h1>
-              <p className="text-sm text-muted-foreground">בחרו תחנה כדי להתחיל חקירה</p>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="text-left">
+              <h1 className="text-base sm:text-xl font-black text-primary">🗺️ מפת המשימה</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">בחרו תחנה כדי להתחיל חקירה</p>
             </div>
             <button
               onClick={() => { playClick(); onOpenResearch(); }}
-              className="glass-card rounded-xl px-4 py-2.5 flex items-center gap-2 border border-accent/20 hover:border-accent/40 transition-all hover:scale-105"
+              className="glass-card rounded-xl px-2.5 py-2 sm:px-4 sm:py-2.5 flex items-center gap-1.5 sm:gap-2 border border-accent/20 hover:border-accent/40 transition-all hover:scale-105"
             >
-              <span className="text-base">📚</span>
-              <span className="text-sm font-bold text-accent">ארכיון</span>
+              <span className="text-sm sm:text-base">📚</span>
+              <span className="text-xs sm:text-sm font-bold text-accent">ארכיון</span>
             </button>
           </div>
         </div>
