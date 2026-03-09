@@ -80,7 +80,7 @@ export const useGameState = () => {
     setHintsUsed(prev => prev + 1);
   }, []);
 
-  const canAccessFinal = completedStations.size === 5;
+  const canAccessFinal = completedStations.size === 6;
 
   const getGameStats = useCallback((): GameStats => {
     const totalMistakes = Object.values(stationStats).reduce((sum, s) => sum + s.mistakes, 0);

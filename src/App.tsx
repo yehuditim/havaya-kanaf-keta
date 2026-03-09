@@ -68,6 +68,7 @@ const App = () => {
     (props: StationProps) => <Station3Dangers {...props} />,
     (props: StationProps) => <Station4Lab {...props} />,
     (props: StationProps) => <Station5Ringing {...props} />,
+    (props: StationProps) => <Station6Analysis {...props} />,
   ];
 
   return (
