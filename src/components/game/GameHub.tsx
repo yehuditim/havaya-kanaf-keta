@@ -72,7 +72,7 @@ const GameHub = ({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex-1 glass-card rounded-2xl relative min-h-[460px] border border-border/30"
+          className="flex-1 glass-card rounded-2xl relative min-h-[460px] border border-border/30 overflow-visible"
           style={{ paddingBottom: "2.5rem" }}
         >
           {/* Map background decoration */}
