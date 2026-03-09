@@ -1,10 +1,12 @@
 import CodeTracker from "./CodeTracker";
 import { SECRET_WORD } from "./gameState";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { playComplete, playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
 import type { GameStats } from "./game/useGameState";
 import { useHebrewNarration } from "../hooks/useHebrewNarration";
+import { saveGameResult } from "../lib/leaderboard";
+import Leaderboard from "./game/Leaderboard";
 
 interface Props {
   collected: { [key: number]: string };
