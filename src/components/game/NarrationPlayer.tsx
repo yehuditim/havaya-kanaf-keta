@@ -48,7 +48,7 @@ const NarrationPlayer = ({
     };
   }, []);
 
-  const speak = useCallback(() => {
+  const doSpeak = useCallback((voices?: SpeechSynthesisVoice[]) => {
     if (!ttsSupported) return;
     window.speechSynthesis.cancel();
 
@@ -57,9 +57,8 @@ const NarrationPlayer = ({
     utter.rate = 0.9;
     utter.pitch = 1;
 
-    // Try to find a Hebrew voice
-    const voices = window.speechSynthesis.getVoices();
-    const heVoice = voices.find(v => v.lang.startsWith("he")) || voices.find(v => v.lang.startsWith("ar")) || null;
+    const availableVoices = voices || window.speechSynthesis.getVoices();
+    const heVoice = availableVoices.find(v => v.lang.startsWith("he")) || availableVoices.find(v => v.lang.startsWith("ar")) || null;
     if (heVoice) utter.voice = heVoice;
 
     utter.onstart = () => setIsSpeaking(true);
@@ -69,6 +68,26 @@ const NarrationPlayer = ({
     utteranceRef.current = utter;
     window.speechSynthesis.speak(utter);
   }, [text, ttsSupported]);
+
+  const speak = useCallback(() => {
+    if (!ttsSupported) return;
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) {
+      // Voices not loaded yet — wait for them
+      const onVoices = () => {
+        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
+        doSpeak(window.speechSynthesis.getVoices());
+      };
+      window.speechSynthesis.addEventListener("voiceschanged", onVoices);
+      // Also try after a short delay as fallback
+      setTimeout(() => {
+        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
+        doSpeak(window.speechSynthesis.getVoices());
+      }, 300);
+    } else {
+      doSpeak(voices);
+    }
+  }, [ttsSupported, doSpeak]);
 
   const stopSpeaking = useCallback(() => {
     window.speechSynthesis.cancel();
