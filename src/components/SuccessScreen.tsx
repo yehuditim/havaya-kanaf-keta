@@ -221,13 +221,29 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
         {/* Professor final message */}
         <div className="glass-card rounded-2xl p-6 card-glow mb-8 animate-slide-up text-right" style={{ animationDelay: '0.4s' }}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center text-2xl border border-primary/20">
+            <div className={`w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center text-2xl border border-primary/20 ${isSpeaking ? "animate-pulse" : ""}`}>
               👨‍🔬
             </div>
-            <div>
+            <div className="flex-1 text-right">
               <p className="text-primary font-black text-sm">הודעת ניצחון!</p>
-              <p className="text-muted-foreground text-xs">פרופסור דרור</p>
+              <p className="text-muted-foreground text-xs">
+                {isSpeaking ? "🎙 פרופסור דרור מקריא..." : "פרופסור דרור"}
+              </p>
             </div>
+            {ttsSupported && (
+              <button
+                onClick={handleSpeak}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-black transition-all duration-200 border shadow-md shrink-0 ${
+                  isSpeaking
+                    ? "bg-primary text-primary-foreground border-primary shadow-primary/30 animate-pulse scale-105"
+                    : "bg-primary/15 text-primary border-primary/25 hover:bg-primary/25 hover:scale-105 hover:shadow-primary/20"
+                }`}
+                title={isSpeaking ? "עצור הקראה" : "הקרא בקול"}
+              >
+                <span className="text-base">{isSpeaking ? "⏸" : "🔊"}</span>
+                <span>{isSpeaking ? "עצור" : "הקרא"}</span>
+              </button>
+            )}
           </div>
           <div className="bg-muted/30 rounded-xl p-5 border border-border/30">
             <p className="text-[13px] leading-[2] text-foreground/90">
