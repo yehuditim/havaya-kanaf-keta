@@ -126,6 +126,15 @@ const infoCards: InfoCard[] = [
       "פסטיבל הצפרות באילת (מרץ 2026) — חגיגה בינלאומית! מירוץ ׳אלופי הנדידה׳ (Champions of the Flyway) — צוותים מתחרים לזהות כמה שיותר מינים ב-24 שעות לגיוס כספים. צפרתון קק״ל — מרתון צפרות ארצי באוקטובר.",
     source: { label: "Champions of the Flyway", url: "https://www.champions-of-the-flyway.com/" },
   },
+  {
+    title: "AEWA ושיתוף פעולה בין-לאומי",
+    emoji: "🤝",
+    category: "conservation",
+    clueRelevant: true,
+    content:
+      "ציפורים נודדות חוצות עשרות מדינות — ולכן הגנה עליהן דורשת שיתוף פעולה בין-לאומי. AEWA (הסכם ציפורי המים האפרו-אירואסיאתיות) מחבר 80 מדינות להגנה על בתי גידול לאורך מסלולי הנדידה. אמנת רמסאר מגינה על ביצות קריטיות, ו-CMS (אמנת בון) מתאמת שמירה על מינים נודדים בין מדינות. ארגון BirdLife International מקשר ארגוני שימור מקומיים ברשת עולמית אחת.",
+    source: { label: "AEWA", url: "https://www.unep-aewa.org/" },
+  },
 ];
 
 const ResearchCenter = ({ onClose }: { onClose: () => void }) => {
