@@ -126,10 +126,10 @@ const GameHub = ({
                   {completed ? "✅" : unlocked ? node.emoji : "🔒"}
                 </div>
                 <div className={`text-center transition-opacity ${unlocked ? "opacity-100" : "opacity-40"}`}>
-                  <p className={`text-sm font-black ${completed ? `text-${node.color}` : "text-foreground/80"}`}>
+                  <p className={`text-[10px] sm:text-sm font-black ${completed ? `text-${node.color}` : "text-foreground/80"}`}>
                     {node.title}
                   </p>
-                  <p className="text-xs text-muted-foreground">{node.subtitle}</p>
+                  <p className="text-[8px] sm:text-xs text-muted-foreground hidden sm:block">{node.subtitle}</p>
                 </div>
                 {completed && (
                   <motion.div
