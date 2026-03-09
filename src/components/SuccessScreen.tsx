@@ -87,7 +87,7 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-center bg-adventure stars-bg relative overflow-hidden">
       {/* Celebration particles */}
       <div className="absolute inset-0 pointer-events-none">
         {[
@@ -132,7 +132,7 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
           ))}
         </div>
 
-        <h1 className="text-5xl md:text-6xl font-black mb-1 text-glow text-primary">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black mb-1 text-glow text-primary">
           הקוד נפתח!
         </h1>
         <p className="text-muted-foreground text-sm mb-6">פיצחתם את התעלומה של פרופסור דרור!</p>

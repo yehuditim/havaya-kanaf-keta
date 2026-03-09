@@ -2,11 +2,11 @@ import CodeTracker from "./CodeTracker";
 import { playClick } from "./SoundEffects";
 
 const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
-  <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-adventure stars-bg">
-    <div className="max-w-lg w-full">
+  <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 bg-adventure stars-bg">
+    <div className="max-w-lg w-full mt-12 sm:mt-0">
       <CodeTracker collected={{}} totalStations={4} />
 
-      <div className="glass-card rounded-2xl p-8 card-glow text-right animate-slide-up mt-5">
+      <div className="glass-card rounded-2xl p-5 sm:p-8 card-glow text-right animate-slide-up mt-5">
         {/* Header */}
         <div className="text-center mb-7">
           <div className="w-16 h-16 rounded-2xl bg-accent/15 border border-accent/20 flex items-center justify-center text-3xl mx-auto mb-3 shadow-sm">

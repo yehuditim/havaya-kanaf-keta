@@ -199,10 +199,10 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
   };
 
   return (
-    <div className="min-h-screen p-4 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-accent/5 via-background to-primary/5" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
-      <div className="max-w-lg w-full relative z-10">
+      <div className="max-w-lg w-full relative z-10 mt-12 sm:mt-0">
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
 
         <AnimatePresence mode="wait">

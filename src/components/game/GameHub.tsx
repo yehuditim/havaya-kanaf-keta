@@ -45,35 +45,35 @@ const GameHub = ({
   };
 
   return (
-    <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col">
+    <div className="min-h-screen bg-adventure stars-bg p-2 sm:p-4 flex flex-col">
       {/* Top bar */}
-      <div className="max-w-2xl mx-auto w-full">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
+      <div className="max-w-2xl mx-auto w-full mt-12 sm:mt-0">
+        <div className="flex items-center justify-between mb-2 sm:mb-3">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <GameNav onHome={onGoHome} backLabel="בית" />
           </div>
-          <div className="flex items-center gap-3">
-            <div>
-              <h1 className="text-xl font-black text-primary">🗺️ מפת המשימה</h1>
-              <p className="text-sm text-muted-foreground">בחרו תחנה כדי להתחיל חקירה</p>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="text-left">
+              <h1 className="text-base sm:text-xl font-black text-primary">🗺️ מפת המשימה</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground hidden sm:block">בחרו תחנה כדי להתחיל חקירה</p>
             </div>
             <button
               onClick={() => { playClick(); onOpenResearch(); }}
-              className="glass-card rounded-xl px-4 py-2.5 flex items-center gap-2 border border-accent/20 hover:border-accent/40 transition-all hover:scale-105"
+              className="glass-card rounded-xl px-2.5 py-2 sm:px-4 sm:py-2.5 flex items-center gap-1.5 sm:gap-2 border border-accent/20 hover:border-accent/40 transition-all hover:scale-105"
             >
-              <span className="text-base">📚</span>
-              <span className="text-sm font-bold text-accent">ארכיון</span>
+              <span className="text-sm sm:text-base">📚</span>
+              <span className="text-xs sm:text-sm font-bold text-accent">ארכיון</span>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full gap-3">
+      <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full gap-2 sm:gap-3">
         {/* Map area */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex-1 glass-card rounded-2xl relative min-h-[460px] border border-border/30 overflow-visible"
+          className="flex-1 glass-card rounded-2xl relative min-h-[340px] sm:min-h-[460px] border border-border/30 overflow-visible"
           style={{ paddingBottom: "2.5rem" }}
         >
           {/* Map background decoration */}
@@ -116,7 +116,7 @@ const GameHub = ({
                 className="absolute z-10 flex flex-col items-center gap-1 group"
                 style={{ left: node.x, top: node.y, transform: "translate(-50%, -50%)" }}
               >
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl border-2 transition-all duration-300 shadow-lg ${
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center text-lg sm:text-2xl border-2 transition-all duration-300 shadow-lg ${
                   completed
                     ? `bg-${node.color}/20 border-${node.color} shadow-${node.color}/20`
                     : unlocked
@@ -126,16 +126,16 @@ const GameHub = ({
                   {completed ? "✅" : unlocked ? node.emoji : "🔒"}
                 </div>
                 <div className={`text-center transition-opacity ${unlocked ? "opacity-100" : "opacity-40"}`}>
-                  <p className={`text-sm font-black ${completed ? `text-${node.color}` : "text-foreground/80"}`}>
+                  <p className={`text-[10px] sm:text-sm font-black ${completed ? `text-${node.color}` : "text-foreground/80"}`}>
                     {node.title}
                   </p>
-                  <p className="text-xs text-muted-foreground">{node.subtitle}</p>
+                  <p className="text-[8px] sm:text-xs text-muted-foreground hidden sm:block">{node.subtitle}</p>
                 </div>
                 {completed && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className={`absolute -top-1 -right-1 w-6 h-6 rounded-full bg-${node.color} flex items-center justify-center text-xs text-background font-black shadow-md`}
+                    className={`absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-${node.color} flex items-center justify-center text-[10px] sm:text-xs text-background font-black shadow-md`}
                   >
                     {collectedLetters[i]}
                   </motion.div>
@@ -155,14 +155,14 @@ const GameHub = ({
             className="absolute z-10 flex flex-col items-center gap-1"
             style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
           >
-            <div className={`w-18 h-18 rounded-full flex items-center justify-center text-3xl border-2 transition-all duration-500 ${
+            <div className={`w-14 h-14 sm:w-18 sm:h-18 rounded-full flex items-center justify-center text-2xl sm:text-3xl border-2 transition-all duration-500 ${
               canAccessFinal
                 ? "bg-primary/20 border-primary shadow-xl shadow-primary/30 animate-pulse-glow cursor-pointer hover:scale-110"
                 : "bg-muted/20 border-border/30 opacity-30 cursor-not-allowed"
             }`}>
               {canAccessFinal ? "🔐" : "🔒"}
             </div>
-            <p className={`text-sm font-black ${canAccessFinal ? "text-primary" : "text-muted-foreground/40"}`}>
+            <p className={`text-xs sm:text-sm font-black ${canAccessFinal ? "text-primary" : "text-muted-foreground/40"}`}>
               {canAccessFinal ? "פצחו את הקוד!" : "השלימו הכל"}
             </p>
           </motion.button>

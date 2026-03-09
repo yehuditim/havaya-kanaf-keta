@@ -20,7 +20,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
   }, [isSpeaking, speak, stopSpeaking]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-center bg-adventure stars-bg relative overflow-hidden">
       {/* Animated floating elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[8%] right-[8%] opacity-[0.12] animate-float">
@@ -35,7 +35,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         </div>
       </div>
 
-      <div className="max-w-lg relative z-10">
+      <div className="max-w-lg relative z-10 px-1 sm:px-0">
         {/* Creator credit - top banner */}
         <div className="mb-6 flex items-center justify-center gap-2 bg-accent/15 border border-accent/30 rounded-2xl px-5 py-3 shadow-sm">
           <span className="text-lg">✏️</span>
@@ -61,12 +61,12 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         </div>
 
         {/* Title */}
-        <h1 className="text-5xl md:text-7xl font-black mb-2 text-glow text-primary leading-[1.1]">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mb-2 text-glow text-primary leading-[1.1]">
           תעלומת הנדידה
         </h1>
 
         {/* Professor message */}
-        <div className="glass-card rounded-2xl p-6 card-glow mb-6 text-right animate-slide-up">
+        <div className="glass-card rounded-2xl p-4 sm:p-6 card-glow mb-4 sm:mb-6 text-right animate-slide-up">
           <div className="flex items-center gap-3 mb-4">
             <div className={`w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center text-2xl border border-primary/20 shadow-sm ${isSpeaking ? "animate-pulse" : ""}`}>
               👨‍🔬
@@ -93,7 +93,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
               </button>
             )}
           </div>
-          <div className="bg-muted/30 rounded-xl p-5 border border-border/40">
+          <div className="bg-muted/30 rounded-xl p-3 sm:p-5 border border-border/40">
             <p className="text-[13px] leading-[2] text-foreground/90">
               ״ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! 
               אני צריך <strong className="text-primary">חוקרים צעירים ומוכשרים</strong> שיעזרו לי לפענח 
@@ -107,7 +107,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         {/* CTA button */}
         <button
           onClick={() => { playClick(); onStart(); }}
-          className="group relative bg-gradient-to-l from-primary via-primary to-primary/85 text-primary-foreground px-12 py-5 rounded-2xl text-xl font-black hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/25 mb-6"
+          className="group relative bg-gradient-to-l from-primary via-primary to-primary/85 text-primary-foreground px-8 sm:px-12 py-4 sm:py-5 rounded-2xl text-lg sm:text-xl font-black hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/25 mb-4 sm:mb-6"
         >
           🔓 קבלו את המשימה
         </button>

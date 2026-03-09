@@ -61,8 +61,8 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
   }, [unlocking, onSuccess]);
 
   return (
-    <div className="min-h-screen bg-adventure stars-bg p-4 flex flex-col items-center justify-center">
-      <div className="max-w-lg w-full">
+    <div className="min-h-screen bg-adventure stars-bg p-3 sm:p-4 flex flex-col items-center justify-center">
+      <div className="max-w-lg w-full mt-12 sm:mt-0">
         {/* Navigation */}
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
 
@@ -96,7 +96,7 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
           </p>
 
           {/* Code entry display */}
-          <div className="flex justify-center gap-3 mb-6" style={{ direction: "ltr" }}>
+          <div className="flex justify-center gap-2 sm:gap-3 mb-6" style={{ direction: "ltr" }}>
             {CODE_LETTERS.map((_, i) => {
               const entered = enteredLetters[i];
               return (
@@ -104,7 +104,7 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
                   key={i}
                   animate={entered && isCorrect ? { scale: [1, 1.3, 1], y: [0, -10, 0] } : {}}
                   transition={{ delay: i * 0.15 }}
-                  className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl font-black border-2 transition-all duration-500 ${
+                  className={`w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center text-lg sm:text-2xl font-black border-2 transition-all duration-500 ${
                     entered
                       ? isCorrect
                         ? "border-primary bg-primary/25 text-primary shadow-lg shadow-primary/30"
@@ -122,7 +122,7 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
             <>
               {/* Inventory items to click */}
               <p className="text-xs text-muted-foreground mb-3">לחצו על הפריטים בסדר הנכון:</p>
-              <div className="grid grid-cols-4 gap-3 mb-4">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 mb-4">
                 {inventory.map(item => {
                   const letter = collectedLetters[item.stationIndex];
                   return (

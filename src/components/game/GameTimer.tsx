@@ -52,7 +52,7 @@ const GameTimer = ({ totalSeconds = 30 * 60, onTimeUp, className = "" }: GameTim
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="fixed top-0 left-0 right-0 z-[60] flex items-center justify-center"
           >
-            <div className="bg-destructive/90 backdrop-blur-md text-destructive-foreground px-6 py-3 rounded-b-2xl shadow-xl shadow-destructive/30 flex items-center gap-3 max-w-md">
+            <div className="bg-destructive/90 backdrop-blur-md text-destructive-foreground px-4 sm:px-6 py-2.5 sm:py-3 rounded-b-2xl shadow-xl shadow-destructive/30 flex items-center gap-2 sm:gap-3 max-w-sm sm:max-w-md mx-3">
               <span className="text-xl">⏰</span>
               <div className="text-right">
                 <p className="text-sm font-black">הטיימר התחיל!</p>
@@ -65,7 +65,7 @@ const GameTimer = ({ totalSeconds = 30 * 60, onTimeUp, className = "" }: GameTim
       </AnimatePresence>
 
       {/* Timer display */}
-      <div className={`fixed top-4 right-16 z-50 flex items-center gap-2 ${className}`}>
+      <div className={`fixed top-3 right-3 sm:top-4 sm:right-16 z-50 flex items-center gap-2 ${className}`}>
         <div
           className={`glass-card rounded-full flex items-center gap-2 px-3 py-2 border transition-all ${
             isCritical
