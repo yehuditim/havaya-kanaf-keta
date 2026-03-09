@@ -68,12 +68,12 @@ const GameHub = ({
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full gap-3">
+      <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full gap-2 sm:gap-3">
         {/* Map area */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex-1 glass-card rounded-2xl relative min-h-[460px] border border-border/30 overflow-visible"
+          className="flex-1 glass-card rounded-2xl relative min-h-[340px] sm:min-h-[460px] border border-border/30 overflow-visible"
           style={{ paddingBottom: "2.5rem" }}
         >
           {/* Map background decoration */}
