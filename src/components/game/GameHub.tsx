@@ -162,7 +162,7 @@ const GameHub = ({
             }`}>
               {canAccessFinal ? "🔐" : "🔒"}
             </div>
-            <p className={`text-sm font-black ${canAccessFinal ? "text-primary" : "text-muted-foreground/40"}`}>
+            <p className={`text-xs sm:text-sm font-black ${canAccessFinal ? "text-primary" : "text-muted-foreground/40"}`}>
               {canAccessFinal ? "פצחו את הקוד!" : "השלימו הכל"}
             </p>
           </motion.button>

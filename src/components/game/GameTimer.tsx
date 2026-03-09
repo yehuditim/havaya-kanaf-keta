@@ -65,7 +65,7 @@ const GameTimer = ({ totalSeconds = 30 * 60, onTimeUp, className = "" }: GameTim
       </AnimatePresence>
 
       {/* Timer display */}
-      <div className={`fixed top-4 right-16 z-50 flex items-center gap-2 ${className}`}>
+      <div className={`fixed top-3 right-3 sm:top-4 sm:right-16 z-50 flex items-center gap-2 ${className}`}>
         <div
           className={`glass-card rounded-full flex items-center gap-2 px-3 py-2 border transition-all ${
             isCritical

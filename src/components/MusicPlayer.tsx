@@ -28,7 +28,7 @@ const SFXToggle = () => {
   return (
     <button
       onClick={toggle}
-      className="fixed top-4 left-4 z-50 w-11 h-11 rounded-full glass-card flex items-center justify-center text-base hover:scale-110 transition-all duration-300 border border-border/30"
+      className="fixed top-3 left-3 sm:top-4 sm:left-4 z-50 w-10 h-10 sm:w-11 sm:h-11 rounded-full glass-card flex items-center justify-center text-sm sm:text-base hover:scale-110 transition-all duration-300 border border-border/30"
       title={muted ? "הפעל צלילים" : "השתק צלילים"}
     >
       <span className="transition-transform duration-300">
