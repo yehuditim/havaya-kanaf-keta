@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { playClick } from "../SoundEffects";
+import { useHebrewNarration } from "../../hooks/useHebrewNarration";
 
 interface NarrationPlayerProps {
   text: string;
@@ -23,11 +24,10 @@ const NarrationPlayer = ({
 }: NarrationPlayerProps) => {
   const [revealed, setRevealed] = useState(autoExpand);
   const [displayedChars, setDisplayedChars] = useState(autoExpand ? text.length : 0);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [ttsSupported] = useState(() => typeof window !== "undefined" && "speechSynthesis" in window);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const autoPlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(text);
 
   useEffect(() => {
     if (revealed && displayedChars < text.length) {
@@ -42,74 +42,22 @@ const NarrationPlayer = ({
       }, 15);
     }
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [revealed, text]);
-
-  // Cleanup speech on unmount
-  useEffect(() => {
-    return () => {
-      if (utteranceRef.current) window.speechSynthesis.cancel();
-      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
-    };
-  }, []);
-
-  const doSpeak = useCallback((voices?: SpeechSynthesisVoice[]) => {
-    if (!ttsSupported) return;
-    window.speechSynthesis.cancel();
-
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "he-IL";
-    utter.rate = 0.9;
-    utter.pitch = 1;
-
-    const availableVoices = voices || window.speechSynthesis.getVoices();
-    const heVoice = availableVoices.find(v => v.lang.startsWith("he")) || availableVoices.find(v => v.lang.startsWith("ar")) || null;
-    if (heVoice) utter.voice = heVoice;
-
-    utter.onstart = () => setIsSpeaking(true);
-    utter.onend = () => setIsSpeaking(false);
-    utter.onerror = () => setIsSpeaking(false);
-
-    utteranceRef.current = utter;
-    window.speechSynthesis.speak(utter);
-  }, [text, ttsSupported]);
-
-  const speak = useCallback(() => {
-    if (!ttsSupported) return;
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length === 0) {
-      const onVoices = () => {
-        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
-        doSpeak(window.speechSynthesis.getVoices());
-      };
-      window.speechSynthesis.addEventListener("voiceschanged", onVoices);
-      setTimeout(() => {
-        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
-        doSpeak(window.speechSynthesis.getVoices());
-      }, 300);
-    } else {
-      doSpeak(voices);
-    }
-  }, [ttsSupported, doSpeak]);
+  }, [revealed, text, displayedChars]);
 
   // Auto-play on mount
   useEffect(() => {
-    if (!autoPlay || !ttsSupported) return;
+    if (!autoPlay || !canSpeak) return;
     autoPlayTimerRef.current = setTimeout(() => {
-      speak();
+      void speak();
     }, autoPlayDelay);
     return () => { if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // intentionally run once on mount
 
-  const stopSpeaking = useCallback(() => {
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
-  }, []);
-
   const handlePlay = () => {
     playClick();
     setRevealed(true);
-    speak();
+    void speak();
   };
 
   const handleSkip = () => {
@@ -121,7 +69,7 @@ const NarrationPlayer = ({
     if (isSpeaking) {
       stopSpeaking();
     } else {
-      speak();
+      void speak();
     }
   };
 
@@ -143,7 +91,7 @@ const NarrationPlayer = ({
               ▶ השמע
             </button>
           )}
-          {revealed && ttsSupported && (
+          {revealed && canSpeak && (
             <button
               onClick={handleTTSToggle}
               className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border ${
