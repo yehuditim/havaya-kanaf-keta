@@ -20,7 +20,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
   }, [isSpeaking, speak, stopSpeaking]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-center bg-adventure stars-bg relative overflow-hidden">
       {/* Animated floating elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[8%] right-[8%] opacity-[0.12] animate-float">
