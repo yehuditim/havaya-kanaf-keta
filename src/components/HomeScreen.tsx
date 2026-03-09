@@ -61,7 +61,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         </div>
 
         {/* Title */}
-        <h1 className="text-5xl md:text-7xl font-black mb-2 text-glow text-primary leading-[1.1]">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl font-black mb-2 text-glow text-primary leading-[1.1]">
           תעלומת הנדידה
         </h1>
 
