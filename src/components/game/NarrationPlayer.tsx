@@ -7,6 +7,8 @@ interface NarrationPlayerProps {
   speaker?: string;
   speakerEmoji?: string;
   autoExpand?: boolean;
+  autoPlay?: boolean;
+  autoPlayDelay?: number; // ms
   className?: string;
 }
 
@@ -15,6 +17,8 @@ const NarrationPlayer = ({
   speaker = "פרופסור דרור",
   speakerEmoji = "👨‍🔬",
   autoExpand = true,
+  autoPlay = true,
+  autoPlayDelay = 1200,
   className = "",
 }: NarrationPlayerProps) => {
   const [revealed, setRevealed] = useState(autoExpand);
@@ -23,6 +27,7 @@ const NarrationPlayer = ({
   const [ttsSupported] = useState(() => typeof window !== "undefined" && "speechSynthesis" in window);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const autoPlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (revealed && displayedChars < text.length) {
@@ -42,9 +47,8 @@ const NarrationPlayer = ({
   // Cleanup speech on unmount
   useEffect(() => {
     return () => {
-      if (utteranceRef.current) {
-        window.speechSynthesis.cancel();
-      }
+      if (utteranceRef.current) window.speechSynthesis.cancel();
+      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
     };
   }, []);
 
@@ -73,13 +77,11 @@ const NarrationPlayer = ({
     if (!ttsSupported) return;
     const voices = window.speechSynthesis.getVoices();
     if (voices.length === 0) {
-      // Voices not loaded yet — wait for them
       const onVoices = () => {
         window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
         doSpeak(window.speechSynthesis.getVoices());
       };
       window.speechSynthesis.addEventListener("voiceschanged", onVoices);
-      // Also try after a short delay as fallback
       setTimeout(() => {
         window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
         doSpeak(window.speechSynthesis.getVoices());
@@ -88,6 +90,16 @@ const NarrationPlayer = ({
       doSpeak(voices);
     }
   }, [ttsSupported, doSpeak]);
+
+  // Auto-play on mount
+  useEffect(() => {
+    if (!autoPlay || !ttsSupported) return;
+    autoPlayTimerRef.current = setTimeout(() => {
+      speak();
+    }, autoPlayDelay);
+    return () => { if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // intentionally run once on mount
 
   const stopSpeaking = useCallback(() => {
     window.speechSynthesis.cancel();
@@ -116,12 +128,14 @@ const NarrationPlayer = ({
   return (
     <div className={`bg-muted/25 rounded-xl border border-border/20 overflow-hidden ${className}`}>
       <div className="flex items-center gap-2.5 p-3 border-b border-border/10">
-        <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-lg shrink-0">
+        <div className={`w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-lg shrink-0 ${isSpeaking ? "animate-pulse" : ""}`}>
           {speakerEmoji}
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-xs font-bold text-primary">{speaker}</p>
-          <p className="text-[10px] text-muted-foreground">קריינות סיפור</p>
+          <p className="text-[10px] text-muted-foreground">
+            {isSpeaking ? "🎙 מקריא..." : "קריינות סיפור"}
+          </p>
         </div>
         <div className="flex items-center gap-1.5">
           {!revealed && (
