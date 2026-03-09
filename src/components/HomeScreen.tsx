@@ -35,7 +35,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         </div>
       </div>
 
-      <div className="max-w-lg relative z-10">
+      <div className="max-w-lg relative z-10 px-1 sm:px-0">
         {/* Creator credit - top banner */}
         <div className="mb-6 flex items-center justify-center gap-2 bg-accent/15 border border-accent/30 rounded-2xl px-5 py-3 shadow-sm">
           <span className="text-lg">✏️</span>
