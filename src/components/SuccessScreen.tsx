@@ -238,6 +238,9 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
           </div>
         </div>
 
+        {/* Leaderboard */}
+        <Leaderboard currentGameId={currentGameId} className="mb-8 animate-slide-up" />
+
         <button
           onClick={() => { playClick(); onRestart(); }}
           className="bg-gradient-to-l from-primary to-primary/80 text-primary-foreground px-12 py-5 rounded-2xl text-xl font-black hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/25"
