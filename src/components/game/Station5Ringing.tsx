@@ -273,7 +273,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                   ״מדהים! חישבתם את זמן הטיסה של העקב המזרחי. 143 שעות נטו באוויר — בלי לישון, בלי לאכול. תחנות הטיבוע עוזרות לנו לעקוב אחרי הנדידות האלה ולהגן על הציפורים!״
                 </p>
               </div>
-              <button onClick={() => onComplete("ה", mistakes, hintsUsed)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
+              <button onClick={() => onComplete("י", mistakes, hintsUsed)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
             </motion.div>

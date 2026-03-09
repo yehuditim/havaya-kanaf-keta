@@ -245,7 +245,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                   ״חקירה מצוינת! האיום הגדול ביותר על ציפורים הוא לא טורפים טבעיים — אלא דברים שבני אדם יצרו. 143 נשרים ניצלו בזכות ׳פורשים כנף׳ — ההוכחה שאנחנו יכולים גם לתקן!״
                 </p>
               </div>
-              <button onClick={() => onComplete("י", matchErrors + decodeAttempts, showCipherHint ? 1 : 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
+              <button onClick={() => onComplete("ד", matchErrors + decodeAttempts, showCipherHint ? 1 : 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
             </motion.div>

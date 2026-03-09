@@ -371,7 +371,7 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
                   ״מדהים! הוכחתם יכולת ניתוח מעולה. בזיהוי מהיר כזה, צוות השטח יכול להגיע לעוז בזמן ולהציל אותו. זו בדיוק העבודה של חוקרי טבע אמיתיים!״
                 </p>
               </div>
-              <button onClick={() => onComplete("ה", errors, hintsUsed)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
+              <button onClick={() => onComplete("ם", errors, hintsUsed)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
             </motion.div>
