@@ -66,6 +66,14 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
       </div>
 
       <div className="max-w-lg relative z-10">
+        {/* Creator credit - top banner */}
+        <div className="mb-6 flex items-center justify-center gap-2 bg-accent/15 border border-accent/30 rounded-2xl px-5 py-3 shadow-sm">
+          <span className="text-lg">✏️</span>
+          <p className="text-sm font-bold text-accent">
+            יוצרת: <span className="text-foreground font-black">יהודית מנדלבאום</span>
+            <span className="text-accent/80 font-semibold"> — הוראת בינה מלאכותית</span>
+          </p>
+        </div>
         {/* Animated hero icon */}
         <div className="relative mb-8 inline-block">
           <div className="w-24 h-24 rounded-3xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto shadow-lg shadow-primary/10">
@@ -162,12 +170,6 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
           <span className="flex items-center gap-1.5">🔑 קוד סודי</span>
         </div>
 
-        {/* Creator credit */}
-        <div className="mt-6 text-center">
-          <p className="text-muted-foreground/35 text-[11px] tracking-wide">
-            ✏️ יוצרת: <span className="text-muted-foreground/55 font-semibold">יהודית מנדלבאום</span> — הוראת בינה מלאכותית
-          </p>
-        </div>
       </div>
     </div>
   );
