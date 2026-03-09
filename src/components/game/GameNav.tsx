@@ -10,7 +10,7 @@ interface GameNavProps {
 
 /** Persistent navigation bar at the top of every game screen */
 const GameNav = ({ onBack, onHome, onMap, backLabel = "חזרה" }: GameNavProps) => (
-  <div className="flex items-center justify-between mb-4 gap-2">
+  <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
     <div className="flex items-center gap-2">
       {onBack && (
         <button
