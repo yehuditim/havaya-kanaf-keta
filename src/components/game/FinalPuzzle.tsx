@@ -104,7 +104,7 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
                   key={i}
                   animate={entered && isCorrect ? { scale: [1, 1.3, 1], y: [0, -10, 0] } : {}}
                   transition={{ delay: i * 0.15 }}
-                  className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl font-black border-2 transition-all duration-500 ${
+                  className={`w-10 h-10 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl flex items-center justify-center text-lg sm:text-2xl font-black border-2 transition-all duration-500 ${
                     entered
                       ? isCorrect
                         ? "border-primary bg-primary/25 text-primary shadow-lg shadow-primary/30"
