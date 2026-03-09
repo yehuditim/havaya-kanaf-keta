@@ -1,6 +1,6 @@
 import CodeTracker from "./CodeTracker";
 import { SECRET_WORD } from "./gameState";
-import { useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { playComplete, playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
 import type { GameStats } from "./game/useGameState";
@@ -44,11 +44,61 @@ const formatTime = (seconds: number) => {
   return `${m}:${String(s).padStart(2, "0")}`;
 };
 
+const VICTORY_TEXT = `מדהים! פיצחתם את הקוד! כל המחקר שלי חזר לסדר בזכותכם. הוכחתם שאתם חוקרי טבע אמיתיים עם מוח חד ולב סקרן. עכשיו אתם יודעים למה ישראל היא מקום כל כך מיוחד לציפורים נודדות, ולמה חשוב לכולנו לשמור עליהן. תודה רבה, שותפים למדע!`;
+
 const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const ttsSupported = typeof window !== "undefined" && "speechSynthesis" in window;
+
   useEffect(() => {
     const timer = setTimeout(playComplete, 400);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    return () => { if (utteranceRef.current) window.speechSynthesis.cancel(); };
+  }, []);
+
+  const doSpeak = useCallback((voices?: SpeechSynthesisVoice[]) => {
+    if (!ttsSupported) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(VICTORY_TEXT);
+    utter.lang = "he-IL";
+    utter.rate = 0.9;
+    utter.pitch = 1;
+    const availableVoices = voices || window.speechSynthesis.getVoices();
+    const heVoice = availableVoices.find(v => v.lang.startsWith("he")) || availableVoices.find(v => v.lang.startsWith("ar")) || null;
+    if (heVoice) utter.voice = heVoice;
+    utter.onstart = () => setIsSpeaking(true);
+    utter.onend = () => setIsSpeaking(false);
+    utter.onerror = () => setIsSpeaking(false);
+    utteranceRef.current = utter;
+    window.speechSynthesis.speak(utter);
+  }, [ttsSupported]);
+
+  const handleSpeak = () => {
+    playClick();
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) {
+      const onVoices = () => {
+        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
+        doSpeak(window.speechSynthesis.getVoices());
+      };
+      window.speechSynthesis.addEventListener("voiceschanged", onVoices);
+      setTimeout(() => {
+        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
+        doSpeak(window.speechSynthesis.getVoices());
+      }, 300);
+    } else {
+      doSpeak(voices);
+    }
+  };
 
   const stars = getStarRating(gameStats);
   const badges = getBadges(gameStats);
@@ -171,13 +221,29 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
         {/* Professor final message */}
         <div className="glass-card rounded-2xl p-6 card-glow mb-8 animate-slide-up text-right" style={{ animationDelay: '0.4s' }}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center text-2xl border border-primary/20">
+            <div className={`w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center text-2xl border border-primary/20 ${isSpeaking ? "animate-pulse" : ""}`}>
               👨‍🔬
             </div>
-            <div>
+            <div className="flex-1 text-right">
               <p className="text-primary font-black text-sm">הודעת ניצחון!</p>
-              <p className="text-muted-foreground text-xs">פרופסור דרור</p>
+              <p className="text-muted-foreground text-xs">
+                {isSpeaking ? "🎙 פרופסור דרור מקריא..." : "פרופסור דרור"}
+              </p>
             </div>
+            {ttsSupported && (
+              <button
+                onClick={handleSpeak}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-black transition-all duration-200 border shadow-md shrink-0 ${
+                  isSpeaking
+                    ? "bg-primary text-primary-foreground border-primary shadow-primary/30 animate-pulse scale-105"
+                    : "bg-primary/15 text-primary border-primary/25 hover:bg-primary/25 hover:scale-105 hover:shadow-primary/20"
+                }`}
+                title={isSpeaking ? "עצור הקראה" : "הקרא בקול"}
+              >
+                <span className="text-base">{isSpeaking ? "⏸" : "🔊"}</span>
+                <span>{isSpeaking ? "עצור" : "הקרא"}</span>
+              </button>
+            )}
           </div>
           <div className="bg-muted/30 rounded-xl p-5 border border-border/30">
             <p className="text-[13px] leading-[2] text-foreground/90">
