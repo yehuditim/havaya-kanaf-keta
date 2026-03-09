@@ -103,7 +103,7 @@ export const stations: Station[] = [
     theme: "spring",
     accentClass: "text-station-1",
     glowClass: "station-glow-1",
-    codeLetter: "ד",
+    codeLetter: "ו",
     briefing:
       "חוקרים, הגעתם לצפון! אגמון החולה נקרא ״האב של האקולוגיה הצפונית״ — ביצות, שדות ומים שמושכים מאות אלפי ציפורים. כאן נמצא אחד ממרכזי הצפרות המדהימים בעולם. אבל הפורץ הצליח לסגור את כל המסכים בתחנת התצפית. עזרו לי לפתוח אותם!",
     debriefing:
