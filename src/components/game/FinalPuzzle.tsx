@@ -122,7 +122,7 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
             <>
               {/* Inventory items to click */}
               <p className="text-xs text-muted-foreground mb-3">לחצו על הפריטים בסדר הנכון:</p>
-              <div className="grid grid-cols-4 gap-3 mb-4">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 mb-4">
                 {inventory.map(item => {
                   const letter = collectedLetters[item.stationIndex];
                   return (
