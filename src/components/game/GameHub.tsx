@@ -116,7 +116,7 @@ const GameHub = ({
                 className="absolute z-10 flex flex-col items-center gap-1 group"
                 style={{ left: node.x, top: node.y, transform: "translate(-50%, -50%)" }}
               >
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl border-2 transition-all duration-300 shadow-lg ${
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center text-lg sm:text-2xl border-2 transition-all duration-300 shadow-lg ${
                   completed
                     ? `bg-${node.color}/20 border-${node.color} shadow-${node.color}/20`
                     : unlocked
