@@ -167,7 +167,7 @@ export const stations: Station[] = [
     theme: "night",
     accentClass: "text-station-2",
     glowClass: "station-glow-2",
-    codeLetter: "י",
+    codeLetter: "ד",
     briefing:
       "חוקרים, עכשיו נכנסים לאזור המסוכן. הציפורים מתמודדות עם איומים שבני אדם יצרו — תשתיות מסוכנות, רעלים ומינים פולשים. אני צריך שתחקרו את התיק הזה לעומק. כל עובדה שתפענחו תעזור לנו להגן על הציפורים. וגם — תחשפו את האות השלישית!",
     debriefing:
