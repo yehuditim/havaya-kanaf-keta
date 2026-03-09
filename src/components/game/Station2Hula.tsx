@@ -212,7 +212,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
               <p className="text-xs text-muted-foreground mb-4">{reward?.description}</p>
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 }} className="inline-flex items-center gap-3 bg-primary/10 border-2 border-primary rounded-xl px-5 py-3 mb-4">
                 <span className="text-xs text-muted-foreground">אות נחשפה:</span>
-                <span className="text-3xl font-black text-primary">ד</span>
+                <span className="text-3xl font-black text-primary">ו</span>
               </motion.div>
               <div className="bg-muted/25 rounded-xl p-4 mb-5 text-right border border-border/20">
                 <p className="text-xs leading-[1.8] text-foreground/80 italic">
