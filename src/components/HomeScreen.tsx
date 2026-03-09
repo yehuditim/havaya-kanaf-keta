@@ -161,6 +161,13 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
           <span className="w-1 h-1 rounded-full bg-muted-foreground/20" />
           <span className="flex items-center gap-1.5">🔑 קוד סודי</span>
         </div>
+
+        {/* Creator credit */}
+        <div className="mt-6 text-center">
+          <p className="text-muted-foreground/35 text-[11px] tracking-wide">
+            ✏️ יוצרת: <span className="text-muted-foreground/55 font-semibold">יהודית מנדלבאום</span> — הוראת בינה מלאכותית
+          </p>
+        </div>
       </div>
     </div>
   );
