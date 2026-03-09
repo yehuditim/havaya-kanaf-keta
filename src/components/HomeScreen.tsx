@@ -66,7 +66,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
         </h1>
 
         {/* Professor message */}
-        <div className="glass-card rounded-2xl p-6 card-glow mb-6 text-right animate-slide-up">
+        <div className="glass-card rounded-2xl p-4 sm:p-6 card-glow mb-4 sm:mb-6 text-right animate-slide-up">
           <div className="flex items-center gap-3 mb-4">
             <div className={`w-12 h-12 rounded-2xl bg-primary/15 flex items-center justify-center text-2xl border border-primary/20 shadow-sm ${isSpeaking ? "animate-pulse" : ""}`}>
               👨‍🔬
