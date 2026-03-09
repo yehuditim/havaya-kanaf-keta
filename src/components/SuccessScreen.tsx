@@ -1,6 +1,6 @@
 import CodeTracker from "./CodeTracker";
 import { SECRET_WORD } from "./gameState";
-import { useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { playComplete, playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
 import type { GameStats } from "./game/useGameState";
