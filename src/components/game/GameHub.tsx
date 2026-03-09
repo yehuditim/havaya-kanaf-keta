@@ -22,7 +22,7 @@ const stationNodes = [
   { emoji: "⚡", title: "שביל הסכנות", subtitle: "חקירת איומים", x: "15%", y: "22%", color: "station-2" },
   { emoji: "🧭", title: "מעבדת הניווט", subtitle: "טכנולוגיה ומדע", x: "85%", y: "62%", color: "station-4" },
   { emoji: "🏷️", title: "מרכז הטיבוע", subtitle: "מעקב ומדידה", x: "40%", y: "80%", color: "station-5" },
-  { emoji: "📊", title: "חדר הניתוח", subtitle: "ניתוח והסקה", x: "60%", y: "80%", color: "accent" },
+  { emoji: "🌍", title: "שגרירות הציפורים", subtitle: "שיתוף פעולה בין-לאומי", x: "60%", y: "80%", color: "accent" },
 ];
 
 const pathSegments = [
