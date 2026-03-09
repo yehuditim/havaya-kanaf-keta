@@ -96,7 +96,7 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
           </p>
 
           {/* Code entry display */}
-          <div className="flex justify-center gap-3 mb-6" style={{ direction: "ltr" }}>
+          <div className="flex justify-center gap-2 sm:gap-3 mb-6" style={{ direction: "ltr" }}>
             {CODE_LETTERS.map((_, i) => {
               const entered = enteredLetters[i];
               return (
