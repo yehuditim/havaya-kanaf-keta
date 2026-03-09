@@ -155,7 +155,7 @@ const GameHub = ({
             className="absolute z-10 flex flex-col items-center gap-1"
             style={{ left: "50%", top: "50%", transform: "translate(-50%, -50%)" }}
           >
-            <div className={`w-18 h-18 rounded-full flex items-center justify-center text-3xl border-2 transition-all duration-500 ${
+            <div className={`w-14 h-14 sm:w-18 sm:h-18 rounded-full flex items-center justify-center text-2xl sm:text-3xl border-2 transition-all duration-500 ${
               canAccessFinal
                 ? "bg-primary/20 border-primary shadow-xl shadow-primary/30 animate-pulse-glow cursor-pointer hover:scale-110"
                 : "bg-muted/20 border-border/30 opacity-30 cursor-not-allowed"
