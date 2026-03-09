@@ -51,11 +51,29 @@ const VICTORY_TEXT = `מדהים! פיצחתם את הקוד! כל המחקר ש
 
 const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
   const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(VICTORY_TEXT);
+  const savedRef = useRef(false);
+  const [currentGameId, setCurrentGameId] = useState<string | undefined>();
+
+  const stars = getStarRating(gameStats);
+  const badges = getBadges(gameStats);
 
   useEffect(() => {
     const timer = setTimeout(playComplete, 400);
     return () => clearTimeout(timer);
   }, []);
+
+  // Save result to leaderboard once
+  useEffect(() => {
+    if (savedRef.current) return;
+    savedRef.current = true;
+    const entry = saveGameResult(
+      gameStats.elapsedSeconds,
+      gameStats.totalMistakes,
+      gameStats.totalHintsUsed,
+      stars,
+    );
+    setCurrentGameId(entry.id);
+  }, [gameStats, stars]);
 
   const handleSpeak = async () => {
     playClick();
@@ -67,9 +85,6 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
 
     await speak();
   };
-
-  const stars = getStarRating(gameStats);
-  const badges = getBadges(gameStats);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
