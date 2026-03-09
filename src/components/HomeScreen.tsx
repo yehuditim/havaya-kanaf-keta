@@ -1,53 +1,23 @@
-import { useState, useRef, useCallback } from "react";
+import { useCallback } from "react";
 import { playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
+import { useHebrewNarration } from "../hooks/useHebrewNarration";
 
 const INTRO_TEXT = "ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! אני צריך חוקרים צעירים ומוכשרים שיעזרו לי לפענח את החידות ולשחזר את קוד הבריחה הסודי. בכל תחנה תגלו רמז חדש. ארבע אותיות — מילה אחת — וכל המחקר יחזור לסדר. מוכנים לצאת למשימה?";
 
 const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenResearch: () => void }) => {
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const ttsSupported = typeof window !== "undefined" && "speechSynthesis" in window;
+  const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(INTRO_TEXT);
 
-  const doSpeak = useCallback((voices?: SpeechSynthesisVoice[]) => {
-    if (!ttsSupported) return;
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(INTRO_TEXT);
-    utter.lang = "he-IL";
-    utter.rate = 0.9;
-    utter.pitch = 1;
-    const availableVoices = voices || window.speechSynthesis.getVoices();
-    const heVoice = availableVoices.find(v => v.lang.startsWith("he")) || availableVoices.find(v => v.lang.startsWith("ar")) || null;
-    if (heVoice) utter.voice = heVoice;
-    utter.onstart = () => setIsSpeaking(true);
-    utter.onend = () => setIsSpeaking(false);
-    utter.onerror = () => setIsSpeaking(false);
-    utteranceRef.current = utter;
-    window.speechSynthesis.speak(utter);
-  }, [ttsSupported]);
-
-  const handleSpeak = () => {
+  const handleSpeak = useCallback(async () => {
     playClick();
+
     if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
+      stopSpeaking();
       return;
     }
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length === 0) {
-      const onVoices = () => {
-        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
-        doSpeak(window.speechSynthesis.getVoices());
-      };
-      window.speechSynthesis.addEventListener("voiceschanged", onVoices);
-      setTimeout(() => {
-        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
-        doSpeak(window.speechSynthesis.getVoices());
-      }, 300);
-    } else {
-      doSpeak(voices);
-    }
-  };
+
+    await speak();
+  }, [isSpeaking, speak, stopSpeaking]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-adventure stars-bg relative overflow-hidden">
@@ -108,7 +78,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
               </p>
             </div>
             {/* TTS Button */}
-            {ttsSupported && (
+            {canSpeak && (
               <button
                 onClick={handleSpeak}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-black transition-all duration-200 border shadow-md shrink-0 ${

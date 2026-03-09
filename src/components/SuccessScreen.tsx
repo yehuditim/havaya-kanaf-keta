@@ -1,9 +1,10 @@
 import CodeTracker from "./CodeTracker";
 import { SECRET_WORD } from "./gameState";
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { playComplete, playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
 import type { GameStats } from "./game/useGameState";
+import { useHebrewNarration } from "../hooks/useHebrewNarration";
 
 interface Props {
   collected: { [key: number]: string };
@@ -47,57 +48,22 @@ const formatTime = (seconds: number) => {
 const VICTORY_TEXT = `מדהים! פיצחתם את הקוד! כל המחקר שלי חזר לסדר בזכותכם. הוכחתם שאתם חוקרי טבע אמיתיים עם מוח חד ולב סקרן. עכשיו אתם יודעים למה ישראל היא מקום כל כך מיוחד לציפורים נודדות, ולמה חשוב לכולנו לשמור עליהן. תודה רבה, שותפים למדע!`;
 
 const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const ttsSupported = typeof window !== "undefined" && "speechSynthesis" in window;
+  const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(VICTORY_TEXT);
 
   useEffect(() => {
     const timer = setTimeout(playComplete, 400);
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    return () => { if (utteranceRef.current) window.speechSynthesis.cancel(); };
-  }, []);
-
-  const doSpeak = useCallback((voices?: SpeechSynthesisVoice[]) => {
-    if (!ttsSupported) return;
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(VICTORY_TEXT);
-    utter.lang = "he-IL";
-    utter.rate = 0.9;
-    utter.pitch = 1;
-    const availableVoices = voices || window.speechSynthesis.getVoices();
-    const heVoice = availableVoices.find(v => v.lang.startsWith("he")) || availableVoices.find(v => v.lang.startsWith("ar")) || null;
-    if (heVoice) utter.voice = heVoice;
-    utter.onstart = () => setIsSpeaking(true);
-    utter.onend = () => setIsSpeaking(false);
-    utter.onerror = () => setIsSpeaking(false);
-    utteranceRef.current = utter;
-    window.speechSynthesis.speak(utter);
-  }, [ttsSupported]);
-
-  const handleSpeak = () => {
+  const handleSpeak = async () => {
     playClick();
+
     if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
+      stopSpeaking();
       return;
     }
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length === 0) {
-      const onVoices = () => {
-        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
-        doSpeak(window.speechSynthesis.getVoices());
-      };
-      window.speechSynthesis.addEventListener("voiceschanged", onVoices);
-      setTimeout(() => {
-        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
-        doSpeak(window.speechSynthesis.getVoices());
-      }, 300);
-    } else {
-      doSpeak(voices);
-    }
+
+    await speak();
   };
 
   const stars = getStarRating(gameStats);
@@ -230,7 +196,7 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
                 {isSpeaking ? "🎙 פרופסור דרור מקריא..." : "פרופסור דרור"}
               </p>
             </div>
-            {ttsSupported && (
+            {canSpeak && (
               <button
                 onClick={handleSpeak}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-black transition-all duration-200 border shadow-md shrink-0 ${
