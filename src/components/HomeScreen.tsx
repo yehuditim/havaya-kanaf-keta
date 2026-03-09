@@ -93,7 +93,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
               </button>
             )}
           </div>
-          <div className="bg-muted/30 rounded-xl p-5 border border-border/40">
+          <div className="bg-muted/30 rounded-xl p-3 sm:p-5 border border-border/40">
             <p className="text-[13px] leading-[2] text-foreground/90">
               ״ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! 
               אני צריך <strong className="text-primary">חוקרים צעירים ומוכשרים</strong> שיעזרו לי לפענח 
