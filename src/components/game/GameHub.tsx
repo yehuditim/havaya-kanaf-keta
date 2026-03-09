@@ -17,15 +17,16 @@ interface Props {
 }
 
 const stationNodes = [
-  { emoji: "🏜️", title: "שער אילת", subtitle: "הכניסה הדרומית", x: "20%", y: "70%", color: "station-3" },
-  { emoji: "🌿", title: "אגמון החולה", subtitle: "תחנת התצפית", x: "78%", y: "20%", color: "station-1" },
-  { emoji: "⚡", title: "שביל הסכנות", subtitle: "חקירת איומים", x: "20%", y: "24%", color: "station-2" },
-  { emoji: "🧭", title: "מעבדת הניווט", subtitle: "טכנולוגיה ומדע", x: "78%", y: "64%", color: "station-4" },
-  { emoji: "🏷️", title: "מרכז הטיבוע", subtitle: "מעקב ומדידה", x: "50%", y: "74%", color: "station-5" },
+  { emoji: "🏜️", title: "שער אילת", subtitle: "הכניסה הדרומית", x: "15%", y: "70%", color: "station-3" },
+  { emoji: "🌿", title: "אגמון החולה", subtitle: "תחנת התצפית", x: "85%", y: "18%", color: "station-1" },
+  { emoji: "⚡", title: "שביל הסכנות", subtitle: "חקירת איומים", x: "15%", y: "22%", color: "station-2" },
+  { emoji: "🧭", title: "מעבדת הניווט", subtitle: "טכנולוגיה ומדע", x: "85%", y: "62%", color: "station-4" },
+  { emoji: "🏷️", title: "מרכז הטיבוע", subtitle: "מעקב ומדידה", x: "40%", y: "80%", color: "station-5" },
+  { emoji: "📊", title: "חדר הניתוח", subtitle: "ניתוח והסקה", x: "60%", y: "80%", color: "accent" },
 ];
 
 const pathSegments = [
-  { from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }, { from: 3, to: 4 }, { from: 4, to: 0 },
+  { from: 0, to: 1 }, { from: 1, to: 2 }, { from: 2, to: 3 }, { from: 3, to: 4 }, { from: 4, to: 5 }, { from: 5, to: 0 },
 ];
 
 const GameHub = ({

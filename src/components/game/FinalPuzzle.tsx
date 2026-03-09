@@ -34,7 +34,7 @@ const FinalPuzzle = ({ inventory, collectedLetters, onSuccess, onGoMap, onGoHome
     const newLetters = [...enteredLetters, letter];
     setEnteredLetters(newLetters);
 
-    if (newLetters.length === 4) {
+    if (newLetters.length === 6) {
       const word = newLetters.join("");
       if (word === SECRET_WORD) {
         setIsCorrect(true);

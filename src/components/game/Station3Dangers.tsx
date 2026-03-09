@@ -238,14 +238,14 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
               <p className="text-xs text-muted-foreground mb-4">{reward?.description}</p>
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 }} className="inline-flex items-center gap-3 bg-primary/10 border-2 border-primary rounded-xl px-5 py-3 mb-4">
                 <span className="text-xs text-muted-foreground">אות נחשפה:</span>
-                <span className="text-3xl font-black text-primary">י</span>
+                <span className="text-3xl font-black text-primary">ד</span>
               </motion.div>
               <div className="bg-muted/25 rounded-xl p-4 mb-5 text-right border border-border/20">
                 <p className="text-xs leading-[1.8] text-foreground/80 italic">
                   ״חקירה מצוינת! האיום הגדול ביותר על ציפורים הוא לא טורפים טבעיים — אלא דברים שבני אדם יצרו. 143 נשרים ניצלו בזכות ׳פורשים כנף׳ — ההוכחה שאנחנו יכולים גם לתקן!״
                 </p>
               </div>
-              <button onClick={() => onComplete("י", matchErrors + decodeAttempts, showCipherHint ? 1 : 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
+              <button onClick={() => onComplete("ד", matchErrors + decodeAttempts, showCipherHint ? 1 : 0)} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-secondary/20">
                 ➡️ חזרה למפה
               </button>
             </motion.div>
