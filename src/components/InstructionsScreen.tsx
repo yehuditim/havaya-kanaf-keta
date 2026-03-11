@@ -30,7 +30,7 @@ const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
               icon: "🔑",
               color: "border-primary/30 bg-primary/5",
               title: "אות סודית בכל תחנה",
-              text: "פתרון כל תחנה יחשוף אות אחת מ<strong>קוד הבריחה</strong>. אספו את כולן!",
+              text: "פתרון כל תחנה יחשוף אות אחת מ<strong>קוד הבריחה בן 6 האותיות</strong>. אספו את כולן!",
             },
             {
               icon: "💡",
