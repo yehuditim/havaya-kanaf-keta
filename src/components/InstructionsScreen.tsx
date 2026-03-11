@@ -42,7 +42,7 @@ const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
               icon: "🔐",
               color: "border-secondary/30 bg-secondary/5",
               title: "פצחו את הקוד!",
-              text: "רק כשתאספו את כל 4 האותיות תוכלו <strong>לפתוח את המנעול ולהציל את המחקר.</strong>",
+              text: "רק כשתאספו את כל 6 האותיות תוכלו <strong>לפתוח את המנעול ולהציל את המחקר.</strong>",
             },
           ].map((item, i) => (
             <div
