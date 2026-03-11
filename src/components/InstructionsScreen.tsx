@@ -23,7 +23,7 @@ const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
             {
               icon: "🗺️",
               color: "border-station-1/30 bg-station-1/5",
-              title: "4 תחנות חקירה",
+              title: "6 תחנות חקירה",
               text: "בכל תחנה חידות שונות על נדידת ציפורים בישראל. כל תחנה עם אווירה ייחודית.",
             },
             {
