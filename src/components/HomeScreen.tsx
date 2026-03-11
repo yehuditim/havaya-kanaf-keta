@@ -3,7 +3,7 @@ import { playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
 import { useHebrewNarration } from "../hooks/useHebrewNarration";
 
-const INTRO_TEXT = "ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! אני צריך חוקרים צעירים ומוכשרים שיעזרו לי לפענח את החידות ולשחזר את קוד הבריחה הסודי. בכל תחנה תגלו רמז חדש. ארבע אותיות — מילה אחת — וכל המחקר יחזור לסדר. מוכנים לצאת למשימה?";
+const INTRO_TEXT = "ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! אני צריך חוקרים צעירים ומוכשרים שיעזרו לי לפענח את החידות ולשחזר את קוד הבריחה הסודי. בכל תחנה תגלו רמז חדש. שש אותיות — מילה אחת — וכל המחקר יחזור לסדר. מוכנים לצאת למשימה?";
 
 const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenResearch: () => void }) => {
   const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(INTRO_TEXT);
