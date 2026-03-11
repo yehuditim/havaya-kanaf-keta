@@ -3,7 +3,7 @@ import { playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
 import { useHebrewNarration } from "../hooks/useHebrewNarration";
 
-const INTRO_TEXT = "ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! אני צריך חוקרים צעירים ומוכשרים שיעזרו לי לפענח את החידות ולשחזר את קוד הבריחה הסודי. בכל תחנה תגלו רמז חדש. ארבע אותיות — מילה אחת — וכל המחקר יחזור לסדר. מוכנים לצאת למשימה?";
+const INTRO_TEXT = "ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! אני צריך חוקרים צעירים ומוכשרים שיעזרו לי לפענח את החידות ולשחזר את קוד הבריחה הסודי. בכל תחנה תגלו רמז חדש. שש אותיות — מילה אחת — וכל המחקר יחזור לסדר. מוכנים לצאת למשימה?";
 
 const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenResearch: () => void }) => {
   const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(INTRO_TEXT);
@@ -98,7 +98,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
               ״ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! 
               אני צריך <strong className="text-primary">חוקרים צעירים ומוכשרים</strong> שיעזרו לי לפענח 
               את החידות ולשחזר את <span className="text-primary font-black">קוד הבריחה הסודי</span>. 
-              בכל תחנה תגלו רמז חדש. ארבע אותיות — מילה אחת — וכל המחקר יחזור לסדר. 
+              בכל תחנה תגלו רמז חדש. שש אותיות — מילה אחת — וכל המחקר יחזור לסדר. 
               מוכנים לצאת למשימה?״
             </p>
           </div>
@@ -133,7 +133,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
 
         {/* Info footer */}
         <div className="flex items-center justify-center gap-5 text-muted-foreground/40 text-xs">
-          <span className="flex items-center gap-1.5">🗺️ 4 תחנות</span>
+          <span className="flex items-center gap-1.5">🗺️ 6 תחנות</span>
           <span className="w-1 h-1 rounded-full bg-muted-foreground/20" />
           <span className="flex items-center gap-1.5">🧩 12 חידות</span>
           <span className="w-1 h-1 rounded-full bg-muted-foreground/20" />

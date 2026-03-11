@@ -4,7 +4,7 @@ import { playClick } from "./SoundEffects";
 const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
   <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 bg-adventure stars-bg">
     <div className="max-w-lg w-full mt-12 sm:mt-0">
-      <CodeTracker collected={{}} totalStations={4} />
+      <CodeTracker collected={{}} totalStations={6} />
 
       <div className="glass-card rounded-2xl p-5 sm:p-8 card-glow text-right animate-slide-up mt-5">
         {/* Header */}
@@ -23,14 +23,14 @@ const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
             {
               icon: "🗺️",
               color: "border-station-1/30 bg-station-1/5",
-              title: "4 תחנות חקירה",
+              title: "6 תחנות חקירה",
               text: "בכל תחנה חידות שונות על נדידת ציפורים בישראל. כל תחנה עם אווירה ייחודית.",
             },
             {
               icon: "🔑",
               color: "border-primary/30 bg-primary/5",
               title: "אות סודית בכל תחנה",
-              text: "פתרון כל תחנה יחשוף אות אחת מ<strong>קוד הבריחה</strong>. אספו את כולן!",
+              text: "פתרון כל תחנה יחשוף אות אחת מ<strong>קוד הבריחה בן 6 האותיות</strong>. אספו את כולן!",
             },
             {
               icon: "💡",
@@ -42,7 +42,7 @@ const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
               icon: "🔐",
               color: "border-secondary/30 bg-secondary/5",
               title: "פצחו את הקוד!",
-              text: "רק כשתאספו את כל 4 האותיות תוכלו <strong>לפתוח את המנעול ולהציל את המחקר.</strong>",
+              text: "רק כשתאספו את כל 6 האותיות תוכלו <strong>לפתוח את המנעול ולהציל את המחקר.</strong>",
             },
           ].map((item, i) => (
             <div
@@ -66,7 +66,7 @@ const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
             ⏰ <strong className="text-destructive">שימו לב:</strong> יש לכם <strong>30 דקות</strong> לפצח את הקוד. אם הזמן ייגמר — החדר יינעל והמחקר יימחק לנצח!
           </p>
           <p className="text-[10px] text-muted-foreground mt-1 italic">
-            👨‍🔬 ״אפשר לבחור בכל סדר — העיקר לאסוף את כל 4 האותיות בזמן!״
+            👨‍🔬 ״אפשר לבחור בכל סדר — העיקר לאסוף את כל 6 האותיות בזמן!״
           </p>
         </div>
 

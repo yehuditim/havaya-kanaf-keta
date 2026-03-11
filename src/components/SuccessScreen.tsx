@@ -139,7 +139,7 @@ const SuccessScreen = ({ collected, onRestart, gameStats }: Props) => {
 
         {/* Code display */}
         <div className="my-6">
-          <CodeTracker collected={collected} totalStations={4} />
+          <CodeTracker collected={collected} totalStations={6} />
         </div>
 
         {/* Secret word highlight */}
