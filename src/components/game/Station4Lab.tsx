@@ -75,7 +75,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
   return (
     <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${labBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="absolute inset-0 z-0 bg-background/75 backdrop-blur-[2px]" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/60 via-background/40 to-background/70 backdrop-blur-[1px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
       <div className="max-w-lg w-full relative z-10 mt-12 sm:mt-0">
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
