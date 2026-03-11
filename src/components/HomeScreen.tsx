@@ -133,7 +133,7 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
 
         {/* Info footer */}
         <div className="flex items-center justify-center gap-5 text-muted-foreground/40 text-xs">
-          <span className="flex items-center gap-1.5">🗺️ 4 תחנות</span>
+          <span className="flex items-center gap-1.5">🗺️ 6 תחנות</span>
           <span className="w-1 h-1 rounded-full bg-muted-foreground/20" />
           <span className="flex items-center gap-1.5">🧩 12 חידות</span>
           <span className="w-1 h-1 rounded-full bg-muted-foreground/20" />

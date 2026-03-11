@@ -66,7 +66,7 @@ const InstructionsScreen = ({ onContinue }: { onContinue: () => void }) => (
             ⏰ <strong className="text-destructive">שימו לב:</strong> יש לכם <strong>30 דקות</strong> לפצח את הקוד. אם הזמן ייגמר — החדר יינעל והמחקר יימחק לנצח!
           </p>
           <p className="text-[10px] text-muted-foreground mt-1 italic">
-            👨‍🔬 ״אפשר לבחור בכל סדר — העיקר לאסוף את כל 4 האותיות בזמן!״
+            👨‍🔬 ״אפשר לבחור בכל סדר — העיקר לאסוף את כל 6 האותיות בזמן!״
           </p>
         </div>
 
