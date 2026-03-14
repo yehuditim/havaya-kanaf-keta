@@ -9,6 +9,7 @@ import CorrectEffect from "./CorrectEffect";
 import NarrationPlayer from "./NarrationPlayer";
 import CodeLock from "./CodeLock";
 import ResearchMission from "./ResearchMission";
+import SceneExplorer, { type SceneHotspot } from "./SceneExplorer";
 
 interface Props {
   onComplete: (letter: string, mistakes: number, hints: number) => void;
@@ -17,7 +18,7 @@ interface Props {
   onGoMap: () => void;
 }
 
-type Phase = "briefing" | "research" | "sort" | "lock" | "reward";
+type Phase = "briefing" | "explore" | "research" | "sort" | "lock" | "reward";
 
 interface BirdCard {
   id: string;
@@ -34,6 +35,14 @@ const birds: BirdCard[] = [
   { id: "warbler", name: "סבכי", iconType: "warbler", type: "night", fact: "טס לבד בחשיכה, מנווט לפי כוכבים" },
   { id: "robin", name: "אדום-חזה", iconType: "robin", type: "night", fact: "נודד לילה — נמנע מטורפים ומחום" },
   { id: "flycatcher", name: "זמיר", iconType: "flycatcher", type: "night", fact: "ציפור שיר קטנה שטסה אלפי ק״מ בלילות" },
+];
+
+const sceneHotspots: SceneHotspot[] = [
+  { id: "exhausted-bird", x: "25%", y: "65%", emoji: "🦅", label: "ציפור עייפה", clue: "ציפור נחתה על סלע, רזה ותשושה. היא טסה 2,000 ק״מ מעל מדבר סהרה — בלי מים ובלי מזון.", detail: "אילת היא תחנת התדלוק הראשונה אחרי המדבר" },
+  { id: "oasis", x: "70%", y: "45%", emoji: "🌴", label: "נווה מדבר", clue: "בריכות מים קטנות באמצע המדבר. ציפורים שותות בשקיקה — הגוף שלהן איבד עד 30% מהמים.", detail: "בלי תחנות תדלוק כאלה, רוב הציפורים לא ישרדו" },
+  { id: "scale", x: "45%", y: "30%", emoji: "⚖️", label: "משקל שדה", clue: "על השלט כתוב: ׳לפני הנדידה — ציפורים עוברות היפרפגיה. צוברות עד 50 אחוז ממשקל גופן בשומן!׳", detail: "50% — המספר הזה חשוב! שימו לב..." },
+  { id: "binoculars", x: "82%", y: "20%", emoji: "🔭", label: "עמדת תצפית", clue: "מהעמדה רואים להקות ענקיות: דואים גדולים רוכבים על תרמיקות ביום, וציפורי שיר קטנות טסות בלילה.", detail: "שני סוגי נודדים: דואים (יום) ונודדי לילה" },
+  { id: "sign", x: "15%", y: "35%", emoji: "🗺️", label: "שלט מידע", clue: "ישראל — צוואר בקבוק על הנתיב האפרו-פליארקטי. כמיליארד ציפורים עוברות כאן פעמיים בשנה!", detail: "אחד ממסלולי הנדידה הגדולים בעולם" },
 ];
 
 const researchCards = [
@@ -56,9 +65,9 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
   const [selectedBird, setSelectedBird] = useState<string | null>(null);
   const [sortErrors, setSortErrors] = useState(0);
   const [researchDone, setResearchDone] = useState(false);
-  const [lockUnlocked, setLockUnlocked] = useState(false);
   const [showCorrectEffect, setShowCorrectEffect] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
+  const [sceneComplete, setSceneComplete] = useState(false);
 
   const unsortedBirds = birds.filter(b => !sortedBirds.soaring.includes(b.id) && !sortedBirds.night.includes(b.id));
   const allSorted = unsortedBirds.length === 0;
@@ -78,7 +87,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
   return (
     <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${eilatBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/60 via-background/40 to-background/70 backdrop-blur-[1px]" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/50 via-background/30 to-background/60 backdrop-blur-[1px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
       <div className="max-w-lg w-full relative z-10 mt-12 sm:mt-0">
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
@@ -87,25 +96,21 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
           {/* BRIEFING */}
           {phase === "briefing" && (
             <motion.div key="briefing" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-4">
-              <div className="glass-card rounded-2xl p-6 station-glow-3">
-                <div className="text-center mb-4">
-                  <div className="w-20 h-20 rounded-2xl bg-station-3/10 border border-station-3/25 flex items-center justify-center text-5xl mx-auto mb-3">🏜️</div>
-                  <h2 className="text-2xl font-black text-station-3">תחנה 1: שער אילת</h2>
-                  <p className="text-sm text-muted-foreground mt-1">הכניסה הדרומית • חקירת נדידה</p>
+              <div className="glass-card-immersive rounded-2xl p-5 station-glow-3">
+                <div className="text-center mb-3">
+                  <div className="w-16 h-16 rounded-2xl bg-station-3/10 border border-station-3/25 flex items-center justify-center text-4xl mx-auto mb-2">🏜️</div>
+                  <h2 className="text-xl font-black text-station-3">תחנה 1: שער אילת</h2>
+                  <p className="text-[11px] text-muted-foreground mt-1">הכניסה הדרומית • חקירת נדידה</p>
                 </div>
 
                 <NarrationPlayer
-                  text="הגעתם לאילת — השער הדרומי של ישראל. כאן, אחרי טיסה של אלפיים קילומטר מעל מדבר סהרה, נוחתות ציפורים על סף התמוטטות. מישהו פרץ למחשב שלי ונעל את כל הנתונים. כדי לשחזר אותם, תצטרכו לחפש מידע בכרטיסי המחקר, למיין את הציפורים, ולפענח את קוד המנעול. בהצלחה, חוקרים!"
-                  className="mb-4"
+                  text="הגעתם לאילת — השער הדרומי של ישראל. כאן, אחרי טיסה של אלפיים קילומטר מעל מדבר סהרה, נוחתות ציפורים על סף התמוטטות. חפשו 5 רמזים חבויים בסצנת המדבר, חקרו בכרטיסי המחקר, מיינו ציפורים, ופצחו את המנעול!"
+                  className="mb-3"
                 />
 
-                <div className="bg-accent/5 rounded-lg p-3 border border-accent/15 text-right mb-4">
-                  <p className="text-[11px] text-accent/80">📖 <strong>טיפ:</strong> קראו על נדידת ציפורים בארכיון המחקר או ב<a href="https://he.wikipedia.org/wiki/%D7%A0%D7%93%D7%99%D7%93%D7%AA_%D7%A6%D7%99%D7%A4%D7%95%D7%A8%D7%99%D7%9D" target="_blank" rel="noopener noreferrer" className="text-accent underline hover:text-accent/70">ויקיפדיה</a> — תצטרכו את המידע!</p>
-                </div>
-
-                <div className="flex flex-col items-center gap-3">
-                  <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-station-3 to-station-3/80 text-background px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-station-3/20">
-                    🔬 למשימת החקר
+                <div className="flex flex-col items-center gap-2">
+                  <button onClick={() => { playClick(); setPhase("explore"); }} className="bg-gradient-to-l from-station-3 to-station-3/80 text-background px-8 py-3 rounded-xl font-black hover:scale-105 transition-all shadow-lg shadow-station-3/20">
+                    🔍 סרקו את הסצנה
                   </button>
                   <button onClick={() => { playClick(); onOpenResearch(); }} className="text-accent/60 text-xs hover:text-accent transition-colors">
                     📚 פתחו את ארכיון המחקר
@@ -115,13 +120,31 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
             </motion.div>
           )}
 
+          {/* EXPLORE SCENE */}
+          {phase === "explore" && (
+            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
+              <SceneExplorer
+                hotspots={sceneHotspots}
+                instruction="🔍 לחצו על האלמנטים בסצנת המדבר כדי לחשוף רמזים"
+                onAllDiscovered={() => setSceneComplete(true)}
+              />
+              {sceneComplete && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+                  <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
+                    🔬 למשימת החקר
+                  </button>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+
           {/* RESEARCH MISSION */}
           {phase === "research" && (
             <motion.div key="research" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
-              <div className="glass-card rounded-2xl p-5 station-glow-3">
-                <p className="text-xs font-black text-station-3 mb-3">🔬 שלב 1: משימת חקר</p>
+              <div className="glass-card-immersive rounded-2xl p-4 station-glow-3">
+                <p className="text-xs font-black text-station-3 mb-2">🔬 שלב 2: משימת חקר</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
-                  חפשו בכרטיסי המחקר: <strong className="text-foreground">כמה אחוזי שומן ציפורים צוברות לפני הנדידה?</strong> המספר הזה הוא הקוד למנעול בשלב הבא!
+                  מצאתם בסצנה שציפורים צוברות שומן לפני נדידה. <strong className="text-foreground">כמה אחוז? חפשו בכרטיסים!</strong>
                 </p>
                 <ResearchMission
                   prompt="פרופסור דרור מבקש: ׳חפשו בכרטיסי המחקר — כמה אחוזי שומן ציפורים צוברות בהיפרפגיה? הרשמו את המספר — תצטרכו אותו כדי לפתוח את המנעול!׳"
@@ -147,13 +170,13 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
           {/* SORT PHASE */}
           {phase === "sort" && (
             <motion.div key="sort" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
-              <div className="glass-card rounded-2xl p-5 station-glow-3 mb-3">
+              <div className="glass-card-immersive rounded-2xl p-4 station-glow-3 mb-3">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-black text-station-3 bg-station-3/10 px-3 py-1 rounded-lg border border-station-3/20">🏜️ שלב 2: מיון ציפורים</span>
+                  <span className="text-xs font-black text-station-3 bg-station-3/10 px-3 py-1 rounded-lg border border-station-3/20">🏜️ שלב 3: מיון ציפורים</span>
                   <span className="text-[10px] text-muted-foreground">{6 - unsortedBirds.length}/6</span>
                 </div>
                 <p className="text-xs text-muted-foreground text-right mb-3">
-                  השתמשו במה שלמדתם מהכרטיסים — מיינו כל ציפור לקטגוריה הנכונה
+                  בסצנה ראיתם: דואים גדולים ביום, ציפורי שיר בלילה. <strong className="text-foreground">מיינו!</strong>
                 </p>
                 <div className="grid grid-cols-3 gap-2 mb-3">
                   {birds.map(bird => {
@@ -161,7 +184,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
                     const isSelected = selectedBird === bird.id;
                     return (
                       <motion.button key={bird.id} layout onClick={() => !isSorted && handleSelectBird(bird.id)} disabled={isSorted}
-                        className={`p-2.5 rounded-xl border-2 text-center transition-all ${isSorted ? "bg-primary/5 border-primary/20 opacity-50" : isSelected ? "bg-station-3/15 border-station-3 scale-105 shadow-md" : "bg-muted/30 border-border/25 hover:border-station-3/40"}`}>
+                        className={`p-2.5 rounded-xl border-2 text-center transition-all ${isSorted ? "bg-primary/5 border-primary/20 opacity-50" : isSelected ? "bg-station-3/15 border-station-3 scale-105 shadow-md" : "bg-background/30 border-border/20 hover:border-station-3/40"}`}>
                         <div className="flex justify-center mb-1"><BirdIcon type={bird.iconType} size={32} className={isSorted ? "text-primary/50" : isSelected ? "text-station-3" : "text-foreground/70"} /></div>
                         <span className="text-[10px] font-bold block">{bird.name}</span>
                         {isSorted && <span className="text-[8px] text-primary">✓</span>}
@@ -170,12 +193,12 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
                   })}
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => handleDropInBucket("soaring")} className={`p-3 rounded-xl border-2 border-dashed text-center transition-all ${selectedBird ? "border-primary/50 bg-primary/5 hover:bg-primary/10" : "border-border/25 bg-muted/10"}`}>
+                  <button onClick={() => handleDropInBucket("soaring")} className={`p-3 rounded-xl border-2 border-dashed text-center transition-all ${selectedBird ? "border-primary/50 bg-primary/5 hover:bg-primary/10" : "border-border/25 bg-background/20"}`}>
                     <span className="text-xl block mb-0.5">☀️</span>
                     <span className="text-[10px] font-black text-primary">דואים (יום)</span>
                     <div className="flex justify-center gap-1 mt-1">{sortedBirds.soaring.map(id => { const b = birds.find(x => x.id === id); return b ? <BirdIcon key={id} type={b.iconType} size={14} className="text-primary/60" /> : null; })}</div>
                   </button>
-                  <button onClick={() => handleDropInBucket("night")} className={`p-3 rounded-xl border-2 border-dashed text-center transition-all ${selectedBird ? "border-accent/50 bg-accent/5 hover:bg-accent/10" : "border-border/25 bg-muted/10"}`}>
+                  <button onClick={() => handleDropInBucket("night")} className={`p-3 rounded-xl border-2 border-dashed text-center transition-all ${selectedBird ? "border-accent/50 bg-accent/5 hover:bg-accent/10" : "border-border/25 bg-background/20"}`}>
                     <span className="text-xl block mb-0.5">🌙</span>
                     <span className="text-[10px] font-black text-accent">נודדי לילה</span>
                     <div className="flex justify-center gap-1 mt-1">{sortedBirds.night.map(id => { const b = birds.find(x => x.id === id); return b ? <BirdIcon key={id} type={b.iconType} size={14} className="text-accent/60" /> : null; })}</div>
@@ -184,9 +207,8 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
                 {sortErrors > 0 && <p className="text-[10px] text-destructive text-center mt-2">💡 דואים = גדולים + תרמיקות + יום. נודדי לילה = קטנים + כוכבים + חשיכה</p>}
               </div>
               {allSorted && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-xl p-4 text-center">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card-immersive rounded-xl p-4 text-center">
                   <p className="text-sm font-bold text-primary mb-2">🎉 כל הציפורים מוינו!</p>
-                  <p className="text-xs text-muted-foreground mb-3">נשאר שלב אחרון — פתחו את המנעול כדי לחשוף את האות!</p>
                   <button onClick={() => { playClick(); setPhase("lock"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
                     🔒 למנעול הקוד
                   </button>
@@ -198,16 +220,16 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
           {/* LOCK PHASE */}
           {phase === "lock" && (
             <motion.div key="lock" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
-              <div className="glass-card rounded-2xl p-5 station-glow-3">
-                <p className="text-xs font-black text-station-3 mb-3">🔒 שלב 3: מנעול קוד</p>
+              <div className="glass-card-immersive rounded-2xl p-4 station-glow-3">
+                <p className="text-xs font-black text-station-3 mb-2">🔒 שלב 4: מנעול קוד</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
-                  זוכרים את המספר שמצאתם במשימת החקר? <strong className="text-foreground">אחוז השומן שציפורים צוברות לפני נדידה?</strong> הכניסו אותו כדי לפתוח!
+                  זוכרים? <strong className="text-foreground">אחוז השומן שמצאתם על המשקל בסצנה ובכרטיסי המחקר</strong> — הכניסו אותו!
                 </p>
                 <CodeLock
                   correctCode="50"
                   label="🔒 הכניסו את אחוז השומן"
                   hint="חפשו בכרטיס ההיפרפגיה — כמה אחוז ממשקל הגוף?"
-                  onUnlock={() => { setLockUnlocked(true); setShowCorrectEffect(true); playReveal(); setTimeout(() => setPhase("reward"), 1200); }}
+                  onUnlock={() => { setShowCorrectEffect(true); playReveal(); setTimeout(() => setPhase("reward"), 1200); }}
                 />
               </div>
             </motion.div>
@@ -215,18 +237,18 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
 
           {/* REWARD */}
           {phase === "reward" && (
-            <motion.div key="reward" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="glass-card rounded-2xl p-6 station-glow-3 text-center">
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring" }} className="mb-4">
-                <div className="w-20 h-20 rounded-2xl bg-primary/15 border-2 border-primary flex items-center justify-center text-5xl mx-auto shadow-xl shadow-primary/20">{reward?.emoji}</div>
+            <motion.div key="reward" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} className="glass-card-immersive rounded-2xl p-5 station-glow-3 text-center">
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring" }} className="mb-3">
+                <div className="w-16 h-16 rounded-2xl bg-primary/15 border-2 border-primary flex items-center justify-center text-4xl mx-auto shadow-xl shadow-primary/20">{reward?.emoji}</div>
               </motion.div>
-              <h2 className="text-xl font-black text-primary mb-1">פריט התגלה!</h2>
+              <h2 className="text-lg font-black text-primary mb-1">פריט התגלה!</h2>
               <p className="text-sm font-bold text-foreground/80 mb-1">{reward?.name}</p>
-              <p className="text-xs text-muted-foreground mb-4">{reward?.description}</p>
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 }} className="inline-flex items-center gap-3 bg-primary/10 border-2 border-primary rounded-xl px-5 py-3 mb-4">
+              <p className="text-xs text-muted-foreground mb-3">{reward?.description}</p>
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 }} className="inline-flex items-center gap-3 bg-primary/10 border-2 border-primary rounded-xl px-5 py-3 mb-3">
                 <span className="text-xs text-muted-foreground">אות נחשפה:</span>
                 <span className="text-3xl font-black text-primary">נ</span>
               </motion.div>
-              <div className="bg-muted/25 rounded-xl p-4 mb-5 text-right border border-border/20">
+              <div className="bg-background/30 backdrop-blur-sm rounded-xl p-3 mb-4 text-right border border-border/20">
                 <p className="text-xs leading-[1.8] text-foreground/80 italic">
                   ״מצוין! שחזרתם את הנתונים של תחנת אילת. ציפורים מגיעות לכאן רזות ועייפות — אילת מצילה את חייהן!״
                 </p>
