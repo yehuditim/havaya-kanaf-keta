@@ -1,4 +1,5 @@
 import { useState } from "react";
+import embassyBg from "@/assets/backgrounds/bird-embassy.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
@@ -162,7 +163,10 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
 
   return (
     <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
-      <div className="absolute inset-0 z-0 bg-gradient-to-br from-accent/8 via-background to-primary/8" />
+      <div className="absolute inset-0 z-0">
+        <img src={embassyBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background/70 backdrop-blur-[2px]" />
+      </div>
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
       <div className="max-w-lg w-full relative z-10 mt-12 sm:mt-0">
         <GameNav onBack={onGoMap} backLabel="חזרה למפה" onHome={onGoHome} />
