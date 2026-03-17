@@ -1,4 +1,5 @@
 import { useState } from "react";
+import embassyBg from "@/assets/backgrounds/bird-embassy.jpg";
 import { motion, AnimatePresence } from "framer-motion";
 import { playClick, playSuccess, playError, playReveal } from "../SoundEffects";
 import { getStationReward } from "./useGameState";
