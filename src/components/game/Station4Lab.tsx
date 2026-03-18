@@ -172,7 +172,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
                     ))}
                   </div>
                 )}
-                {compassErrors > 1 && !allNavPlaced && <p className="text-[10px] text-accent text-center mt-2">💡 מגנטי=צפון, שמש=מזרח, כוכבים=מערב, ציוני דרך=דרום</p>}
+                {compassErrors > 1 && !allNavPlaced && <p className="text-[10px] text-accent text-center mt-2">💡 חשבו: מה מראה כיוון גם בחושך? מה עוזר ביום? מה רואים רק בלילה? ומה נראה מגובה?</p>}
               </div>
               {allNavPlaced && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-3 glass-card-immersive rounded-xl p-4 text-center">
