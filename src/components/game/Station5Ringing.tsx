@@ -104,6 +104,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 hotspots={sceneHotspots}
                 instruction="🔍 חפשו 5 פריטים בתחנת הטיבוע — אספו את כל נתוני הטיסה!"
                 onAllDiscovered={() => setSceneComplete(true)}
+                backgroundImage={ringingBg}
               />
               {sceneComplete && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
@@ -194,7 +195,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 <CodeLock
                   correctCode="143"
                   label="🔒 מנעול תחנת הטיבוע"
-                  hint="התשובה היא מספר שעות הטיסה שחישבתם בשלב הקודם"
+                  hint="הקוד קשור לנתונים שאספתם בסצנה — חישוב אחד פשוט יוביל אתכם לתשובה"
                   onUnlock={() => { setShowCorrectEffect(true); playReveal(); setTimeout(() => setPhase("reward"), 1200); }}
                 />
               </div>

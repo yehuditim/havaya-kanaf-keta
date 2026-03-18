@@ -18,6 +18,7 @@ interface SceneExplorerProps {
   onAllDiscovered?: () => void;
   stationColor?: string;
   className?: string;
+  backgroundImage?: string;
 }
 
 /**
@@ -31,6 +32,7 @@ const SceneExplorer = ({
   onAllDiscovered,
   stationColor = "primary",
   className = "",
+  backgroundImage,
 }: SceneExplorerProps) => {
   const [discovered, setDiscovered] = useState<Set<string>>(new Set());
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -74,6 +76,10 @@ const SceneExplorer = ({
 
       {/* Scene area with hotspots */}
       <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden border border-border/20">
+        {/* Background image */}
+        {backgroundImage && (
+          <img src={backgroundImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        )}
         {/* Dark overlay to help hotspots pop */}
         <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-background/30 z-[1]" />
 
