@@ -89,6 +89,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
             <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <SceneExplorer
                 hotspots={sceneHotspots}
+                backgroundImage={hulaBg}
                 instruction="🔍 חפשו 5 רמזים בתחנת התצפית — שימו לב לצופן ברמז האחרון!"
                 onAllDiscovered={() => setSceneComplete(true)}
               />

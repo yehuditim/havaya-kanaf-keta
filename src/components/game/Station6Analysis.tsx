@@ -156,7 +156,7 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
   const useHint = () => { setHintsUsed(h => h + 1); setShowHint(true); };
 
   const hints: Record<string, string> = {
-    treaties: "💡 AEWA עוסקת בציפורי מים, CMS בכל בעלי החיים הנודדים, רמסר בביצות, BirdLife היא רשת ארגונים.",
+    treaties: "💡 קראו שוב את התיאור של כל הסכם — חשבו: מה מיוחד בכל אחד? מהו סוג ההגנה שהוא מציע? התאימו לפי הרעיון המרכזי.",
     dilemma: "💡 ציפור נודדת עוברת 15 מדינות. מגנים עליה רק באחת — מה קורה בשאר?",
     summit: "💡 חשבו: לדעת איפה היא (מעקב), לשמור על מה שהיא צריכה (תחנות), ולחנך אנשים.",
   };
