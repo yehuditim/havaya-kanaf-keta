@@ -156,9 +156,9 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
   const useHint = () => { setHintsUsed(h => h + 1); setShowHint(true); };
 
   const hints: Record<string, string> = {
-    treaties: "💡 AEWA עוסקת בציפורי מים, CMS בכל בעלי החיים הנודדים, רמסר בביצות, BirdLife היא רשת ארגונים.",
+    treaties: "💡 קיראו בעיון את תיאור כל הסכם/ארגון — לכל אחד יש נושא מרכזי שמבדיל אותו מהאחרים.",
     dilemma: "💡 ציפור נודדת עוברת 15 מדינות. מגנים עליה רק באחת — מה קורה בשאר?",
-    summit: "💡 חשבו: לדעת איפה היא (מעקב), לשמור על מה שהיא צריכה (תחנות), ולחנך אנשים.",
+    summit: "💡 איזו תוכנית מכסה את כל הצרכים של ציפור נודדת לאורך כל נתיב הנדידה, לא רק חלק ממנו?",
   };
 
   return (
@@ -204,6 +204,7 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
                 hotspots={sceneHotspots}
                 instruction="🌍 גלו את המסמכים והנתונים בשגרירות הציפורים"
                 onAllDiscovered={() => setSceneComplete(true)}
+                backgroundImage={embassyBg}
               />
               {sceneComplete && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
