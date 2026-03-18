@@ -164,7 +164,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                     )}
                     {showCalcHint && (
                       <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[10px] text-accent text-center">
-                        💡 רמז: 7,150 ÷ 50 = ?
+                        💡 חשבו על הנוסחה: מרחק חלקי מהירות. מצאתם את שני המספרים בסצנה — עכשיו חשבו!
                       </motion.p>
                     )}
                   </div>
@@ -194,7 +194,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 <CodeLock
                   correctCode="143"
                   label="🔒 מנעול תחנת הטיבוע"
-                  hint="7,150 ÷ 50 = ?"
+                  hint="התשובה היא מספר שעות הטיסה שחישבתם בשלב הקודם"
                   onUnlock={() => { setShowCorrectEffect(true); playReveal(); setTimeout(() => setPhase("reward"), 1200); }}
                 />
               </div>

@@ -18,7 +18,7 @@ const NarrationPlayer = ({
   speaker = "פרופסור דרור",
   speakerEmoji = "👨‍🔬",
   autoExpand = true,
-  autoPlay = true,
+  autoPlay = false,
   autoPlayDelay = 800,
   className = "",
 }: NarrationPlayerProps) => {
@@ -44,15 +44,8 @@ const NarrationPlayer = ({
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [revealed, text, displayedChars]);
 
-  // Auto-play on mount
-  useEffect(() => {
-    if (!autoPlay || !canSpeak) return;
-    autoPlayTimerRef.current = setTimeout(() => {
-      void speak();
-    }, autoPlayDelay);
-    return () => { if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // intentionally run once on mount
+  // Auto-play disabled by default for mobile compatibility
+  // Audio only starts on explicit user click
 
   const handlePlay = () => {
     playClick();
@@ -86,18 +79,13 @@ const NarrationPlayer = ({
           </p>
         </div>
         <div className="flex items-center gap-1.5">
-          {!revealed && (
-            <button onClick={handlePlay} className="bg-primary/15 text-primary px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-primary/25 transition-colors border border-primary/20">
-              ▶ השמע
-            </button>
-          )}
-          {revealed && canSpeak && (
+          {canSpeak && (
             <button
-              onClick={handleTTSToggle}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+              onClick={revealed ? handleTTSToggle : handlePlay}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                 isSpeaking
                   ? "bg-primary/20 text-primary border-primary/30 animate-pulse"
-                  : "bg-muted/40 text-muted-foreground border-border/25 hover:bg-primary/10 hover:text-primary"
+                  : "bg-primary/15 text-primary border-primary/20 hover:bg-primary/25"
               }`}
               title={isSpeaking ? "עצור הקראה" : "הקרא בקול"}
             >

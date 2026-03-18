@@ -87,32 +87,28 @@ const SceneExplorer = ({
               onClick={() => handleClick(hs.id)}
               className="absolute z-10"
               style={{ left: hs.x, top: hs.y, transform: "translate(-50%, -50%)" }}
-              whileHover={{ scale: 1.15 }}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
               <div
-                className={`relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center text-xl sm:text-2xl transition-all duration-300 ${
+                className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg transition-all duration-300 ${
                   isDiscovered
                     ? isActive
                       ? "bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
                       : "bg-primary/15 border border-primary/30"
-                    : "bg-background/30 border-2 border-foreground/20 backdrop-blur-sm hover:border-primary/50 hover:bg-primary/10"
+                    : "bg-transparent border border-transparent hover:bg-foreground/10 hover:border-foreground/15"
                 }`}
               >
-                {/* Pulse ring for undiscovered */}
-                {!isDiscovered && (
-                  <span className="absolute inset-0 rounded-xl border-2 border-primary/40 animate-ping opacity-40" />
-                )}
-                <span className={isDiscovered ? "" : "animate-pulse-glow"}>{hs.emoji}</span>
+                <span className={isDiscovered ? "" : "opacity-30 hover:opacity-50 transition-opacity"}>{hs.emoji}</span>
                 {isDiscovered && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center text-[8px] text-primary-foreground font-bold">✓</span>
                 )}
               </div>
-              <span className={`text-[8px] sm:text-[9px] font-bold block mt-0.5 text-center transition-colors ${
-                isDiscovered ? "text-primary/80" : "text-foreground/50"
-              }`}>
-                {hs.label}
-              </span>
+              {isDiscovered && (
+                <span className="text-[8px] sm:text-[9px] font-bold block mt-0.5 text-center text-primary/80">
+                  {hs.label}
+                </span>
+              )}
             </motion.button>
           );
         })}
