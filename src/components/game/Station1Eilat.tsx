@@ -125,7 +125,8 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
             <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <SceneExplorer
                 hotspots={sceneHotspots}
-                instruction="🔍 לחצו על האלמנטים בסצנת המדבר כדי לחשוף רמזים"
+                backgroundImage={eilatBg}
+                instruction="🔍 חפשו 5 רמזים חבויים בסצנת המדבר"
                 onAllDiscovered={() => setSceneComplete(true)}
               />
               {sceneComplete && (

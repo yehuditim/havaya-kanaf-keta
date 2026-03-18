@@ -102,6 +102,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
             <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <SceneExplorer
                 hotspots={sceneHotspots}
+                backgroundImage={ringingBg}
                 instruction="🔍 חפשו 5 פריטים בתחנת הטיבוע — אספו את כל נתוני הטיסה!"
                 onAllDiscovered={() => setSceneComplete(true)}
               />
