@@ -202,6 +202,7 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
             <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <SceneExplorer
                 hotspots={sceneHotspots}
+                backgroundImage={embassyBg}
                 instruction="🌍 גלו את המסמכים והנתונים בשגרירות הציפורים"
                 onAllDiscovered={() => setSceneComplete(true)}
               />
