@@ -44,15 +44,8 @@ const NarrationPlayer = ({
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [revealed, text, displayedChars]);
 
-  // Auto-play on mount
-  useEffect(() => {
-    if (!autoPlay || !canSpeak) return;
-    autoPlayTimerRef.current = setTimeout(() => {
-      void speak();
-    }, autoPlayDelay);
-    return () => { if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // intentionally run once on mount
+  // Auto-play disabled by default for mobile compatibility
+  // Audio only starts on explicit user click
 
   const handlePlay = () => {
     playClick();
