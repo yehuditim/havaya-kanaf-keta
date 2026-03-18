@@ -128,7 +128,6 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
             <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
               <SceneExplorer
                 hotspots={sceneHotspots}
-                backgroundImage={dangersBg}
                 instruction="⚠️ מצאו 5 סכנות שמאיימות על ציפורים בסצנה"
                 onAllDiscovered={() => setSceneComplete(true)}
               />
@@ -254,7 +253,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                     <CodeLock
                       correctCode="143"
                       label="🔒 מנעול שביל הסכנות"
-                      hint="חפשו בכרטיס האיומים — כמה נשרים ניצלו בפרויקט? המספר מופיע בסוף הטקסט."
+                      hint="מספר הנשרים שניצלו — שלוש ספרות"
                       onUnlock={() => { playReveal(); setShowCorrectEffect(true); setTimeout(() => setPhase("reward"), 1200); }}
                     />
                   </div>

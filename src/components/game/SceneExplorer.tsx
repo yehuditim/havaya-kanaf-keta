@@ -14,8 +14,6 @@ export interface SceneHotspot {
 
 interface SceneExplorerProps {
   hotspots: SceneHotspot[];
-  /** Background image URL — hotspots are placed directly on this image */
-  backgroundImage?: string;
   instruction?: string;
   onAllDiscovered?: () => void;
   stationColor?: string;
@@ -24,12 +22,11 @@ interface SceneExplorerProps {
 
 /**
  * Full-screen interactive scene explorer.
- * Renders hotspots directly on the background image.
- * Hotspots are camouflaged until discovered.
+ * Renders hotspots directly on the background image (which is the parent's bg).
+ * Hotspots pulse until clicked, then reveal clues in floating cards.
  */
 const SceneExplorer = ({
   hotspots,
-  backgroundImage,
   instruction = "🔍 חפשו וגלו את כל הרמזים בסצנה",
   onAllDiscovered,
   stationColor = "primary",
@@ -75,19 +72,10 @@ const SceneExplorer = ({
         />
       </div>
 
-      {/* Scene area with hotspots — background image rendered here */}
+      {/* Scene area with hotspots */}
       <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden border border-border/20">
-        {/* Background image */}
-        {backgroundImage && (
-          <img
-            src={backgroundImage}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover"
-            draggable={false}
-          />
-        )}
-        {/* Subtle overlay to help readability without hiding the scene */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-background/15 z-[1]" />
+        {/* Dark overlay to help hotspots pop */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-background/30 z-[1]" />
 
         {/* Hotspots */}
         {hotspots.map((hs) => {
@@ -97,34 +85,27 @@ const SceneExplorer = ({
             <motion.button
               key={hs.id}
               onClick={() => handleClick(hs.id)}
-              className="absolute z-10 group"
+              className="absolute z-10"
               style={{ left: hs.x, top: hs.y, transform: "translate(-50%, -50%)" }}
+              whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
               <div
-                className={`relative flex items-center justify-center transition-all duration-300 ${
+                className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg transition-all duration-300 ${
                   isDiscovered
                     ? isActive
-                      ? "w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
-                      : "w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary/15 border border-primary/30"
-                    : "w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-transparent border border-transparent group-hover:bg-foreground/8 group-hover:border-foreground/10 group-hover:shadow-sm"
+                      ? "bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
+                      : "bg-primary/15 border border-primary/30"
+                    : "bg-transparent border border-transparent hover:bg-foreground/10 hover:border-foreground/15"
                 }`}
               >
-                <span
-                  className={`transition-all duration-300 ${
-                    isDiscovered
-                      ? "text-base sm:text-lg"
-                      : "text-xs sm:text-sm opacity-[0.2] group-hover:opacity-[0.45] grayscale group-hover:grayscale-0"
-                  }`}
-                >
-                  {hs.emoji}
-                </span>
+                <span className={isDiscovered ? "" : "opacity-30 hover:opacity-50 transition-opacity"}>{hs.emoji}</span>
                 {isDiscovered && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center text-[8px] text-primary-foreground font-bold">✓</span>
                 )}
               </div>
               {isDiscovered && (
-                <span className="text-[8px] sm:text-[9px] font-bold block mt-0.5 text-center text-primary/80 drop-shadow-sm">
+                <span className="text-[8px] sm:text-[9px] font-bold block mt-0.5 text-center text-primary/80">
                   {hs.label}
                 </span>
               )}
