@@ -194,7 +194,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 <CodeLock
                   correctCode="143"
                   label="🔒 מנעול תחנת הטיבוע"
-                  hint="7,150 ÷ 50 = ?"
+                  hint="התשובה היא מספר שעות הטיסה שחישבתם בשלב הקודם"
                   onUnlock={() => { setShowCorrectEffect(true); playReveal(); setTimeout(() => setPhase("reward"), 1200); }}
                 />
               </div>

@@ -209,7 +209,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
                     <CodeLock
                       correctCode="1899"
                       label="🔒 מנעול המעבדה"
-                      hint="שנת המצאת הטיבוע — ארבע ספרות, סוף המאה ה-19"
+                      hint="חפשו בכרטיס הטכנולוגיה — באיזה עשור הומצאה שיטת המעקב הוותיקה ביותר?"
                       onUnlock={() => { playReveal(); setShowCorrectEffect(true); setTimeout(() => setPhase("atbash"), 800); }}
                     />
                   </div>

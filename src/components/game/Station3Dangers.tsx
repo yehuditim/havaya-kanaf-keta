@@ -202,7 +202,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 </div>
                 {showCipherHint && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-primary/5 rounded-lg p-2.5 mb-3 border border-primary/15 text-right">
-                    <p className="text-[10px] text-primary">💡 ל→כ, ג→ב, נ→מ... חשבו: מה זה ״כ ג ס  ת ו ק ז ח״ אם כל אות חוזרת אחורה?</p>
+                    <p className="text-[10px] text-primary">💡 כל אות זזה מקום אחד אחורה באל״ף-בי״ת. נסו עם האות הראשונה ובנו מילה שמתחברת לחקר ציפורים.</p>
                   </motion.div>
                 )}
                 {!decoded ? (
