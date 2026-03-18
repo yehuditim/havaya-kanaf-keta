@@ -164,7 +164,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                     )}
                     {showCalcHint && (
                       <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-[10px] text-accent text-center">
-                        💡 רמז: 7,150 ÷ 50 = ?
+                        💡 חשבו על הנוסחה: מרחק חלקי מהירות. מצאתם את שני המספרים בסצנה — עכשיו חשבו!
                       </motion.p>
                     )}
                   </div>
