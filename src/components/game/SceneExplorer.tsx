@@ -16,6 +16,8 @@ interface SceneExplorerProps {
   hotspots: SceneHotspot[];
   instruction?: string;
   onAllDiscovered?: () => void;
+  /** Label for the continue button shown after all hotspots are found */
+  continueLabel?: string;
   stationColor?: string;
   className?: string;
   backgroundImage?: string;
