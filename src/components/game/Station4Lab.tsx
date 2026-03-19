@@ -115,21 +115,22 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
             </motion.div>
           )}
 
-          {/* EXPLORE SCENE */}
           {phase === "explore" && (
-            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
+            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <SceneExplorer
                 hotspots={sceneHotspots}
+                backgroundImage={labBg}
                 instruction="🔬 גלו את הציוד והטכנולוגיות במעבדת החקר"
                 onAllDiscovered={() => setSceneComplete(true)}
               />
               {sceneComplete && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                  <p className="text-xs text-primary mb-2">✅ גילתם את כל הטכנולוגיות! עכשיו — בנו מצפן</p>
-                  <button onClick={() => { playClick(); setPhase("compass"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 text-center">
+                  <p className="text-xs text-primary mb-2 bg-background/60 backdrop-blur-sm rounded-lg px-3 py-1 inline-block">✅ גילתם את כל הטכנולוגיות! עכשיו — בנו מצפן</p>
+                  <br />
+                  <button onClick={() => { playClick(); setPhase("compass"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all shadow-lg mt-1">
                     🧭 בנו את המצפן
                   </button>
-                </motion.div>
+                </div>
               )}
             </motion.div>
           )}

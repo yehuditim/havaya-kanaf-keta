@@ -84,21 +84,22 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
             </motion.div>
           )}
 
-          {/* EXPLORE SCENE */}
           {phase === "explore" && (
-            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
+            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <SceneExplorer
                 hotspots={sceneHotspots}
+                backgroundImage={hulaBg}
                 instruction="🔍 חפשו 5 רמזים בתחנת התצפית — שימו לב לצופן ברמז האחרון!"
                 onAllDiscovered={() => setSceneComplete(true)}
               />
               {sceneComplete && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                  <p className="text-xs text-primary mb-2">🔓 שמתם לב? ברמז של הנוצה יש צופן אתב״ש!</p>
-                  <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 text-center">
+                  <p className="text-xs text-primary mb-2 bg-background/60 backdrop-blur-sm rounded-lg px-3 py-1 inline-block">🔓 שמתם לב? ברמז של הנוצה יש צופן אתב״ש!</p>
+                  <br />
+                  <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all shadow-lg mt-1">
                     🔬 למשימת החקר
                   </button>
-                </motion.div>
+                </div>
               )}
             </motion.div>
           )}
