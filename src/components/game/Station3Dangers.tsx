@@ -253,7 +253,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                     <CodeLock
                       correctCode="143"
                       label="🔒 מנעול שביל הסכנות"
-                      hint="מספר הנשרים שניצלו — שלוש ספרות"
+                      hint="חפשו בכרטיס האיומים — כמה חיים הציל פרויקט השימור?"
                       onUnlock={() => { playReveal(); setShowCorrectEffect(true); setTimeout(() => setPhase("reward"), 1200); }}
                     />
                   </div>

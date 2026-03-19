@@ -23,14 +23,13 @@ interface SceneExplorerProps {
 
 /**
  * Full-screen interactive scene explorer.
- * Renders hotspots directly on the background image (which is the parent's bg).
- * Hotspots pulse until clicked, then reveal clues in floating cards.
+ * Renders hotspots directly on the station background (which fills the viewport).
+ * Hotspots are nearly invisible until hovered/tapped, then reveal clues.
  */
 const SceneExplorer = ({
   hotspots,
   instruction = "🔍 חפשו וגלו את כל הרמזים בסצנה",
   onAllDiscovered,
-  stationColor = "primary",
   className = "",
   backgroundImage,
 }: SceneExplorerProps) => {
@@ -56,80 +55,95 @@ const SceneExplorer = ({
   const activeHotspot = hotspots.find(h => h.id === activeId);
 
   return (
-    <div className={`relative w-full ${className}`}>
-      {/* Top bar */}
-      <div className="flex items-center justify-between mb-2 px-1">
-        <p className="text-[11px] text-foreground/80 font-bold">{instruction}</p>
-        <span className="text-[10px] text-muted-foreground bg-background/40 backdrop-blur-sm px-2 py-0.5 rounded-full">
+    <div className={`fixed inset-0 z-20 ${className}`}>
+      {/* Optional background image (for stations that supply one) */}
+      {backgroundImage && (
+        <img
+          src={backgroundImage}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
+
+      {/* Subtle vignette so UI elements remain legible */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/50 pointer-events-none z-[1]" />
+
+      {/* Top HUD: instruction + counter */}
+      <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between">
+        <p className="text-[11px] text-foreground/90 font-bold drop-shadow-md bg-background/30 backdrop-blur-sm rounded-lg px-2.5 py-1">
+          {instruction}
+        </p>
+        <span className="text-[10px] text-foreground/80 bg-background/40 backdrop-blur-sm px-2.5 py-1 rounded-full font-bold drop-shadow-md">
           {discovered.size}/{hotspots.length}
         </span>
       </div>
 
-      {/* Progress */}
-      <div className="h-1 bg-muted/20 rounded-full mb-3 overflow-hidden">
-        <motion.div
-          className="h-full bg-primary rounded-full"
-          animate={{ width: `${(discovered.size / hotspots.length) * 100}%` }}
-          transition={{ duration: 0.4 }}
-        />
+      {/* Progress bar */}
+      <div className="absolute top-12 left-3 right-3 z-30">
+        <div className="h-1 bg-muted/20 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-primary rounded-full"
+            animate={{ width: `${(discovered.size / hotspots.length) * 100}%` }}
+            transition={{ duration: 0.4 }}
+          />
+        </div>
       </div>
 
-      {/* Scene area with hotspots */}
-      <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-2xl overflow-hidden border border-border/20">
-        {/* Background image */}
-        {backgroundImage && (
-          <img src={backgroundImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
-        )}
-        {/* Dark overlay to help hotspots pop */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-background/30 z-[1]" />
-
-        {/* Hotspots */}
-        {hotspots.map((hs) => {
-          const isDiscovered = discovered.has(hs.id);
-          const isActive = activeId === hs.id;
-          return (
-            <motion.button
-              key={hs.id}
-              onClick={() => handleClick(hs.id)}
-              className="absolute z-10"
-              style={{ left: hs.x, top: hs.y, transform: "translate(-50%, -50%)" }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+      {/* Hotspots — placed directly on the viewport */}
+      {hotspots.map((hs) => {
+        const isDiscovered = discovered.has(hs.id);
+        const isActive = activeId === hs.id;
+        return (
+          <motion.button
+            key={hs.id}
+            onClick={() => handleClick(hs.id)}
+            className="absolute z-10"
+            style={{ left: hs.x, top: hs.y, transform: "translate(-50%, -50%)" }}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <div
+              className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-sm sm:text-base transition-all duration-300 ${
+                isDiscovered
+                  ? isActive
+                    ? "bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
+                    : "bg-primary/15 border border-primary/30"
+                  : "bg-transparent border border-transparent hover:bg-foreground/10 hover:border-foreground/20"
+              }`}
             >
-              <div
-                className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg transition-all duration-300 ${
-                  isDiscovered
-                    ? isActive
-                      ? "bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
-                      : "bg-primary/15 border border-primary/30"
-                    : "bg-transparent border border-transparent hover:bg-foreground/10 hover:border-foreground/15"
+              <span
+                className={`transition-opacity duration-200 ${
+                  isDiscovered ? "opacity-100" : "opacity-[0.18] hover:opacity-40"
                 }`}
+                style={!isDiscovered ? { filter: "grayscale(0.8)" } : undefined}
               >
-                <span className={isDiscovered ? "" : "opacity-30 hover:opacity-50 transition-opacity"}>{hs.emoji}</span>
-                {isDiscovered && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center text-[8px] text-primary-foreground font-bold">✓</span>
-                )}
-              </div>
+                {hs.emoji}
+              </span>
               {isDiscovered && (
-                <span className="text-[8px] sm:text-[9px] font-bold block mt-0.5 text-center text-primary/80">
-                  {hs.label}
+                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-primary flex items-center justify-center text-[7px] text-primary-foreground font-bold">
+                  ✓
                 </span>
               )}
-            </motion.button>
-          );
-        })}
-      </div>
+            </div>
+            {isDiscovered && (
+              <span className="text-[7px] sm:text-[8px] font-bold block mt-0.5 text-center text-primary/80 drop-shadow-sm">
+                {hs.label}
+              </span>
+            )}
+          </motion.button>
+        );
+      })}
 
-      {/* Active clue card — floating below the scene */}
+      {/* Active clue card — floating at bottom */}
       <AnimatePresence>
         {activeHotspot && (
           <motion.div
             key={activeHotspot.id}
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.25 }}
-            className="mt-3 bg-background/70 backdrop-blur-md border border-primary/20 rounded-xl p-3 text-right"
+            className="absolute bottom-16 left-3 right-3 z-30 bg-background/75 backdrop-blur-md border border-primary/20 rounded-xl p-3 text-right"
           >
             <div className="flex items-start gap-2">
               <span className="text-xl">{activeHotspot.emoji}</span>
@@ -150,9 +164,11 @@ const SceneExplorer = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mt-3 text-center"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30"
         >
-          <p className="text-xs font-black text-primary">✅ כל הרמזים נמצאו! המשיכו הלאה</p>
+          <p className="text-xs font-black text-primary bg-background/60 backdrop-blur-sm px-4 py-2 rounded-full drop-shadow-lg">
+            ✅ כל הרמזים נמצאו! המשיכו הלאה
+          </p>
         </motion.div>
       )}
     </div>
