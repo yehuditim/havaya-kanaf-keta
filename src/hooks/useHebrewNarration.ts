@@ -4,6 +4,9 @@ const CLOUD_TTS_URL = import.meta.env.VITE_SUPABASE_URL
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/google-tts`
   : null;
 
+const SILENT_AUDIO_DATA_URI =
+  "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
+
 const fetchCloudTtsAudio = async (text: string, signal: AbortSignal) => {
   const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -28,6 +31,24 @@ const fetchCloudTtsAudio = async (text: string, signal: AbortSignal) => {
   }
 
   return response.blob();
+};
+
+const primeAudioForMobile = async (audio: HTMLAudioElement) => {
+  audio.preload = "auto";
+  audio.muted = true;
+  audio.src = SILENT_AUDIO_DATA_URI;
+
+  try {
+    await audio.play();
+  } catch {
+    // Best effort: iOS/Android unlock can fail silently on some devices.
+  }
+
+  audio.pause();
+  audio.currentTime = 0;
+  audio.muted = false;
+  audio.removeAttribute("src");
+  audio.load();
 };
 
 export const useHebrewNarration = (text: string) => {
@@ -102,28 +123,36 @@ export const useHebrewNarration = (text: string) => {
         const controller = new AbortController();
         abortControllerRef.current = controller;
 
+        const audio = new Audio();
+        audioRef.current = audio;
+
+        // Must happen inside the click/tap gesture path for iOS/Android autoplay policies.
+        await primeAudioForMobile(audio);
+
         const audioBlob = await fetchCloudTtsAudio(text, controller.signal);
         if (controller.signal.aborted) return;
 
         const objectUrl = URL.createObjectURL(audioBlob);
         objectUrlRef.current = objectUrl;
 
-        const audio = new Audio(objectUrl);
-        audioRef.current = audio;
-
         audio.onplay = () => setIsSpeaking(true);
         audio.onended = () => {
+          abortControllerRef.current = null;
           cleanupAudio();
           setIsSpeaking(false);
         };
         audio.onerror = () => {
+          abortControllerRef.current = null;
           cleanupAudio();
           setIsSpeaking(false);
         };
 
+        audio.src = objectUrl;
         await audio.play();
         return;
       } catch (error) {
+        abortControllerRef.current = null;
+        cleanupAudio();
         console.warn("Cloud TTS failed, falling back to browser voice", error);
       }
     }
@@ -145,7 +174,7 @@ export const useHebrewNarration = (text: string) => {
       setTimeout(() => {
         window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
         speakWithBrowser(window.speechSynthesis.getVoices());
-      }, 300);
+      }, 1000);
     } else {
       speakWithBrowser(voices);
     }
