@@ -48,7 +48,7 @@ const sceneHotspots: SceneHotspot[] = [
 const researchCards = [
   { id: "flyway", title: "הנתיב האפרו-פליארקטי", emoji: "🗺️", content: "ישראל נמצאת על הנתיב האפרו-פליארקטי — אחד ממסלולי הנדידה הגדולים בעולם. כמיליארד ציפורים חולפות דרכה פעמיים בשנה. ישראל היא ׳צוואר בקבוק׳ — רצועת יבשה צרה בין שלוש יבשות.", hiddenClue: "המספר הקריטי: כמיליארד ציפורים, פעמיים בשנה." },
   { id: "soaring", title: "דואים מול נודדי לילה", emoji: "☀️", content: "דואים (חסידות, שקנאים, דורסים) — עופות גדולים שרוכבים על תרמיקות ביום. הם נמנעים מלחצות ימים. נודדי לילה (סבכיים, זמירים) — ציפורי שיר קטנות שטסות בחשיכה." },
-  { id: "hyperphagia", title: "היפרפגיה — תדלוק לפני הטיסה", emoji: "⚖️", content: "לפני נדידה ציפורים עוברות היפרפגיה — אכילה מוגברת שמעלה את משקלן עד 50% בשומן. תהליך זה נמשך כשבועיים. אחוז השומן המדויק: עד 50 אחוז ממשקל הגוף.", hiddenClue: "חפשו את אחוז השומן שציפורים צוברות — הוא מופיע בפסקה על היפרפגיה" },
+  { id: "hyperphagia", title: "היפרפגיה — תדלוק לפני הטיסה", emoji: "⚖️", content: "לפני נדידה ציפורים עוברות היפרפגיה — אכילה מוגברת שמעלה את משקלן עד 50% בשומן. תהליך זה נמשך כשבועיים. אחוז השומן המדויק: עד 50 אחוז ממשקל הגוף.", hiddenClue: "קראו את הפסקה בעיון — כמה מסוגלת ציפור לצבור ממשקלה?" },
   { id: "eilat", title: "אילת — שער הכניסה", emoji: "🏜️", content: "אילת היא תחנת הדלק הראשונה אחרי 2,000 ק״מ של מדבר סהרה. פסטיבל הצפרות באילת (מרץ) הוא אירוע בינלאומי." },
 ];
 
@@ -122,18 +122,19 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
 
           {/* EXPLORE SCENE */}
           {phase === "explore" && (
-            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
+            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <SceneExplorer
                 hotspots={sceneHotspots}
+                backgroundImage={eilatBg}
                 instruction="🔍 לחצו על האלמנטים בסצנת המדבר כדי לחשוף רמזים"
                 onAllDiscovered={() => setSceneComplete(true)}
               />
               {sceneComplete && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                  <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30">
+                  <button onClick={() => { playClick(); setPhase("research"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all shadow-lg">
                     🔬 למשימת החקר
                   </button>
-                </motion.div>
+                </div>
               )}
             </motion.div>
           )}

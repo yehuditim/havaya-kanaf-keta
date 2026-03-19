@@ -41,7 +41,7 @@ const sceneHotspots: SceneHotspot[] = [
 ];
 
 const researchCards = [
-  { id: "tech", title: "טיבוע, GPS ומכ״ם", emoji: "📡", content: "טיבוע — טבעת אלומיניום עם מספר ייחודי. שנת ההמצאה: 1899. משדרי GPS זעירים (פחות מ-5 גרם!) מאפשרים מעקב בזמן אמת — התחילו להשתמש בהם בשנות ה-2000. מכ״ם — מעקב אחרי להקות שלמות מרחוק, מאז שנות ה-1940.", hiddenClue: "השנה מופיעה אחרי ׳שנת ההמצאה׳ — חפשו את המספר בן 4 הספרות" },
+  { id: "tech", title: "טיבוע, GPS ומכ״ם", emoji: "📡", content: "טיבוע — טבעת אלומיניום עם מספר ייחודי. שנת ההמצאה: 1899. משדרי GPS זעירים (פחות מ-5 גרם!) מאפשרים מעקב בזמן אמת — התחילו להשתמש בהם בשנות ה-2000. מכ״ם — מעקב אחרי להקות שלמות מרחוק, מאז שנות ה-1940.", hiddenClue: "חפשו מתי התחילו חוקרים לעקוב אחרי ציפורים בדרך הוותיקה ביותר" },
   { id: "nav", title: "GPS ביולוגי", emoji: "🧠", content: "ציפורים מנווטות באמצעות מצפן מגנטי מולד, שמש, כוכבים וציוני דרך. ארבע שיטות שעובדות ביחד!" },
   { id: "citizen", title: "eBird — מדע אזרחי", emoji: "📱", content: "eBird הוא פרויקט מדע אזרחי — צפרים מדווחים תצפיות באפליקציה. מאז שנות ה-2010 חולל מהפכה במחקר הנדידה." },
 ];
@@ -115,21 +115,22 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
             </motion.div>
           )}
 
-          {/* EXPLORE SCENE */}
           {phase === "explore" && (
-            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
+            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <SceneExplorer
                 hotspots={sceneHotspots}
+                backgroundImage={labBg}
                 instruction="🔬 גלו את הציוד והטכנולוגיות במעבדת החקר"
                 onAllDiscovered={() => setSceneComplete(true)}
               />
               {sceneComplete && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                  <p className="text-xs text-primary mb-2">✅ גילתם את כל הטכנולוגיות! עכשיו — בנו מצפן</p>
-                  <button onClick={() => { playClick(); setPhase("compass"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 text-center">
+                  <p className="text-xs text-primary mb-2 bg-background/60 backdrop-blur-sm rounded-lg px-3 py-1 inline-block">✅ גילתם את כל הטכנולוגיות! עכשיו — בנו מצפן</p>
+                  <br />
+                  <button onClick={() => { playClick(); setPhase("compass"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all shadow-lg mt-1">
                     🧭 בנו את המצפן
                   </button>
-                </motion.div>
+                </div>
               )}
             </motion.div>
           )}

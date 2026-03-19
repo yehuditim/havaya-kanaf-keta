@@ -197,22 +197,22 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
             </motion.div>
           )}
 
-          {/* EXPLORE SCENE */}
           {phase === "explore" && (
-            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition} className="space-y-3">
+            <motion.div key="explore" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <SceneExplorer
                 hotspots={sceneHotspots}
+                backgroundImage={embassyBg}
                 instruction="🌍 גלו את המסמכים והנתונים בשגרירות הציפורים"
                 onAllDiscovered={() => setSceneComplete(true)}
-                backgroundImage={embassyBg}
               />
               {sceneComplete && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                  <p className="text-xs text-primary mb-2">✅ גילתם הכול! עכשיו — התאימו הסכמים לתפקידים</p>
-                  <button onClick={() => { playClick(); setPhase("treaties"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all">
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 text-center">
+                  <p className="text-xs text-primary mb-2 bg-background/60 backdrop-blur-sm rounded-lg px-3 py-1 inline-block">✅ גילתם הכול! עכשיו — התאימו הסכמים לתפקידים</p>
+                  <br />
+                  <button onClick={() => { playClick(); setPhase("treaties"); }} className="bg-gradient-to-l from-secondary to-secondary/80 text-secondary-foreground px-6 py-2.5 rounded-xl font-black hover:scale-105 transition-all shadow-lg mt-1">
                     🌍 למשימת ההסכמים
                   </button>
-                </motion.div>
+                </div>
               )}
             </motion.div>
           )}
