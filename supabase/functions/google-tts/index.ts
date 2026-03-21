@@ -44,20 +44,27 @@ serve(async (req) => {
       });
     }
 
+    // Clean Hebrew text for better TTS pronunciation
+    const cleanedText = trimmedText
+      .replace(/ק״מ/g, "קילומטר")
+      .replace(/אתב״ש/g, "אתבש")
+      .replace(/[״׳]/g, "")
+      .replace(/—/g, ", ");
+
     const response = await fetch(
       `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_CLOUD_TTS_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          input: { text: trimmedText },
+          input: { text: cleanedText },
           voice: {
             languageCode: "he-IL",
-            name: "he-IL-Wavenet-C",
+            name: "he-IL-Neural2-C",
           },
           audioConfig: {
             audioEncoding: "MP3",
-            speakingRate: 0.95,
+            speakingRate: 0.9,
             pitch: 0,
           },
         }),

@@ -99,10 +99,7 @@ export const useHebrewNarration = (text: string) => {
     utter.pitch = 1;
 
     const availableVoices = voices || window.speechSynthesis.getVoices();
-    const heVoice =
-      availableVoices.find((v) => v.lang.startsWith("he")) ||
-      availableVoices.find((v) => v.lang.startsWith("ar")) ||
-      null;
+    const heVoice = availableVoices.find((v) => v.lang.startsWith("he")) || null;
 
     if (heVoice) utter.voice = heVoice;
 

@@ -111,8 +111,10 @@ const SceneExplorer = ({
             onClick={() => handleClick(hs.id)}
             className="absolute z-10"
             style={{ left: hs.x, top: hs.y, transform: "translate(-50%, -50%)" }}
-            whileHover={{ scale: 1.15 }}
+            whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
+            animate={!isDiscovered ? { scale: [1, 1.18, 1] } : {}}
+            transition={!isDiscovered ? { duration: 2.2, repeat: Infinity, ease: "easeInOut" } : {}}
           >
             <div
               className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-sm sm:text-base transition-all duration-300 ${
@@ -120,14 +122,13 @@ const SceneExplorer = ({
                   ? isActive
                     ? "bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
                     : "bg-primary/15 border border-primary/30"
-                  : "bg-transparent border border-transparent hover:bg-foreground/10 hover:border-foreground/20"
+                  : "bg-white/20 border border-white/40 shadow-sm hover:bg-foreground/10 hover:border-foreground/30"
               }`}
             >
               <span
                 className={`transition-opacity duration-200 ${
-                  isDiscovered ? "opacity-100" : "opacity-50 hover:opacity-75"
+                  isDiscovered ? "opacity-100" : "opacity-80 hover:opacity-100"
                 }`}
-                style={!isDiscovered ? { filter: "grayscale(0.4)" } : undefined}
               >
                 {hs.emoji}
               </span>
