@@ -91,6 +91,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
                 backgroundImage={hulaBg}
                 instruction="🔍 חפשו 5 רמזים בתחנת התצפית — שימו לב לצופן ברמז האחרון!"
                 onAllDiscovered={() => setSceneComplete(true)}
+                onGoMap={onGoMap}
               />
               {sceneComplete && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 text-center">

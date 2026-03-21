@@ -122,6 +122,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
                 backgroundImage={labBg}
                 instruction="🔬 גלו את הציוד והטכנולוגיות במעבדת החקר"
                 onAllDiscovered={() => setSceneComplete(true)}
+                onGoMap={onGoMap}
               />
               {sceneComplete && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 text-center">

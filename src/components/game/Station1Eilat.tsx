@@ -128,6 +128,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
                 backgroundImage={eilatBg}
                 instruction="🔍 לחצו על האלמנטים בסצנת המדבר כדי לחשוף רמזים"
                 onAllDiscovered={() => setSceneComplete(true)}
+                onGoMap={onGoMap}
               />
               {sceneComplete && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30">

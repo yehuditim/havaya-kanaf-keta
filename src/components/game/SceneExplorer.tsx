@@ -21,6 +21,7 @@ interface SceneExplorerProps {
   stationColor?: string;
   className?: string;
   backgroundImage?: string;
+  onGoMap?: () => void;
 }
 
 /**
@@ -34,6 +35,7 @@ const SceneExplorer = ({
   onAllDiscovered,
   className = "",
   backgroundImage,
+  onGoMap,
 }: SceneExplorerProps) => {
   const [discovered, setDiscovered] = useState<Set<string>>(new Set());
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -70,12 +72,20 @@ const SceneExplorer = ({
       {/* Subtle vignette so UI elements remain legible */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/50 pointer-events-none z-[1]" />
 
-      {/* Top HUD: instruction + counter */}
-      <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between">
-        <p className="text-[11px] text-foreground/90 font-bold drop-shadow-md bg-background/30 backdrop-blur-sm rounded-lg px-2.5 py-1">
+      {/* Top HUD: back button + instruction + counter */}
+      <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between gap-2">
+        {onGoMap && (
+          <button
+            onClick={onGoMap}
+            className="text-[11px] text-foreground/90 font-bold drop-shadow-md bg-background/50 backdrop-blur-sm rounded-lg px-2.5 py-1 hover:bg-background/70 transition-all shrink-0"
+          >
+            ← חזרה למפה
+          </button>
+        )}
+        <p className="text-[11px] text-foreground/90 font-bold drop-shadow-md bg-background/30 backdrop-blur-sm rounded-lg px-2.5 py-1 flex-1 text-center">
           {instruction}
         </p>
-        <span className="text-[10px] text-foreground/80 bg-background/40 backdrop-blur-sm px-2.5 py-1 rounded-full font-bold drop-shadow-md">
+        <span className="text-[10px] text-foreground/80 bg-background/40 backdrop-blur-sm px-2.5 py-1 rounded-full font-bold drop-shadow-md shrink-0">
           {discovered.size}/{hotspots.length}
         </span>
       </div>
@@ -145,7 +155,7 @@ const SceneExplorer = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.25 }}
-            className="absolute bottom-16 left-3 right-3 z-30 bg-background/75 backdrop-blur-md border border-primary/20 rounded-xl p-3 text-right"
+            className="absolute bottom-4 left-3 right-3 z-30 bg-background/80 backdrop-blur-md border border-primary/20 rounded-xl p-3 text-right"
           >
             <div className="flex items-start gap-2">
               <span className="text-xl">{activeHotspot.emoji}</span>
@@ -156,13 +166,20 @@ const SceneExplorer = ({
                   <p className="text-[10px] text-muted-foreground italic mt-1">{activeHotspot.detail}</p>
                 )}
               </div>
+              <button
+                onClick={() => setActiveId(null)}
+                className="text-muted-foreground/60 hover:text-foreground text-lg leading-none shrink-0 -mt-0.5"
+                aria-label="סגור"
+              >
+                ×
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* All found message */}
-      {allFound && (
+      {allFound && !activeId && (
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

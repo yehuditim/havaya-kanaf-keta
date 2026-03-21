@@ -18,7 +18,7 @@ const NarrationPlayer = ({
   speaker = "פרופסור דרור",
   speakerEmoji = "👨‍🔬",
   autoExpand = true,
-  autoPlay = false,
+  autoPlay = true,
   autoPlayDelay = 800,
   className = "",
 }: NarrationPlayerProps) => {
@@ -44,8 +44,17 @@ const NarrationPlayer = ({
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [revealed, text, displayedChars]);
 
-  // Auto-play disabled by default for mobile compatibility
-  // Audio only starts on explicit user click
+  // Auto-play narration after delay
+  useEffect(() => {
+    if (!autoPlay || !canSpeak) return;
+    autoPlayTimerRef.current = setTimeout(() => {
+      void speak();
+    }, autoPlayDelay);
+    return () => {
+      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoPlay, canSpeak]);
 
   const handlePlay = () => {
     playClick();
