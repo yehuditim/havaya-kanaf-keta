@@ -1,44 +1,52 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
-import { useHebrewNarration } from "../hooks/useHebrewNarration";
 
-const INTRO_TEXT = "ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! אני צריך חוקרים צעירים ומוכשרים שיעזרו לי לפענח את החידות ולשחזר את קוד הבריחה הסודי. בכל תחנה תגלו רמז חדש. שש אותיות — מילה אחת — וכל המחקר יחזור לסדר. מוכנים לצאת למשימה?";
-const INTRO_SPEECH_TEXT = "יְלָדִים יְקָרִים, אֲנִי פְּרוֹפֵסוֹר דְּרוֹר. מִישֶׁהוּ פֶּרֶץ לַמַּחְשֵׁב שֶׁלִּי וְעִרְבֵּב אֶת כָּל מֶחְקָר הַנְּדִידָה! אֲנִי צָרִיךְ חוֹקְרִים צְעִירִים וּמֻכְשָׁרִים שֶׁיַּעַזְרוּ לִי לְפַעְנֵחַ אֶת הַחִידוֹת וּלְשַׁחְזֵר אֶת קוֹד הַבְּרִיחָה הַסּוֹדִי. בְּכָל תַּחֲנָה תְּגַלּוּ רֶמֶז חָדָשׁ. שֵׁשׁ אוֹתִיּוֹת — מִלָּה אַחַת — וְכָל הַמֶּחְקָר יַחֲזֹר לְסַדֵּר. מוּכָנִים לָצֵאת לַמְּשִׂימָה?";
+const INTRO_AUDIO_SRC = "/narration/intro.wav";
 
 const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenResearch: () => void }) => {
-  const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(INTRO_SPEECH_TEXT);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [tapHint, setTapHint] = useState(false);
 
-  // Auto-play narration on mount; show a tap-hint if autoplay is blocked
   useEffect(() => {
-    if (!canSpeak) return;
-    void speak();
-    const timer = setTimeout(() => {
-      setTapHint(prev => prev || true);
-    }, 700);
+    const audio = new Audio(INTRO_AUDIO_SRC);
+    audioRef.current = audio;
+    audio.onplay = () => { setIsSpeaking(true); setTapHint(false); };
+    audio.onended = () => setIsSpeaking(false);
+    audio.onpause = () => setIsSpeaking(false);
+
+    // Try autoplay; if blocked show tap hint
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => setTapHint(true));
+    }
+
+    const timer = setTimeout(() => setTapHint(prev => prev || !isSpeaking), 700);
     return () => {
       clearTimeout(timer);
-      stopSpeaking();
+      audio.pause();
+      audio.src = "";
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canSpeak]);
+  }, []);
 
   useEffect(() => {
     if (isSpeaking) setTapHint(false);
   }, [isSpeaking]);
 
-  const handleSpeak = useCallback(async () => {
+  const handleSpeak = useCallback(() => {
     playClick();
     setTapHint(false);
-
+    const audio = audioRef.current;
+    if (!audio) return;
     if (isSpeaking) {
-      stopSpeaking();
-      return;
+      audio.pause();
+      audio.currentTime = 0;
+    } else {
+      void audio.play();
     }
-
-    await speak();
-  }, [isSpeaking, speak, stopSpeaking]);
+  }, [isSpeaking]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-center bg-adventure stars-bg relative overflow-hidden">
@@ -98,23 +106,21 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
                 {isSpeaking ? "🎙 פרופסור דרור מקריא..." : "פרופסור דרור — חוקר ציפורים נודדות"}
               </p>
             </div>
-            {/* TTS Button */}
-            {canSpeak && (
-              <button
-                onClick={handleSpeak}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-black transition-all duration-200 border shadow-md shrink-0 ${
-                  isSpeaking
-                    ? "bg-primary text-primary-foreground border-primary shadow-primary/30 animate-pulse scale-105"
-                    : tapHint
-                    ? "bg-primary text-primary-foreground border-primary animate-pulse scale-105 shadow-primary/30"
-                    : "bg-primary/15 text-primary border-primary/25 hover:bg-primary/25 hover:scale-105 hover:shadow-primary/20"
-                }`}
-                title={isSpeaking ? "עצור הקראה" : "הקרא בקול"}
-              >
-                <span className="text-base">{isSpeaking ? "⏸" : "🔊"}</span>
-                <span>{isSpeaking ? "עצור" : tapHint ? "לחצו לשמוע" : "הקרא"}</span>
-              </button>
-            )}
+            {/* Audio Button */}
+            <button
+              onClick={handleSpeak}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-black transition-all duration-200 border shadow-md shrink-0 ${
+                isSpeaking
+                  ? "bg-primary text-primary-foreground border-primary shadow-primary/30 animate-pulse scale-105"
+                  : tapHint
+                  ? "bg-primary text-primary-foreground border-primary animate-pulse scale-105 shadow-primary/30"
+                  : "bg-primary/15 text-primary border-primary/25 hover:bg-primary/25 hover:scale-105 hover:shadow-primary/20"
+              }`}
+              title={isSpeaking ? "עצור הקראה" : "הקרא בקול"}
+            >
+              <span className="text-base">{isSpeaking ? "⏸" : "🔊"}</span>
+              <span>{isSpeaking ? "עצור" : tapHint ? "לחצו לשמוע" : "הקרא"}</span>
+            </button>
           </div>
           <div className="bg-muted/30 rounded-xl p-3 sm:p-5 border border-border/40">
             <p className="text-[13px] leading-[2] text-foreground/90">
