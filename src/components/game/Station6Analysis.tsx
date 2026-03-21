@@ -184,6 +184,7 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
                 <NarrationPlayer
                   text="ברוכים הבאים לשגרירות! סרקו את החדר, גלו מידע על הסכמים בין-לאומיים, ואז — התמודדו עם דילמות אמיתיות כחוקרים!"
                   speechText="בְּרוּכִים הַבָּאִים לַשַּׁגְרִירוּת! סִרְקוּ אֶת הַחֶדֶר, גַּלּוּ מֵידָע עַל הֶסְכֵּמִים בֵּין-לְאֻמִּיִּים, וְאָז — הִתְמוֹדְדוּ עִם דִּילֵמוֹת אֲמִתִּיּוֹת כְּחוֹקְרִים!"
+                  audioSrc="/narration/station6-embassy.wav"
                   className="mb-3"
                 />
                 <div className="flex flex-col items-center gap-2">
