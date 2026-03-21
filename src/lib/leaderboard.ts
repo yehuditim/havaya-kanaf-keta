@@ -47,7 +47,11 @@ export const saveGameResult = (
 
   // Keep only the last 20 entries
   const trimmed = entries.slice(0, 20);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+  } catch {
+    // localStorage unavailable (e.g. Safari private mode) — continue silently
+  }
 
   return entry;
 };
