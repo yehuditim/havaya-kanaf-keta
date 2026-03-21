@@ -104,6 +104,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 backgroundImage={ringingBg}
                 instruction="🔍 חפשו 5 פריטים בתחנת הטיבוע — אספו את כל נתוני הטיסה!"
                 onAllDiscovered={() => setSceneComplete(true)}
+                onGoMap={onGoMap}
               />
               {sceneComplete && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30">

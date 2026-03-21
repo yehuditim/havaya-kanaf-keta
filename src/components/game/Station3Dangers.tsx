@@ -130,6 +130,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 backgroundImage={dangersBg}
                 instruction="⚠️ מצאו 5 סכנות שמאיימות על ציפורים בסצנה"
                 onAllDiscovered={() => setSceneComplete(true)}
+                onGoMap={onGoMap}
               />
               {sceneComplete && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 text-center">

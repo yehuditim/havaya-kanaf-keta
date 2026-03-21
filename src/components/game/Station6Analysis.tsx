@@ -204,6 +204,7 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
                 backgroundImage={embassyBg}
                 instruction="🌍 גלו את המסמכים והנתונים בשגרירות הציפורים"
                 onAllDiscovered={() => setSceneComplete(true)}
+                onGoMap={onGoMap}
               />
               {sceneComplete && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 text-center">
