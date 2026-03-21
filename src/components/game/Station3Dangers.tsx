@@ -38,15 +38,17 @@ const sceneHotspots: SceneHotspot[] = [
 ];
 
 const researchCards = [
-  { id: "threats", title: "איומים על הנודדות", emoji: "⚠️", content: "הרעלות, ציד לא חוקי, עמודי חשמל, טורבינות רוח, זיהום אור ומינים פולשים — כל אלה מאיימים על ציפורים נודדות. בישראל מתו 5 נשרים בשנת 2023 מהרעלה. פרויקט ׳פורשים כנף׳ מוכיח שאפשר גם להציל: מיגון עמודי חשמל, תחנות האכלה וגידול בשבי הצילו עד כה 143 נשרים.", hiddenClue: "קראו על פרויקט ׳פורשים כנף׳ — כמה נשרים הצליח להציל?" },
-  { id: "wing", title: "פרויקט ׳פורשים כנף׳", emoji: "🛡️", content: "מאמץ ישראלי ייחודי: מיגון עמודי חשמל, תחנות האכלה, גידול רבייה בשבי. בזכותו, אוכלוסיות נשרים מתאוששות." },
+  { id: "threats", title: "איומים על הנודדות", emoji: "⚠️", content: "הרעלות, ציד לא חוקי, עמודי חשמל, טורבינות רוח, זיהום אור ומינים פולשים — כל אלה מאיימים על ציפורים נודדות. בישראל מתו 5 נשרים בשנת 2023 מהרעלה. אבל יש גם סיפורי הצלה — חפשו בכרטיס הפרויקט!", hiddenClue: "מצאתם את האיומים! עכשיו פנו לכרטיס ׳פורשים כנף׳ — כמה נשרים הצליח הפרויקט להחזיר לשמיים?" },
+  { id: "wing", title: "פרויקט ׳פורשים כנף׳", emoji: "🛡️", content: "מאמץ ישראלי ייחודי להצלת הנשר המצוי. מיגון עמודי חשמל, תחנות האכלה וגידול רבייה בשבי. ספירת ההצלחות: 143 נשרים כבר חזרו לשמיים הישראליים." },
   { id: "ebird", title: "eBird — מדע אזרחי", emoji: "📱", content: "פרויקט מדע אזרחי גלובלי. צפרים מדווחים תצפיות באפליקציה. מיליוני דיווחים עוזרים לתכנן שמורות." },
 ];
 
+// אתב"ש: א↔ת, ב↔ש, ג↔ר, ... (כל אות מתחלפת עם המקבילה מהסוף)
 const CIPHER_MAP: Record<string, string> = {
-  "מ": "ל", "ד": "ג", "ע": "ס", " ": " ", "א": "ת", "ז": "ו", "ר": "ק", "ח": "ז",
-  "י": "ח", "כ": "י", "ל": "כ", "ה": "ד", "ו": "ה", "ש": "ר", "נ": "מ", "ת": "ש",
-  "ב": "א", "ג": "ב", "ס": "נ", "פ": "ע", "צ": "פ", "ק": "צ",
+  "א": "ת", "ב": "ש", "ג": "ר", "ד": "ק", "ה": "צ", "ו": "פ", "ז": "ע",
+  "ח": "ס", "ט": "נ", "י": "מ", "כ": "ל", "ל": "כ", "מ": "י", "נ": "ט",
+  "ס": "ח", "ע": "ז", "פ": "ו", "צ": "ה", "ק": "ד", "ר": "ג", "ש": "ב", "ת": "א",
+  " ": " ",
 };
 const SECRET = "מדע אזרחי";
 const ENCODED = SECRET.split("").map(ch => CIPHER_MAP[ch] || ch).join("");
@@ -85,7 +87,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
     setSelectedThreat(null);
   };
   const handleDecodeSubmit = () => {
-    if (decodeInput.trim() === SECRET) { playSuccess(); setDecoded(true); setShowCorrectEffect(true); }
+    if (decodeInput.trim().replace(/\s+/g, " ") === SECRET) { playSuccess(); setDecoded(true); setShowCorrectEffect(true); }
     else { playError(); setDecodeAttempts(a => a + 1); if (decodeAttempts >= 1) setShowCipherHint(true); }
   };
 
@@ -195,17 +197,17 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
           {phase === "decode" && (
             <motion.div key="decode" variants={phaseVariants} initial="initial" animate="animate" exit="exit" transition={phaseTransition}>
               <div className="glass-card-immersive rounded-2xl p-4 station-glow-2">
-                <p className="text-xs font-black text-station-2 mb-2">⚡ שלב 3: פענוח צופן הזזה</p>
+                <p className="text-xs font-black text-station-2 mb-2">⚡ שלב 3: פענוח צופן אתב״ש</p>
                 <div className="bg-background/40 backdrop-blur-sm rounded-lg p-3 border border-station-2/20 text-center mb-3">
                   <p className="text-[10px] text-muted-foreground mb-1">ההודעה המוצפנת:</p>
                   <p className="text-xl font-black tracking-[0.3em] text-station-2" dir="rtl">{ENCODED}</p>
                 </div>
                 <div className="bg-accent/5 rounded-lg p-2.5 border border-accent/15 text-right mb-3">
-                  <p className="text-[10px] text-accent/80">🔑 <strong>מפתח:</strong> כל אות הוחלפה באות שלפניה באל״ף-בי״ת (ב←א, ג←ב, ד←ג...)</p>
+                  <p className="text-[10px] text-accent/80">🔑 <strong>מפתח:</strong> כל אות הוחלפה באות המקבילה מהסוף (א↔ת, ב↔ש, ג↔ר...)</p>
                 </div>
                 {showCipherHint && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-primary/5 rounded-lg p-2.5 mb-3 border border-primary/15 text-right">
-                    <p className="text-[10px] text-primary">💡 כל אות זזה מקום אחד אחורה באל״ף-בי״ת. נסו עם האות הראשונה ובנו מילה שמתחברת לחקר ציפורים.</p>
+                    <p className="text-[10px] text-primary">💡 באתב״ש האות הראשונה (א) הופכת לאחרונה (ת) וההיפך. נסו עם יוד — מה האות המקבילה לה מהסוף?</p>
                   </motion.div>
                 )}
                 {!decoded ? (
@@ -218,7 +220,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 ) : (
                   <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-primary/8 border border-primary/20 rounded-xl p-4 text-center">
                     <p className="text-sm font-bold text-primary mb-1">🔓 פוענח: ״{SECRET}״!</p>
-                    <p className="text-xs text-foreground/70">מדע אזרחי — כמו eBird — מאפשר לכל אדם לעזור למדענים.</p>
+                    <p className="text-xs text-foreground/70">מדע אזרחי — כמו eBird — מאפשר לכל אדם לעזור למדענים לעקוב אחרי ציפורים נודדות.</p>
                   </motion.div>
                 )}
               </div>
@@ -256,7 +258,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                     <CodeLock
                       correctCode="143"
                       label="🔒 מנעול שביל הסכנות"
-                      hint="חפשו בכרטיס האיומים — כמה חיים הציל פרויקט השימור?"
+                      hint="חפשו בכרטיס ׳פורשים כנף׳ — כמה נשרים הציל הפרויקט?"
                       onUnlock={() => { playReveal(); setShowCorrectEffect(true); setTimeout(() => setPhase("reward"), 1200); }}
                     />
                   </div>
