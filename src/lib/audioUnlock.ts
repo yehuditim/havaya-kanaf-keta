@@ -1,24 +1,47 @@
 /**
  * Global audio unlock utility.
  * Mobile browsers (iOS Safari, Android Chrome) block audio autoplay.
- * Calling this inside a user-gesture handler primes both HTMLMediaElement
- * and SpeechSynthesis so subsequent programmatic calls succeed.
+ *
+ * Strategy: on the very first user gesture we play a silent audio through a
+ * singleton HTMLAudioElement.  That same element is then reused for all Cloud
+ * TTS playback — because iOS only allows programmatic play on an element that
+ * has already been played inside a gesture.
  */
 
 const SILENT_WAV =
   "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
 
 let _unlocked = false;
+let _sharedAudio: HTMLAudioElement | null = null;
 
+/** Return (and lazily create) the singleton audio element. */
+export const getSharedAudio = (): HTMLAudioElement => {
+  if (!_sharedAudio) _sharedAudio = new Audio();
+  return _sharedAudio;
+};
+
+/**
+ * Call this inside any user-gesture handler (click / touchend).
+ * After the first call the shared audio element is unlocked and can play
+ * programmatically at any time during the session.
+ */
 export const unlockAudioOnGesture = () => {
   if (_unlocked) return;
   _unlocked = true;
 
-  // Unlock HTMLMediaElement (used by cloud TTS)
+  // Unlock HTMLMediaElement via the shared singleton
   try {
-    const audio = new Audio();
+    const audio = getSharedAudio();
+    audio.muted = true;
     audio.src = SILENT_WAV;
-    audio.play().catch(() => {});
+    audio.play()
+      .then(() => {
+        audio.pause();
+        audio.muted = false;
+        audio.removeAttribute("src");
+        audio.load();
+      })
+      .catch(() => {});
   } catch {}
 
   // Unlock SpeechSynthesis (used by browser TTS fallback)
