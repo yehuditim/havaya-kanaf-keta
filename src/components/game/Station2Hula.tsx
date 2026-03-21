@@ -21,7 +21,7 @@ interface Props {
 type Phase = "briefing" | "explore" | "research" | "decode" | "reward";
 
 const sceneHotspots: SceneHotspot[] = [
-  { id: "binoculars", x: "15%", y: "25%", emoji: "🔭", label: "עמדת תצפית", clue: "להקות ענקיות של עופות אפורים רוקדים בשדות", detail: "עגורים אפורים — עד 40,000 חונים בחולה בחורף!" },
+  { id: "binoculars", x: "15%", y: "25%", emoji: "🔭", label: "עמדת תצפית", clue: "להקות ענקיות של עופות אפורים רוקדים בשדות", detail: "עגורים אפורים — נודדי חורף שמגיעים אלינו מצפון אירופה ומאסיה" },
   { id: "screen", x: "72%", y: "18%", emoji: "🖥️", label: "מסך נתונים", clue: "חצי מיליארד ציפורים בשנה עוברות דרך עמק החולה", detail: "אגמון החולה — תחנת תדלוק בינלאומית קריטית" },
   { id: "notebook", x: "48%", y: "55%", emoji: "📓", label: "יומן שדה", clue: "85% מחסידות מזרח אירופה — כחצי מיליון — עוברות דרך ישראל!", detail: "חסידה עם GPS תועדה טסה 11,000 ק״מ ברצף" },
   { id: "map", x: "82%", y: "62%", emoji: "🗺️", label: "מפת ביצות", clue: "ביצות, שדות חקלאיים ובריכות דגים — מקורות מזון ומנוחה", detail: "שילוב מים, מזון ושטחים פתוחים = גן עדן לציפורים" },
@@ -29,7 +29,7 @@ const sceneHotspots: SceneHotspot[] = [
 ];
 
 const researchCards = [
-  { id: "hula", title: "אגמון החולה", emoji: "🌿", content: "עמק החולה בצפון הוא ״האב של האקולוגיה הצפונית״. ביצות, שדות חקלאיים ובריכות דגים מושכים חצי מיליארד ציפורים בשנה! עד 40,000 עגורים אפורים חונים כאן כל חורף.", hiddenClue: "המספר מופיע בסוף הפסקה — כמה עגורים חונים בחולה?" },
+  { id: "hula", title: "אגמון החולה", emoji: "🌿", content: "עמק החולה בצפון הוא ״האב של האקולוגיה הצפונית״. ביצות, שדות חקלאיים ובריכות דגים מושכים חצי מיליארד ציפורים בשנה! עד 40,000 עגורים אפורים חונים כאן כל חורף.", hiddenClue: "בדקו: כמה עגורים אפורים מגיעים לאגמון כל חורף?" },
   { id: "v-form", title: "תצורת V", emoji: "✈️", content: "כשעגורים טסים בתצורת V, כל ציפור ׳רוכבת׳ על זרם האוויר — חיסכון של עד 70% באנרגיה! הן מתחלפות בהובלה." },
   { id: "stopover", title: "תחנות תדלוק", emoji: "⛽", content: "תחנות תדלוק (Stopover sites) הן מקומות בהם ציפורים נחות, אוכלות ושותות. בלי תחנות כאלה הנדידה בלתי אפשרית. החולה היא תחנת תדלוק מרכזית." },
 ];
@@ -54,7 +54,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
   const reward = getStationReward(1);
 
   return (
-    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${hulaBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/50 via-background/30 to-background/60 backdrop-blur-[1px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
@@ -73,6 +73,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
                 </div>
                 <NarrationPlayer
                   text="הגעתם לצפון — לאגמון החולה! זה אחד ממרכזי הצפרות המדהימים בעולם. חפשו 5 רמזים חבויים בתחנת התצפית, חקרו בכרטיסים, ופענחו צופן אתב״ש מסתורי!"
+                  speechText="הִגַּעְתֶּם לַצָּפוֹן — לְאַגְמוֹן הַחוּלָה! זֶה אֶחָד מִמֶּרְכְּזֵי הַצַּפָּרוּת הַמַּדְהִימִים בָּעוֹלָם. חַפְּשׂוּ 5 רְמָזִים חֲבוּיִים בְּתַחֲנַת הַתַּצְפִּית, חָקְרוּ בְּכַרְטִיסִים, וּפִעְנְחוּ צֹפֶן אַתְבָּ״שׁ מִסְתּוֹרִי!"
                   className="mb-3"
                 />
                 <div className="flex flex-col items-center gap-2">
@@ -137,7 +138,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
               <div className="glass-card-immersive rounded-2xl p-4 station-glow-1">
                 <p className="text-xs font-black text-station-1 mb-2">🔐 שלב 3: פענוח צופן אתב״ש</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
-                  בנוצה מצאתם: ״שם העגור באתב״ש: ״{ATBASH_ENCODED}״. <strong className="text-foreground">פענחו — מה המילה?</strong>
+                  בנוצה מצאתם מילה מוצפנת באתב״ש: ״{ATBASH_ENCODED}״. <strong className="text-foreground">פענחו — מהי הציפור?</strong>
                 </p>
                 <AtbashDecoder
                   encodedMessage={ATBASH_ENCODED}

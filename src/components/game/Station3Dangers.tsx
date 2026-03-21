@@ -38,7 +38,7 @@ const sceneHotspots: SceneHotspot[] = [
 ];
 
 const researchCards = [
-  { id: "threats", title: "איומים על הנודדות", emoji: "⚠️", content: "הרעלות, ציד לא חוקי, עמודי חשמל, טורבינות רוח, זיהום אור ומינים פולשים — כל אלה מאיימים על ציפורים נודדות. בישראל מתו 5 נשרים בשנת 2023 מהרעלה. מספר הנשרים שניצלו בפרויקט ׳פורשים כנף׳: 143.", hiddenClue: "המספר מופיע בסוף — חפשו כמה נשרים ניצלו בפרויקט" },
+  { id: "threats", title: "איומים על הנודדות", emoji: "⚠️", content: "הרעלות, ציד לא חוקי, עמודי חשמל, טורבינות רוח, זיהום אור ומינים פולשים — כל אלה מאיימים על ציפורים נודדות. בישראל מתו 5 נשרים בשנת 2023 מהרעלה. פרויקט ׳פורשים כנף׳ מוכיח שאפשר גם להציל: מיגון עמודי חשמל, תחנות האכלה וגידול בשבי הצילו עד כה 143 נשרים.", hiddenClue: "קראו על פרויקט ׳פורשים כנף׳ — כמה נשרים הצליח להציל?" },
   { id: "wing", title: "פרויקט ׳פורשים כנף׳", emoji: "🛡️", content: "מאמץ ישראלי ייחודי: מיגון עמודי חשמל, תחנות האכלה, גידול רבייה בשבי. בזכותו, אוכלוסיות נשרים מתאוששות." },
   { id: "ebird", title: "eBird — מדע אזרחי", emoji: "📱", content: "פרויקט מדע אזרחי גלובלי. צפרים מדווחים תצפיות באפליקציה. מיליוני דיווחים עוזרים לתכנן שמורות." },
 ];
@@ -90,7 +90,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
   };
 
   return (
-    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${dangersBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/50 via-background/30 to-background/60 backdrop-blur-[1px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
@@ -109,6 +109,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 </div>
                 <NarrationPlayer
                   text="נכנסים לאזור המסוכן! סרקו את הסצנה וגלו 5 סכנות שמאיימות על ציפורים נודדות. אחר כך — התאימו כל איום לפתרון, פענחו צופן, וחפשו קוד למנעול!"
+                  speechText="נִכְנָסִים לְאֵזוֹר הַמְּסֻכָּן! סִרְקוּ אֶת הַסְּצֵנָה וְגַלּוּ 5 סַכָּנוֹת שֶׁמְּאַיְּמוֹת עַל צִפּוֹרִים נוֹדְדוֹת. אַחַר כָּךְ — הַתְאִימוּ כָּל אִיּוּם לְפִתְרוֹן, פִּעְנְחוּ צֹפֶן, וְחַפְּשׂוּ קוֹד לַמַּנְעוּל!"
                   className="mb-3"
                 />
                 <div className="flex flex-col items-center gap-2">

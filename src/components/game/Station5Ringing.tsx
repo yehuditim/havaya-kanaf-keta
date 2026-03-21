@@ -62,7 +62,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
   };
 
   return (
-    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${ringingBg})`, backgroundSize: "cover", backgroundPosition: "center" }} />
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/50 via-background/30 to-background/60 backdrop-blur-[1px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
@@ -82,6 +82,7 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
 
                 <NarrationPlayer
                   text="הגעתם למרכז הטיבוע! סרקו את התחנה, גלו את נתוני הטיסה של העקב המזרחי, ואז — חשבו את זמן הטיסה כדי לפתוח את המנעול!"
+                  speechText="הִגַּעְתֶּם לְמֶרְכַּז הַטִּבּוּעַ! סִרְקוּ אֶת הַתַּחֲנָה, גָּלוּ אֶת נְתוּנֵי הַטִּיסָה שֶׁל הֶעָקֵב הַמִּזְרָחִי, וְאָז — חִשְׁבוּ אֶת זְמַן הַטִּיסָה כְּדֵי לִפְתֹּחַ אֶת הַמַּנְעוּל!"
                   className="mb-3"
                 />
 
@@ -134,9 +135,6 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                   <div className="border-t border-border/20 pt-2 mt-2">
                     <p className="text-sm font-black text-station-5">
                       ❓ כמה שעות טיסה נטו נדרשו?
-                    </p>
-                    <p className="text-[10px] text-muted-foreground mt-1">
-                      💡 חלקו מרחק ÷ מהירות
                     </p>
                   </div>
                 </div>

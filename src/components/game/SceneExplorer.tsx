@@ -117,18 +117,16 @@ const SceneExplorer = ({
             transition={!isDiscovered ? { duration: 2.2, repeat: Infinity, ease: "easeInOut" } : {}}
           >
             <div
-              className={`relative w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-sm sm:text-base transition-all duration-300 ${
+              className={`relative w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-base sm:text-lg transition-all duration-300 ${
                 isDiscovered
                   ? isActive
                     ? "bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
-                    : "bg-primary/15 border border-primary/30"
-                  : "bg-white/20 border border-white/40 shadow-sm hover:bg-foreground/10 hover:border-foreground/30"
+                    : "bg-primary/15 border-2 border-primary/40"
+                  : "bg-background/55 border-2 border-white/70 shadow-md shadow-black/30 hover:bg-background/70 hover:border-white/90"
               }`}
             >
               <span
-                className={`transition-opacity duration-200 ${
-                  isDiscovered ? "opacity-100" : "opacity-80 hover:opacity-100"
-                }`}
+                className="opacity-100"
               >
                 {hs.emoji}
               </span>

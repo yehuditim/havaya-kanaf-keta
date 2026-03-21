@@ -6,6 +6,9 @@ import { unlockAudioOnGesture } from "../../lib/audioUnlock";
 
 interface NarrationPlayerProps {
   text: string;
+  /** Optional nikud (vowel-pointed) version of the text for cleaner TTS pronunciation.
+   *  If provided, TTS uses this text while the display still shows `text`. */
+  speechText?: string;
   speaker?: string;
   speakerEmoji?: string;
   autoExpand?: boolean;
@@ -15,6 +18,7 @@ interface NarrationPlayerProps {
 
 const NarrationPlayer = ({
   text,
+  speechText,
   speaker = "פרופסור דרור",
   speakerEmoji = "👨‍🔬",
   autoExpand = true,
@@ -26,7 +30,7 @@ const NarrationPlayer = ({
   const [tapHint, setTapHint] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(text);
+  const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(speechText ?? text);
 
   useEffect(() => {
     if (revealed && displayedChars < text.length) {

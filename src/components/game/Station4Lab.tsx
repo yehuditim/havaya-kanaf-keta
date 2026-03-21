@@ -41,7 +41,7 @@ const sceneHotspots: SceneHotspot[] = [
 ];
 
 const researchCards = [
-  { id: "tech", title: "טיבוע, GPS ומכ״ם", emoji: "📡", content: "טיבוע — טבעת אלומיניום עם מספר ייחודי. שנת ההמצאה: 1899. משדרי GPS זעירים (פחות מ-5 גרם!) מאפשרים מעקב בזמן אמת — התחילו להשתמש בהם בשנות ה-2000. מכ״ם — מעקב אחרי להקות שלמות מרחוק, מאז שנות ה-1940.", hiddenClue: "חפשו מתי התחילו חוקרים לעקוב אחרי ציפורים בדרך הוותיקה ביותר" },
+  { id: "tech", title: "טיבוע, GPS ומכ״ם", emoji: "📡", content: "טיבוע — טבעת אלומיניום עם מספר ייחודי, שיטה שהמדענים משתמשים בה כבר מאז 1899. משדרי GPS זעירים (פחות מ-5 גרם!) מאפשרים מעקב בזמן אמת — החלו לשמש בשנות ה-2000. מכ״ם — מעקב אחרי להקות שלמות מרחוק, מאז שנות ה-1940.", hiddenClue: "שלוש שיטות מעקב — איזו הכי ותיקה? באיזו שנה היא הומצאה?" },
   { id: "nav", title: "GPS ביולוגי", emoji: "🧠", content: "ציפורים מנווטות באמצעות מצפן מגנטי מולד, שמש, כוכבים וציוני דרך. ארבע שיטות שעובדות ביחד!" },
   { id: "citizen", title: "eBird — מדע אזרחי", emoji: "📱", content: "eBird הוא פרויקט מדע אזרחי — צפרים מדווחים תצפיות באפליקציה. מאז שנות ה-2010 חולל מהפכה במחקר הנדידה." },
 ];
@@ -82,7 +82,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
   };
 
   return (
-    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${labBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/50 via-background/30 to-background/60 backdrop-blur-[1px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
@@ -101,6 +101,7 @@ const Station4Lab = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) =
                 </div>
                 <NarrationPlayer
                   text="ברוכים הבאים למעבדה! סרקו את המעבדה וגלו את הטכנולוגיות שחוקרים משתמשים בהן. אחר כך — בנו מצפן ביולוגי, חפשו קוד למנעול, ופענחו צופן אתב״ש!"
+                  speechText="בְּרוּכִים הַבָּאִים לַמַּעְבָּדָה! סִרְקוּ אֶת הַמַּעְבָּדָה וְגַלּוּ אֶת הַטֶּכְנוֹלוֹגְיוֹת שֶׁחוֹקְרִים מִשְׁתַּמְּשִׁים בָּהֶן. אַחַר כָּךְ — בָּנוּ מַצְפֵּן בִּיּוֹלוֹגִי, חַפְּשׂוּ קוֹד לְמַנְעוּל, וּפִעְנְחוּ צֹפֶן אַתְבָּ״שׁ!"
                   className="mb-3"
                 />
                 <div className="flex flex-col items-center gap-2">

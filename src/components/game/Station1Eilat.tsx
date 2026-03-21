@@ -48,7 +48,7 @@ const sceneHotspots: SceneHotspot[] = [
 const researchCards = [
   { id: "flyway", title: "הנתיב האפרו-פליארקטי", emoji: "🗺️", content: "ישראל נמצאת על הנתיב האפרו-פליארקטי — אחד ממסלולי הנדידה הגדולים בעולם. כמיליארד ציפורים חולפות דרכה פעמיים בשנה. ישראל היא ׳צוואר בקבוק׳ — רצועת יבשה צרה בין שלוש יבשות.", hiddenClue: "המספר הקריטי: כמיליארד ציפורים, פעמיים בשנה." },
   { id: "soaring", title: "דואים מול נודדי לילה", emoji: "☀️", content: "דואים (חסידות, שקנאים, דורסים) — עופות גדולים שרוכבים על תרמיקות ביום. הם נמנעים מלחצות ימים. נודדי לילה (סבכיים, זמירים) — ציפורי שיר קטנות שטסות בחשיכה." },
-  { id: "hyperphagia", title: "היפרפגיה — תדלוק לפני הטיסה", emoji: "⚖️", content: "לפני נדידה ציפורים עוברות היפרפגיה — אכילה מוגברת שמעלה את משקלן עד 50% בשומן. תהליך זה נמשך כשבועיים. אחוז השומן המדויק: עד 50 אחוז ממשקל הגוף.", hiddenClue: "קראו את הפסקה בעיון — כמה מסוגלת ציפור לצבור ממשקלה?" },
+  { id: "hyperphagia", title: "היפרפגיה — תדלוק לפני הטיסה", emoji: "⚖️", content: "לפני נדידה ציפורים עוברות היפרפגיה — אכילה מוגברת שמעלה את משקלן עד 50% בשומן. תהליך זה נמשך כשבועיים, ובסופו הגוף מוכן לטיסה הארוכה.", hiddenClue: "כמה אחוז שומן ממשקל הגוף ציפור מסוגלת לצבור בהיפרפגיה?" },
   { id: "eilat", title: "אילת — שער הכניסה", emoji: "🏜️", content: "אילת היא תחנת הדלק הראשונה אחרי 2,000 ק״מ של מדבר סהרה. פסטיבל הצפרות באילת (מרץ) הוא אירוע בינלאומי." },
 ];
 
@@ -85,7 +85,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
   };
 
   return (
-    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 z-0" style={{ backgroundImage: `url(${eilatBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/50 via-background/30 to-background/60 backdrop-blur-[1px]" />
       <CorrectEffect show={showCorrectEffect} onDone={() => setShowCorrectEffect(false)} />
@@ -105,6 +105,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
 
                 <NarrationPlayer
                   text="הגעתם לאילת — השער הדרומי של ישראל. כאן, אחרי טיסה של אלפיים קילומטר מעל מדבר סהרה, נוחתות ציפורים על סף התמוטטות. חפשו 5 רמזים חבויים בסצנת המדבר, חקרו בכרטיסי המחקר, מיינו ציפורים, ופצחו את המנעול!"
+                  speechText="הִגַּעְתֶּם לְאֵילַת — הַשַּׁעַר הַדְּרוֹמִי שֶׁל יִשְׂרָאֵל. כָּאן, אַחֲרֵי טִיסָה שֶׁל אַלְפַּיִם קִילוֹמֶטֶר מֵעַל מִדְבַּר סָהָרָה, נוֹחֲתוֹת צִפּוֹרִים עַל סַף הִתְמוֹטְטוּת. חַפְּשׂוּ 5 רְמָזִים חֲבוּיִים בִּסְצֵנַת הַמִּדְבָּר, חָקְרוּ בְּכַרְטִיסֵי הַמֶּחְקָר, מִיְּנוּ צִפּוֹרִים, וּפָצְחוּ אֶת הַמַּנְעוּל!"
                   className="mb-3"
                 />
 
