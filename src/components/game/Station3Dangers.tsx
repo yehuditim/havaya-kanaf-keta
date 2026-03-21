@@ -48,7 +48,7 @@ const CIPHER_MAP: Record<string, string> = {
   "י": "ח", "כ": "י", "ל": "כ", "ה": "ד", "ו": "ה", "ש": "ר", "נ": "מ", "ת": "ש",
   "ב": "א", "ג": "ב", "ס": "נ", "פ": "ע", "צ": "פ", "ק": "צ",
 };
-const SECRET = "מדע אזרחי";
+const SECRET = "הגנה";
 const ENCODED = SECRET.split("").map(ch => CIPHER_MAP[ch] || ch).join("");
 
 type Phase = "briefing" | "explore" | "match" | "decode" | "research" | "lock" | "reward";
@@ -218,7 +218,7 @@ const Station3Dangers = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                 ) : (
                   <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-primary/8 border border-primary/20 rounded-xl p-4 text-center">
                     <p className="text-sm font-bold text-primary mb-1">🔓 פוענח: ״{SECRET}״!</p>
-                    <p className="text-xs text-foreground/70">מדע אזרחי — כמו eBird — מאפשר לכל אדם לעזור למדענים.</p>
+                    <p className="text-xs text-foreground/70">הגנה על ציפורים נודדות דורשת שיתוף פעולה בין מדינות, חוקרים ואזרחים.</p>
                   </motion.div>
                 )}
               </div>
