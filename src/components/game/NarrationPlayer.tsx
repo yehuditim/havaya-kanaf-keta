@@ -9,7 +9,6 @@ interface NarrationPlayerProps {
   speakerEmoji?: string;
   autoExpand?: boolean;
   autoPlay?: boolean;
-  autoPlayDelay?: number; // ms
   className?: string;
 }
 
@@ -19,13 +18,11 @@ const NarrationPlayer = ({
   speakerEmoji = "👨‍🔬",
   autoExpand = true,
   autoPlay = true,
-  autoPlayDelay = 800,
   className = "",
 }: NarrationPlayerProps) => {
   const [revealed, setRevealed] = useState(autoExpand);
   const [displayedChars, setDisplayedChars] = useState(autoExpand ? text.length : 0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const autoPlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(text);
 
@@ -44,15 +41,11 @@ const NarrationPlayer = ({
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [revealed, text, displayedChars]);
 
-  // Auto-play narration after delay
+  // Auto-play narration immediately on mount (closest to user gesture context)
   useEffect(() => {
     if (!autoPlay || !canSpeak) return;
-    autoPlayTimerRef.current = setTimeout(() => {
-      void speak();
-    }, autoPlayDelay);
-    return () => {
-      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
-    };
+    void speak();
+    return () => stopSpeaking();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlay, canSpeak]);
 
