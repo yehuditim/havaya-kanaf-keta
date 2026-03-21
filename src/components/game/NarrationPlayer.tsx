@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { playClick } from "../SoundEffects";
 import { useHebrewNarration } from "../../hooks/useHebrewNarration";
-import { unlockAudioOnGesture } from "../../lib/audioUnlock";
+import { unlockAudioOnGesture, getSharedAudio } from "../../lib/audioUnlock";
 
 interface NarrationPlayerProps {
   text: string;
@@ -32,25 +32,33 @@ const NarrationPlayer = ({
   const [displayedChars, setDisplayedChars] = useState(autoExpand ? text.length : 0);
   const [tapHint, setTapHint] = useState(false);
   const [wavPlaying, setWavPlaying] = useState(false);
-  const wavRef = useRef<HTMLAudioElement | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(speechText ?? text);
 
-  // WAV audio setup
+  // When audioSrc is provided, show tap hint immediately (autoplay blocked on mobile)
   useEffect(() => {
+    if (audioSrc) setTapHint(true);
+  }, [audioSrc]);
+
+  const playWav = () => {
     if (!audioSrc) return;
-    const audio = new Audio(audioSrc);
-    wavRef.current = audio;
+    const audio = getSharedAudio();
     audio.onplay = () => { setWavPlaying(true); setTapHint(false); };
     audio.onended = () => setWavPlaying(false);
-    audio.onpause = () => setWavPlaying(false);
-    if (autoPlay) {
-      audio.play().catch(() => setTapHint(true));
-    }
-    return () => { audio.pause(); audio.src = ""; };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [audioSrc]);
+    audio.onerror = () => setWavPlaying(false);
+    audio.src = audioSrc;
+    audio.play().catch(() => setTapHint(true));
+  };
+
+  const stopWav = () => {
+    const audio = getSharedAudio();
+    audio.pause();
+    audio.onplay = null;
+    audio.onended = null;
+    audio.onerror = null;
+    setWavPlaying(false);
+  };
 
   useEffect(() => {
     if (revealed && displayedChars < text.length) {
@@ -94,9 +102,8 @@ const NarrationPlayer = ({
     unlockAudioOnGesture();
     setRevealed(true);
     setTapHint(false);
-    if (audioSrc && wavRef.current) {
-      wavRef.current.currentTime = 0;
-      wavRef.current.play().catch(() => setTapHint(true));
+    if (audioSrc) {
+      playWav();
     } else {
       void speak();
     }
@@ -109,13 +116,11 @@ const NarrationPlayer = ({
 
   const handleTTSToggle = () => {
     unlockAudioOnGesture();
-    if (audioSrc && wavRef.current) {
+    if (audioSrc) {
       if (wavPlaying) {
-        wavRef.current.pause();
-        wavRef.current.currentTime = 0;
+        stopWav();
       } else {
-        setTapHint(false);
-        wavRef.current.play().catch(() => setTapHint(true));
+        playWav();
       }
     } else {
       if (isSpeaking) {
