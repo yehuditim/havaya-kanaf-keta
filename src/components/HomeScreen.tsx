@@ -4,9 +4,10 @@ import BirdIcon from "./BirdIcon";
 import { useHebrewNarration } from "../hooks/useHebrewNarration";
 
 const INTRO_TEXT = "ילדים יקרים, אני פרופסור דרור. מישהו פרץ למחשב שלי וערבב את כל מחקר הנדידה! אני צריך חוקרים צעירים ומוכשרים שיעזרו לי לפענח את החידות ולשחזר את קוד הבריחה הסודי. בכל תחנה תגלו רמז חדש. שש אותיות — מילה אחת — וכל המחקר יחזור לסדר. מוכנים לצאת למשימה?";
+const INTRO_SPEECH_TEXT = "יְלָדִים יְקָרִים, אֲנִי פְּרוֹפֵסוֹר דְּרוֹר. מִישֶׁהוּ פֶּרֶץ לַמַּחְשֵׁב שֶׁלִּי וְעִרְבֵּב אֶת כָּל מֶחְקָר הַנְּדִידָה! אֲנִי צָרִיךְ חוֹקְרִים צְעִירִים וּמֻכְשָׁרִים שֶׁיַּעַזְרוּ לִי לְפַעְנֵחַ אֶת הַחִידוֹת וּלְשַׁחְזֵר אֶת קוֹד הַבְּרִיחָה הַסּוֹדִי. בְּכָל תַּחֲנָה תְּגַלּוּ רֶמֶז חָדָשׁ. שֵׁשׁ אוֹתִיּוֹת — מִלָּה אַחַת — וְכָל הַמֶּחְקָר יַחֲזֹר לְסַדֵּר. מוּכָנִים לָצֵאת לַמְּשִׂימָה?";
 
 const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenResearch: () => void }) => {
-  const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(INTRO_TEXT);
+  const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(INTRO_SPEECH_TEXT);
 
   const handleSpeak = useCallback(async () => {
     playClick();
