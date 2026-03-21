@@ -105,7 +105,7 @@ const Station1Eilat = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props)
 
                 <NarrationPlayer
                   text="הגעתם לאילת — השער הדרומי של ישראל. כאן, אחרי טיסה של אלפיים קילומטר מעל מדבר סהרה, נוחתות ציפורים על סף התמוטטות. חפשו 5 רמזים חבויים בסצנת המדבר, חקרו בכרטיסי המחקר, מיינו ציפורים, ופצחו את המנעול!"
-                  audioSrc="/narration/אילת.wav"
+                  audioSrc="/narration/station1-eilat.wav"
                   className="mb-3"
                 />
 

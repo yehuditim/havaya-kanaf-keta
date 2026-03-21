@@ -73,7 +73,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
                 </div>
                 <NarrationPlayer
                   text="הגעתם לצפון — לאגמון החולה! זה אחד ממרכזי הצפרות המדהימים בעולם. חפשו 5 רמזים חבויים בתחנת התצפית, חקרו בכרטיסים, ופענחו צופן אתב״ש מסתורי!"
-                  audioSrc="/narration/אגמון החולה.wav"
+                  audioSrc="/narration/station2-hula.wav"
                   className="mb-3"
                 />
                 <div className="flex flex-col items-center gap-2">

@@ -46,8 +46,7 @@ const NarrationPlayer = ({
     audio.onended = () => setWavPlaying(false);
     audio.onpause = () => setWavPlaying(false);
     if (autoPlay) {
-      const p = audio.play();
-      if (p !== undefined) p.catch(() => setTapHint(true));
+      audio.play().catch(() => setTapHint(true));
     }
     return () => { audio.pause(); audio.src = ""; };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,11 +67,11 @@ const NarrationPlayer = ({
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [revealed, text, displayedChars]);
 
-  // Auto-play narration immediately on mount.
+  // Auto-play narration immediately on mount (TTS only — WAV is handled above).
   // On mobile the audio context may not yet be unlocked — in that case we show
   // a pulsing "tap to hear" hint on the button after a short wait.
   useEffect(() => {
-    if (!autoPlay || !canSpeak) return;
+    if (!autoPlay || !canSpeak || audioSrc) return;
     void speak();
     // If not speaking after 600ms, audio was blocked → show tap hint
     const timer = setTimeout(() => {
@@ -97,7 +96,7 @@ const NarrationPlayer = ({
     setTapHint(false);
     if (audioSrc && wavRef.current) {
       wavRef.current.currentTime = 0;
-      void wavRef.current.play();
+      wavRef.current.play().catch(() => setTapHint(true));
     } else {
       void speak();
     }
@@ -116,7 +115,7 @@ const NarrationPlayer = ({
         wavRef.current.currentTime = 0;
       } else {
         setTapHint(false);
-        void wavRef.current.play();
+        wavRef.current.play().catch(() => setTapHint(true));
       }
     } else {
       if (isSpeaking) {
