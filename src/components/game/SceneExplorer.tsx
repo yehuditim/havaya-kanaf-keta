@@ -114,11 +114,11 @@ const SceneExplorer = ({
             whileTap={{ scale: 0.9 }}
             animate={
               !isDiscovered
-                ? { scale: [1, 1.06, 1], opacity: [0.05, 0.09, 0.05] }
+                ? { scale: [1, 1.08, 1], opacity: [0.08, 0.13, 0.08] }
                 : {}
             }
-            whileHover={!isDiscovered ? { scale: 1.2, opacity: 0.55 } : { scale: 1.1 }}
-            transition={!isDiscovered ? { duration: 4.2, repeat: Infinity, ease: "easeInOut" } : {}}
+            whileHover={!isDiscovered ? { scale: 1.25, opacity: 0.70 } : { scale: 1.1 }}
+            transition={!isDiscovered ? { duration: 3.5, repeat: Infinity, ease: "easeInOut" } : {}}
           >
             <div
               className={`relative w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-base sm:text-lg transition-all duration-300 ${
