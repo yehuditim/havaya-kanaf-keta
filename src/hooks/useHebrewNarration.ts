@@ -135,6 +135,7 @@ export const useHebrewNarration = (text: string) => {
         const objectUrl = URL.createObjectURL(audioBlob);
         objectUrlRef.current = objectUrl;
 
+        audio.muted = false;
         audio.onplay = () => setIsSpeaking(true);
         audio.onended = () => {
           abortControllerRef.current = null;

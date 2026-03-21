@@ -47,6 +47,7 @@ const NarrationPlayer = ({
     audio.onplay = () => { setWavPlaying(true); setTapHint(false); };
     audio.onended = () => setWavPlaying(false);
     audio.onerror = () => setWavPlaying(false);
+    audio.muted = false;
     audio.src = audioSrc;
     audio.play().catch(() => setTapHint(true));
   };
