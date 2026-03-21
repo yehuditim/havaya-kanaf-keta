@@ -84,10 +84,11 @@ const CodeLock = ({
     <div className={`bg-muted/20 border border-border/25 rounded-xl p-4 ${className}`}>
       <p className="text-xs font-bold text-center mb-3">{label}</p>
       
-      <motion.div 
-        animate={shaking ? { x: [0, -8, 8, -8, 8, 0] } : {}} 
+      <motion.div
+        animate={shaking ? { x: [0, -8, 8, -8, 8, 0] } : {}}
         transition={{ duration: 0.4 }}
         className="flex items-center justify-center gap-2 mb-3"
+        dir="ltr"
       >
         {values.map((val, i) => (
           <div key={i} className="flex flex-col items-center gap-1">

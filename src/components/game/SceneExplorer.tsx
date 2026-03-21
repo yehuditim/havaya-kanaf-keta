@@ -111,10 +111,14 @@ const SceneExplorer = ({
             onClick={() => handleClick(hs.id)}
             className="absolute z-10"
             style={{ left: hs.x, top: hs.y, transform: "translate(-50%, -50%)" }}
-            whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
-            animate={!isDiscovered ? { scale: [1, 1.18, 1] } : {}}
-            transition={!isDiscovered ? { duration: 2.2, repeat: Infinity, ease: "easeInOut" } : {}}
+            animate={
+              !isDiscovered
+                ? { scale: [1, 1.12, 1], opacity: [0.15, 0.22, 0.15] }
+                : {}
+            }
+            whileHover={!isDiscovered ? { scale: 1.3, opacity: 0.85 } : { scale: 1.1 }}
+            transition={!isDiscovered ? { duration: 2.8, repeat: Infinity, ease: "easeInOut" } : {}}
           >
             <div
               className={`relative w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-base sm:text-lg transition-all duration-300 ${
@@ -122,12 +126,10 @@ const SceneExplorer = ({
                   ? isActive
                     ? "bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
                     : "bg-primary/15 border-2 border-primary/40"
-                  : "bg-background/55 border-2 border-white/70 shadow-md shadow-black/30 hover:bg-background/70 hover:border-white/90"
+                  : "bg-background/15 border border-white/20 shadow-sm shadow-black/10"
               }`}
             >
-              <span
-                className="opacity-100"
-              >
+              <span>
                 {hs.emoji}
               </span>
               {isDiscovered && (
