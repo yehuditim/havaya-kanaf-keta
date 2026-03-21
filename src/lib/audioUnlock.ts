@@ -36,10 +36,14 @@ export const unlockAudioOnGesture = () => {
     audio.src = SILENT_WAV;
     audio.play()
       .then(() => {
-        audio.pause();
+        // Only clean up the silent WAV if nothing else has taken over the
+        // element yet (e.g. playWav() may have already set a new src).
+        if (audio.src === SILENT_WAV) {
+          audio.pause();
+          audio.removeAttribute("src");
+          audio.load();
+        }
         audio.muted = false;
-        audio.removeAttribute("src");
-        audio.load();
       })
       .catch(() => {});
   } catch {}
