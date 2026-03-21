@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { playClick } from "./SoundEffects";
 import BirdIcon from "./BirdIcon";
 import { useHebrewNarration } from "../hooks/useHebrewNarration";
@@ -8,9 +8,29 @@ const INTRO_SPEECH_TEXT = "יְלָדִים יְקָרִים, אֲנִי פְּ�
 
 const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenResearch: () => void }) => {
   const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(INTRO_SPEECH_TEXT);
+  const [tapHint, setTapHint] = useState(false);
+
+  // Auto-play narration on mount; show a tap-hint if autoplay is blocked
+  useEffect(() => {
+    if (!canSpeak) return;
+    void speak();
+    const timer = setTimeout(() => {
+      setTapHint(prev => prev || true);
+    }, 700);
+    return () => {
+      clearTimeout(timer);
+      stopSpeaking();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canSpeak]);
+
+  useEffect(() => {
+    if (isSpeaking) setTapHint(false);
+  }, [isSpeaking]);
 
   const handleSpeak = useCallback(async () => {
     playClick();
+    setTapHint(false);
 
     if (isSpeaking) {
       stopSpeaking();
@@ -85,12 +105,14 @@ const HomeScreen = ({ onStart, onOpenResearch }: { onStart: () => void; onOpenRe
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-black transition-all duration-200 border shadow-md shrink-0 ${
                   isSpeaking
                     ? "bg-primary text-primary-foreground border-primary shadow-primary/30 animate-pulse scale-105"
+                    : tapHint
+                    ? "bg-primary text-primary-foreground border-primary animate-pulse scale-105 shadow-primary/30"
                     : "bg-primary/15 text-primary border-primary/25 hover:bg-primary/25 hover:scale-105 hover:shadow-primary/20"
                 }`}
                 title={isSpeaking ? "עצור הקראה" : "הקרא בקול"}
               >
                 <span className="text-base">{isSpeaking ? "⏸" : "🔊"}</span>
-                <span>{isSpeaking ? "עצור" : "הקרא"}</span>
+                <span>{isSpeaking ? "עצור" : tapHint ? "לחצו לשמוע" : "הקרא"}</span>
               </button>
             )}
           </div>

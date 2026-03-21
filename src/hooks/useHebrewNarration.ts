@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { unlockAudioOnGesture, getSharedAudio } from "../lib/audioUnlock";
 
+/** Strip Hebrew nikud (vowel points) so browser TTS engines that don't support
+ *  them don't mispronounce or garble the text. */
+const stripNikud = (text: string): string =>
+  text.replace(/[\u05B0-\u05C7\uFB1D-\uFB4E]/g, "");
+
 const CLOUD_TTS_URL = import.meta.env.VITE_SUPABASE_URL
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/google-tts`
   : null;
@@ -78,13 +83,20 @@ export const useHebrewNarration = (text: string) => {
 
     window.speechSynthesis.cancel();
 
-    const utter = new SpeechSynthesisUtterance(text);
+    // Strip nikud so browser TTS engines that don't support vowel points
+    // don't garble the pronunciation.
+    const cleanText = stripNikud(text);
+    const utter = new SpeechSynthesisUtterance(cleanText);
     utter.lang = "he-IL";
-    utter.rate = 0.9;
+    utter.rate = 0.78;
     utter.pitch = 1;
 
     const availableVoices = voices || window.speechSynthesis.getVoices();
-    const heVoice = availableVoices.find((v) => v.lang.startsWith("he")) || null;
+    // Prefer a local (non-network) Hebrew voice for best quality/latency
+    const heVoice =
+      availableVoices.find((v) => v.lang.startsWith("he") && v.localService) ||
+      availableVoices.find((v) => v.lang.startsWith("he")) ||
+      null;
     if (heVoice) utter.voice = heVoice;
 
     utter.onstart = () => setIsSpeaking(true);
