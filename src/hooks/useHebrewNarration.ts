@@ -1,12 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { unlockAudioOnGesture } from "../lib/audioUnlock";
+import { unlockAudioOnGesture, getSharedAudio } from "../lib/audioUnlock";
 
 const CLOUD_TTS_URL = import.meta.env.VITE_SUPABASE_URL
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/google-tts`
   : null;
-
-const SILENT_AUDIO_DATA_URI =
-  "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
 
 const fetchCloudTtsAudio = async (text: string, signal: AbortSignal) => {
   const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -34,24 +31,6 @@ const fetchCloudTtsAudio = async (text: string, signal: AbortSignal) => {
   return response.blob();
 };
 
-const primeAudioForMobile = async (audio: HTMLAudioElement) => {
-  audio.preload = "auto";
-  audio.muted = true;
-  audio.src = SILENT_AUDIO_DATA_URI;
-
-  try {
-    await audio.play();
-  } catch {
-    // Best effort: iOS/Android unlock can fail silently on some devices.
-  }
-
-  audio.pause();
-  audio.currentTime = 0;
-  audio.muted = false;
-  audio.removeAttribute("src");
-  audio.load();
-};
-
 export const useHebrewNarration = (text: string) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const ttsSupported = typeof window !== "undefined" && "speechSynthesis" in window;
@@ -59,16 +38,16 @@ export const useHebrewNarration = (text: string) => {
   const canSpeak = ttsSupported || cloudSupported;
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const cleanupAudio = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = "";
-      audioRef.current = null;
-    }
+    // Detach event listeners from the shared audio element so they don't fire
+    // for future playbacks.
+    const audio = getSharedAudio();
+    audio.onplay = null;
+    audio.onended = null;
+    audio.onerror = null;
 
     if (objectUrlRef.current) {
       URL.revokeObjectURL(objectUrlRef.current);
@@ -83,6 +62,12 @@ export const useHebrewNarration = (text: string) => {
     if (ttsSupported) {
       window.speechSynthesis.cancel();
     }
+
+    // Pause the shared audio element without destroying it
+    try {
+      const audio = getSharedAudio();
+      audio.pause();
+    } catch {}
 
     cleanupAudio();
     setIsSpeaking(false);
@@ -100,7 +85,6 @@ export const useHebrewNarration = (text: string) => {
 
     const availableVoices = voices || window.speechSynthesis.getVoices();
     const heVoice = availableVoices.find((v) => v.lang.startsWith("he")) || null;
-
     if (heVoice) utter.voice = heVoice;
 
     utter.onstart = () => setIsSpeaking(true);
@@ -124,15 +108,18 @@ export const useHebrewNarration = (text: string) => {
         const controller = new AbortController();
         abortControllerRef.current = controller;
 
-        const audio = new Audio();
-        audioRef.current = audio;
-
-        // Must happen inside the click/tap gesture path for iOS/Android autoplay policies.
-        await primeAudioForMobile(audio);
+        // Reuse the singleton audio element that was already unlocked on the
+        // first user gesture.  On iOS, a new Audio() created outside a gesture
+        // cannot call play() — but reusing the pre-unlocked element works.
+        const audio = getSharedAudio();
 
         const audioBlob = await fetchCloudTtsAudio(text, controller.signal);
         if (controller.signal.aborted) return;
 
+        // Revoke any previous object URL before creating a new one
+        if (objectUrlRef.current) {
+          URL.revokeObjectURL(objectUrlRef.current);
+        }
         const objectUrl = URL.createObjectURL(audioBlob);
         objectUrlRef.current = objectUrl;
 
