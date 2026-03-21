@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { playClick } from "../SoundEffects";
 import { useHebrewNarration } from "../../hooks/useHebrewNarration";
+import { unlockAudioOnGesture } from "../../lib/audioUnlock";
 
 interface NarrationPlayerProps {
   text: string;
@@ -9,7 +10,6 @@ interface NarrationPlayerProps {
   speakerEmoji?: string;
   autoExpand?: boolean;
   autoPlay?: boolean;
-  autoPlayDelay?: number; // ms
   className?: string;
 }
 
@@ -19,13 +19,12 @@ const NarrationPlayer = ({
   speakerEmoji = "👨‍🔬",
   autoExpand = true,
   autoPlay = true,
-  autoPlayDelay = 800,
   className = "",
 }: NarrationPlayerProps) => {
   const [revealed, setRevealed] = useState(autoExpand);
   const [displayedChars, setDisplayedChars] = useState(autoExpand ? text.length : 0);
+  const [tapHint, setTapHint] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const autoPlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { isSpeaking, canSpeak, speak, stopSpeaking } = useHebrewNarration(text);
 
@@ -44,21 +43,33 @@ const NarrationPlayer = ({
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [revealed, text, displayedChars]);
 
-  // Auto-play narration after delay
+  // Auto-play narration immediately on mount.
+  // On mobile the audio context may not yet be unlocked — in that case we show
+  // a pulsing "tap to hear" hint on the button after a short wait.
   useEffect(() => {
     if (!autoPlay || !canSpeak) return;
-    autoPlayTimerRef.current = setTimeout(() => {
-      void speak();
-    }, autoPlayDelay);
+    void speak();
+    // If not speaking after 600ms, audio was blocked → show tap hint
+    const timer = setTimeout(() => {
+      setTapHint(prev => prev || true);
+    }, 600);
     return () => {
-      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+      clearTimeout(timer);
+      stopSpeaking();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlay, canSpeak]);
 
+  // Hide tap hint once narration actually starts
+  useEffect(() => {
+    if (isSpeaking) setTapHint(false);
+  }, [isSpeaking]);
+
   const handlePlay = () => {
     playClick();
+    unlockAudioOnGesture(); // ensure unlocked on mobile tap
     setRevealed(true);
+    setTapHint(false);
     void speak();
   };
 
@@ -68,9 +79,11 @@ const NarrationPlayer = ({
   };
 
   const handleTTSToggle = () => {
+    unlockAudioOnGesture();
     if (isSpeaking) {
       stopSpeaking();
     } else {
+      setTapHint(false);
       void speak();
     }
   };
@@ -84,7 +97,7 @@ const NarrationPlayer = ({
         <div className="flex-1 min-w-0">
           <p className="text-xs font-bold text-primary">{speaker}</p>
           <p className="text-[10px] text-muted-foreground">
-            {isSpeaking ? "🎙 מקריא..." : "קריינות סיפור"}
+            {isSpeaking ? "🎙 מקריא..." : tapHint ? "👆 לחצו להאזין" : "קריינות סיפור"}
           </p>
         </div>
         <div className="flex items-center gap-1.5">
@@ -94,6 +107,8 @@ const NarrationPlayer = ({
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                 isSpeaking
                   ? "bg-primary/20 text-primary border-primary/30 animate-pulse"
+                  : tapHint
+                  ? "bg-primary text-primary-foreground border-primary animate-pulse scale-105 shadow-lg shadow-primary/30"
                   : "bg-primary/15 text-primary border-primary/20 hover:bg-primary/25"
               }`}
               title={isSpeaking ? "עצור הקראה" : "הקרא בקול"}

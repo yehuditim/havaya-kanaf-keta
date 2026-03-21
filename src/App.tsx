@@ -17,6 +17,7 @@ import Station6Analysis from "./components/game/Station6Analysis";
 import FinalPuzzle from "./components/game/FinalPuzzle";
 import { useGameState } from "./components/game/useGameState";
 import { useState } from "react";
+import { unlockAudioOnGesture } from "./lib/audioUnlock";
 
 const pageVariants = {
   initial: { opacity: 0, scale: 0.95, y: 24, filter: "blur(4px)" },
@@ -34,10 +35,22 @@ const SFXSync = () => {
   return null;
 };
 
+
 const App = () => {
   const game = useGameState();
   const [showResearch, setShowResearch] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+
+  // Unlock audio APIs on the very first interaction so narration can auto-play afterwards
+  useEffect(() => {
+    const unlock = () => unlockAudioOnGesture();
+    document.addEventListener("click", unlock, { once: true, capture: true });
+    document.addEventListener("touchend", unlock, { once: true, capture: true });
+    return () => {
+      document.removeEventListener("click", unlock, true);
+      document.removeEventListener("touchend", unlock, true);
+    };
+  }, []);
 
   const handleStationComplete = useCallback((stationIndex: number, letter: string, mistakes: number, hints: number) => {
     game.completeStation(stationIndex, letter, mistakes, hints);

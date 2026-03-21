@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { unlockAudioOnGesture } from "../lib/audioUnlock";
 
 const CLOUD_TTS_URL = import.meta.env.VITE_SUPABASE_URL
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/google-tts`
@@ -115,6 +116,9 @@ export const useHebrewNarration = (text: string) => {
 
   const speak = useCallback(async () => {
     if (!canSpeak) return;
+
+    // Best-effort unlock in case the caller is inside a user gesture
+    unlockAudioOnGesture();
 
     stopSpeaking();
 
