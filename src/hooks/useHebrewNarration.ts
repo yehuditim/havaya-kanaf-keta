@@ -10,6 +10,19 @@ const CLOUD_TTS_URL = import.meta.env.VITE_SUPABASE_URL
   ? `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/google-tts`
   : null;
 
+// Pre-load and cache TTS voices at module level so they're available
+// synchronously when the user taps — Android Chrome blocks speechSynthesis.speak()
+// if called outside a user gesture (e.g. inside setTimeout / voiceschanged).
+let _cachedVoices: SpeechSynthesisVoice[] = [];
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  const loadVoices = () => {
+    const v = window.speechSynthesis.getVoices();
+    if (v.length > 0) _cachedVoices = v;
+  };
+  loadVoices();
+  window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+}
+
 const fetchCloudTtsAudio = async (text: string, signal: AbortSignal) => {
   const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -163,22 +176,9 @@ export const useHebrewNarration = (text: string) => {
       return;
     }
 
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length === 0) {
-      const onVoices = () => {
-        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
-        speakWithBrowser(window.speechSynthesis.getVoices());
-      };
-
-      window.speechSynthesis.addEventListener("voiceschanged", onVoices);
-
-      setTimeout(() => {
-        window.speechSynthesis.removeEventListener("voiceschanged", onVoices);
-        speakWithBrowser(window.speechSynthesis.getVoices());
-      }, 1000);
-    } else {
-      speakWithBrowser(voices);
-    }
+    // Use pre-cached voices so speakWithBrowser() runs synchronously inside
+    // the user gesture — Android Chrome blocks speak() called from setTimeout.
+    speakWithBrowser(_cachedVoices.length > 0 ? _cachedVoices : window.speechSynthesis.getVoices());
   }, [canSpeak, cleanupAudio, cloudSupported, speakWithBrowser, stopSpeaking, text, ttsSupported]);
 
   useEffect(() => {
