@@ -162,7 +162,7 @@ const Station6Analysis = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Pro
   };
 
   return (
-    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen p-3 sm:p-4 flex flex-col items-center justify-center relative overflow-x-hidden overflow-y-auto">
       <div className="absolute inset-0 z-0">
         <img src={embassyBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background/70 backdrop-blur-[2px]" />
