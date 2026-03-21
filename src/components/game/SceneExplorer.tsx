@@ -115,9 +115,9 @@ const SceneExplorer = ({
             >
               <span
                 className={`transition-opacity duration-200 ${
-                  isDiscovered ? "opacity-100" : "opacity-[0.18] hover:opacity-40"
+                  isDiscovered ? "opacity-100" : "opacity-50 hover:opacity-75"
                 }`}
-                style={!isDiscovered ? { filter: "grayscale(0.8)" } : undefined}
+                style={!isDiscovered ? { filter: "grayscale(0.4)" } : undefined}
               >
                 {hs.emoji}
               </span>
