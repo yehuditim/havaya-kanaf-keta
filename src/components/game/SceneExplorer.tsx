@@ -114,10 +114,10 @@ const SceneExplorer = ({
             whileTap={{ scale: 0.9 }}
             animate={
               !isDiscovered
-                ? { scale: [1, 1.08, 1], opacity: [0.08, 0.13, 0.08] }
+                ? { scale: [1, 1.08, 1], opacity: [0.25, 0.40, 0.25] }
                 : {}
             }
-            whileHover={!isDiscovered ? { scale: 1.25, opacity: 0.70 } : { scale: 1.1 }}
+            whileHover={!isDiscovered ? { scale: 1.25, opacity: 0.75 } : { scale: 1.1 }}
             transition={!isDiscovered ? { duration: 3.5, repeat: Infinity, ease: "easeInOut" } : {}}
           >
             <div
@@ -126,7 +126,7 @@ const SceneExplorer = ({
                   ? isActive
                     ? "bg-primary/25 border-2 border-primary/60 shadow-lg shadow-primary/20"
                     : "bg-primary/15 border-2 border-primary/40"
-                  : "bg-background/5 border border-white/8 shadow-sm shadow-black/5"
+                  : "bg-background/20 border border-white/25 shadow-sm shadow-black/10"
               }`}
             >
               <span>
