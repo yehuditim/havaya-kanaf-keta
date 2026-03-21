@@ -137,7 +137,7 @@ const Station2Hula = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Props) 
               <div className="glass-card-immersive rounded-2xl p-4 station-glow-1">
                 <p className="text-xs font-black text-station-1 mb-2">🔐 שלב 3: פענוח צופן אתב״ש</p>
                 <p className="text-[11px] text-muted-foreground text-right mb-3">
-                  בנוצה מצאתם: ״שם העגור באתב״ש: ״{ATBASH_ENCODED}״. <strong className="text-foreground">פענחו — מה המילה?</strong>
+                  בנוצה מצאתם מילה מוצפנת באתב״ש: ״{ATBASH_ENCODED}״. <strong className="text-foreground">פענחו — מהי הציפור?</strong>
                 </p>
                 <AtbashDecoder
                   encodedMessage={ATBASH_ENCODED}

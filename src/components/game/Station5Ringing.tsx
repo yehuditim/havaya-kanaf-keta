@@ -135,9 +135,6 @@ const Station5Ringing = ({ onComplete, onOpenResearch, onGoHome, onGoMap }: Prop
                     <p className="text-sm font-black text-station-5">
                       ❓ כמה שעות טיסה נטו נדרשו?
                     </p>
-                    <p className="text-[10px] text-muted-foreground mt-1">
-                      💡 חלקו מרחק ÷ מהירות
-                    </p>
                   </div>
                 </div>
 
